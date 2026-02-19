@@ -1,0 +1,23 @@
+{
+  "name": "loka-api",
+  "version": "1.0.0",
+  "description": "Enterprise Backend API for Rental Management SaaS Platform",
+  "main": "dist/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.18.2",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "http": "0.0.1-security"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.0",
+    "typescript": "^5.9.3"
+  }
+}
