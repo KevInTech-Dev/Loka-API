@@ -5,7 +5,7 @@
 
 import express, { Express } from "express";
 
-// Create Express app
+// Create an instance of the Express application
 const app: Express = express();
 
 export default app;

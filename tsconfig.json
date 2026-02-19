@@ -23,7 +23,6 @@
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "noEmitOnError": false,
-    "ignoreDeprecations": "6.0",
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
