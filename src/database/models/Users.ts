@@ -3,6 +3,7 @@ import {RoleEnum} from "@/enums/RoleEnum";
 import {BaseModel} from "@common/models/base.model";
 
 export interface UserAttributes extends BaseModel {
+    username: string;
     firstname: string;
     lastname: string;
     role: RoleEnum
@@ -25,6 +26,7 @@ class User
     implements UserAttributes {
     declare id: string;
     declare email: string;
+    declare username: string;
     declare password: string;
     declare firstname: string;
     declare lastname: string;
@@ -44,7 +46,10 @@ const initModelUser = (sequelize: Sequelize) => {
                 defaultValue: DataTypes.UUIDV4,
                 primaryKey: true,
             },
-            firstname: {
+            username: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            }, firstname: {
                 type: DataTypes.STRING,
                 allowNull: true,
             },

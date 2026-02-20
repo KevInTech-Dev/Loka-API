@@ -1,18 +1,33 @@
-import { Express } from "express";
-import express from "express";
+import express, {Express, Request, Response} from "express";
 import cors from "cors";
-import { specs, swaggerUi } from "./config/swagger";
+import swaggerUi from 'swagger-ui-express';
+import env from "@config/env";
+import userRoute from "@modules/users/user.route";
+import swaggerSpec from "@/swagger";
 
 const app: Express = express();
+const API_PREFIX = env.API_PREFIX;
 
 app.use(express.json());
 
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 //cors origin
 app.use(cors());
 
 // Swagger UI setup
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Rental Management API Documentation',
+}));
+
+app.get('/api-docs.json', (req: Request, res: Response) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+});
+
+
+app.use(`${API_PREFIX}/users`, userRoute);
 
 export default app;
