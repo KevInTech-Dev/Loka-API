@@ -33,7 +33,7 @@ const getEnvVarNumber = (key: string, defaultValue?: number): number => {
   return numValue;
 };
 
-const env: EnvConfig = {
+export const env: EnvConfig = {
   PORT: getEnvVarNumber("PORT"),
   NODE_ENV: getEnvVar("NODE_ENV", "development") as
     | "development"
