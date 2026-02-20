@@ -4,6 +4,8 @@ import swaggerUi from 'swagger-ui-express';
 import env from "@config/env";
 import userRoute from "@modules/users/user.route";
 import swaggerSpec from "@/swagger";
+import propertyRoute from "./modules/property/property.route";
+import propertyTypeRoute from "./modules/propertyType/propertyType.route";
 
 const app: Express = express();
 const API_PREFIX = env.API_PREFIX;
@@ -29,5 +31,7 @@ app.get('/api-docs.json', (req: Request, res: Response) => {
 
 
 app.use(`${API_PREFIX}/users`, userRoute);
+app.use(`${API_PREFIX}/property`, propertyRoute);
+app.use(`${API_PREFIX}/property-type`,propertyTypeRoute)
 
 export default app;

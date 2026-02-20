@@ -1,6 +1,8 @@
 import env from "@config/env";
 import {OpenAPIV3} from "openapi-types";
 import {userPath, userShema, userTags} from "@/swagger/user.swagger";
+import { propertyShema } from "./property.swagger";
+import { propertyTypeShema } from "./propertType.swagger";
 
 
 export const tags: OpenAPIV3.TagObject[] = [
@@ -35,12 +37,15 @@ export const paths: OpenAPIV3.PathsObject = {
         },
     },
     // Module paths
-    ...userPath
+    ...userPath,
+    ...propertyShema,
+    ...propertyTypeShema
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...userShema,
-
+    ...propertyShema,
+    ...propertyTypeShema
 };
 
 
