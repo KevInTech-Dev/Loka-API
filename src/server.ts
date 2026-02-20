@@ -1,33 +1,29 @@
-/**
- * Server Entry Point
- * Starts the HTTP server and initializes database connection
- */
-
 import http from "http";
 import app from "./app";
+import env from "./config/env";
+import {syncDatabase, testConnection} from "@database/sequelize";
 
-// Server instance
 let server: http.Server;
 
-/**
- * Start the server
- */
-const startServer = async (): Promise<void> => {
-  try {
-    // Create HTTP server
-    server = http.createServer(app);
+const startServer = async () => {
+    const dbConnect = await testConnection();
+    if (!dbConnect) {
+        console.error("Failed to connect to the database. Server will not start.");
+        process.exit(1);
+    }
 
-    // Start listening
-    server.listen(process.env.PORT || 3000, () =>
-      console.log(`Server running on port ${process.env.PORT || 3000}`),
-    );
-  } catch (error) {
-    console.error("Error starting server:", error);
-    process.exit(1);
-  }
+    await syncDatabase(true);
+
+    try {
+        server = http.createServer(app);
+        const PORT = env.PORT || 3000;
+        server.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Error creating server:", error);
+        process.exit(1);
+    }
 };
 
-// Start the server
 startServer();
-
-export { server };
