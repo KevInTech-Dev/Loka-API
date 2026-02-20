@@ -9,7 +9,7 @@ const userShema: OpenAPIV3.ComponentsObject['schemas'] = {
     user: {
         type: "object",
         properties: {
-            usename: {
+            username: {
                 type: "string",
                 default: "",
                 description: "Name of the user"
@@ -25,7 +25,7 @@ const userShema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Password for the user account"
             }
         },
-        required: ["username", "email", "password"]
+        required: ["email", "password"]
     }
 }
 
@@ -34,7 +34,7 @@ const userPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["User"],
             summary: "Get all users",
-            description: "Retrieve a list of all users in the system",
+            description: "Retrieve a list of all account in the system",
             responses: {
                 "200": {
                     description: "A list of users",
