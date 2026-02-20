@@ -3,6 +3,7 @@ import {OpenAPIV3} from "openapi-types";
 import {userPath, userShema, userTags} from "@/swagger/user.swagger";
 import { propertyShema } from "./property.swagger";
 import { propertyTypeShema } from "./propertType.swagger";
+import { abonnementsSchema } from "./abonnement.swagger";
 
 
 export const tags: OpenAPIV3.TagObject[] = [
@@ -43,7 +44,9 @@ export const paths: OpenAPIV3.PathsObject = {
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
-    ...userShema,
+    ...userShema, 
+
+    ...abonnementsSchema, //abonnementsSchema,
     ...propertyShema,
     ...propertyTypeShema
 };
