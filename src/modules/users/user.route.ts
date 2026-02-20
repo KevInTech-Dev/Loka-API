@@ -2,14 +2,13 @@ import {Router} from "express";
 import {UserController} from "@modules/users/user.controller";
 import validate from "@modules/middleware/validate.middleware";
 import {createUserSchema, userIdShema} from "@modules/users/user.schema";
-import {defaultPaginationQuery} from "@common/api.schema";
 
 
 const router: Router = Router();
 const userController = new UserController();
 
 // get all users
-router.get('', validate(defaultPaginationQuery, 'query'), userController.getAllUsers);
+router.get('', userController.getAllUsers);
 
 // create user
 router.post('', validate(createUserSchema, 'body'), userController.createUser);

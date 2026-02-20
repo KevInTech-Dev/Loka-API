@@ -33,6 +33,8 @@ export class UserService {
             role: user.role,
             isEmailVerified: user.isEmailVerified,
             isActive: user.isActive,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
         }
 
     }
