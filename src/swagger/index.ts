@@ -44,7 +44,7 @@ export const paths: OpenAPIV3.PathsObject = {
     ...userPath,
     ...propertyShema,
     ...propertyTypeShema
-    ...landlordPath
+    // ...landlordPath
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
