@@ -46,6 +46,14 @@ const closeConnection = async () => {
 
 const initModels = async () => {
     initModelUser(sequelize);
+
+
+    // If you have more models, initialize them here and set up associations if needed before syncing the database.
+    Object.values(sequelize).forEach((model) => {
+        if (typeof model.associate === "function") {
+            model.associate(sequelize.models);
+        }
+    })
 };
 
 initModels().then(() => console.log("Models initialized successfully.")).catch(error => console.error("Unable to initialize models:", error));
