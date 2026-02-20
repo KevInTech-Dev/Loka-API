@@ -4,7 +4,9 @@ import {ModelStatic} from "sequelize";
 export class UserRepository {
     private user: ModelStatic<User>
 
-
+    constructor() {
+        this.user = User;
+    }
 
     async createUser(data: UserCreationAttributes) {
         return this.user.create(data);

@@ -6,20 +6,18 @@ export class UserService {
 
     private userRepository: UserRepository;
 
-    constructor(
-
-    ) {
+    constructor() {
         this.userRepository = new UserRepository();
     }
 
     async createUser(data: CreateUserInput) {
         const existingUser = this.userRepository.getUserByEmail(data.email);
 
-        if (existingUser) {
-            throw new Error('User with this email already exists');
+        if (!existingUser) {
+            return null;
         }
 
-        return (await this.userRepository.createUser({
+        const user = (await this.userRepository.createUser({
             email: data.email,
             username: data.username,
             password: data.password,
@@ -28,12 +26,21 @@ export class UserService {
             isActive: false,
         }));
 
+        return {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            role: user.role,
+            isEmailVerified: user.isEmailVerified,
+            isActive: user.isActive,
+        }
+
     }
 
     async getUserById(id: string) {
         const user = await this.userRepository.getUserById(id);
         if (!user) {
-            throw new Error('User not found');
+            return null;
         }
         return user;
     }
@@ -49,7 +56,7 @@ export class UserService {
     async updateUser(id: string, data: Partial<CreateUserInput>) {
         const updatedUser = await this.userRepository.updateUser(id, data);
         if (!updatedUser) {
-            throw new Error('User not found');
+            return null;
         }
         return updatedUser;
     }
