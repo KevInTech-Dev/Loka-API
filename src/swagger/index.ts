@@ -1,6 +1,6 @@
 import env from "@config/env";
 import {OpenAPIV3} from "openapi-types";
-import {userPath, userShema, userTags} from "@/swagger/user.swagger";
+import {userPath, userSchema, userTags} from "@/swagger/user.swagger";
 import { propertyShema } from "./property.swagger";
 import { propertyTypeShema } from "./propertType.swagger";
 import { abonnementsSchema } from "./abonnement.swagger";
@@ -48,8 +48,7 @@ export const paths: OpenAPIV3.PathsObject = {
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
-    ...userShema,
-    ...landlordSchema,
+    ...userSchema,
 
     ...abonnementsSchema, //abonnementsSchema,
     ...propertyShema,
@@ -85,11 +84,11 @@ export const swaggerSpec: OpenAPIV3.Document = {
         schemas,
         // responses,
     },
-    security: [
+   /* security: [
         {
             bearerAuth: [],
         },
-    ],
+    ],*/
     paths,
 };
 

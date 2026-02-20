@@ -31,6 +31,17 @@ app.get('/api-docs.json', (req: Request, res: Response) => {
     res.send(swaggerSpec);
 });
 
+// Health check
+app.get(`${API_PREFIX}/health`, (req: Request, res: Response) => {
+    res.status(200).json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: env.NODE_ENV,
+
+    });
+});
+
 
 app.use(`${API_PREFIX}/users`, userRoute);
 app.use(`${API_PREFIX}/property`, propertyRoute);

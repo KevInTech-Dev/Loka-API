@@ -5,8 +5,8 @@ import {BaseModel} from "@common/models/base.model";
 
 export interface UserAttributes extends BaseModel {
     username: string;
-    firstname: string;
-    lastname: string;
+    firstname?: string;
+    lastname?: string;
     role: RoleEnum
     email: string;
     password: string;
@@ -29,8 +29,8 @@ class User
     declare email: string;
     declare username: string;
     declare password: string;
-    declare firstname: string;
-    declare lastname: string;
+    declare firstname?: string;
+    declare lastname?: string;
     declare role: RoleEnum
     declare isActive: boolean;
     declare profilePhotoUrl?: string;
