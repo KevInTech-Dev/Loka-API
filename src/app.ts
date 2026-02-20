@@ -5,6 +5,7 @@ import env from "@config/env";
 import userRoute from "@modules/users/user.route";
 import abonnementRoute from "@modules/abonnements/abonnement.route";
 import swaggerSpec from "@/swagger";
+import landLordRoute from "./modules/landLord/landLord.route";
 import propertyRoute from "./modules/property/property.route";
 import propertyTypeRoute from "./modules/propertyType/propertyType.route";
 
@@ -35,5 +36,6 @@ app.use(`${API_PREFIX}/users`, userRoute);
 app.use(`${API_PREFIX}/property`, propertyRoute);
 app.use(`${API_PREFIX}/property-type`,propertyTypeRoute)
 app.use(`${API_PREFIX}/abonnements`, abonnementRoute);
+app.use(`${API_PREFIX}/landLords`, landLordRoute);
 
 export default app;

@@ -4,6 +4,8 @@ import env from "@config/env";  // ou "@config" selon votre structure
 import { initModelUser } from "./models/Users";
 import { initModelAbonnement } from "./models/Abonnements";
 
+import { initModelandLord } from "./models/landLord";
+
 const sequelize = new Sequelize({
     ...options,
 });
@@ -48,6 +50,7 @@ const closeConnection = async () => {
 const initModels = async () => {
     initModelUser(sequelize);
     initModelAbonnement(sequelize);
+    initModelandLord(sequelize);
 
 
     // If you have more models, initialize them here and set up associations if needed before syncing the database.
