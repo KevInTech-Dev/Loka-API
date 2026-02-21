@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { LandLordController } from "./landLord.controller";
+import validate from "../middleware/validate.middleware";
+import { createlandLordSchema, landlordIdSchema } from "./landlord.schema";
 
 
 const router: Router = Router();
@@ -9,10 +11,13 @@ router.get('', landlordController.getAllLandlords);
 
 router.get('/:id', landlordController.getlandLord);
 
-router.patch('', landlordController.updatelandLord);
+router.patch('/:id', validate({
+    params: landlordIdSchema,
+    body: createlandLordSchema
+}), landlordController.updatelandLord);
 
-router.post('', landlordController.createlandLord);
+router.post('', validate(createlandLordSchema, 'body'),landlordController.createlandLord);
 
-router.delete('', landlordController.deletelandLord);
+router.delete('', validate(landlordIdSchema, 'params'),landlordController.deletelandLord);
 
 export default router;

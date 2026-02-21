@@ -19,6 +19,6 @@ export class LandLordController {
 
     deletelandLord(req: Request, res: Response) {
         console.log(req.params)
-        return res.send('user deleted');
+        return res.send('landlord deleted');
     }
 }

@@ -56,7 +56,7 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Le pays du propriétaire"
             }
         },
-        required: ["taxId", "registrationNumber", "phonePrimary"]
+        required: ["businessType", "taxId", "registrationNumber", "phonePrimary"]
     }
 }
 
@@ -74,7 +74,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
                             schema: {
                                 type: "array",
                                 items: {
-                                    $ref: "#/components/schema/landlord"
+                                    $ref: "#/components/schemas/landlord"
                                 }
                             }
                         }
@@ -153,7 +153,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
                     schema: {
                         type: "string"
                     },
-                    description: "The unique identifier of the user"
+                    description: "The unique identifier of the landlord"
                 }
             ],
             requestBody: {
