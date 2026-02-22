@@ -12,29 +12,29 @@ export class landLordRepository{
         return this.landlord.create(data);
     }
 
-    async getlandLordById(id: string) {
-        return this.landlord.findByPk(id);
+    async getlandLordByUserId(userId: string) {
+        return this.landlord.findOne({ where: {userId}});
     }
 
     async getAllLandlords(){
-        return this.landlord.findAll;
+        return this.landlord.findAll();
     }
 
-    async getlandLoardPaginated(page: number, limit: number) {
+    async getlandLordPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.landlord.findAll({offset, limit});
-    }
+        return this.landlord.findAll({ offset, limit });
+}
 
     async updatelandLord(id: string, data: Partial<landLordCreationAtributes>){
-        const landlord = await this.getlandLordById(id);
-        if (!landLord) return null;
+        const landlord = await this.getlandLordByUserId(id);
+        if (!landlord) return null;
 
         await landlord.update(data);
         return landlord;
     }
 
     async deletelandLord(id: string) {
-        const landlord = await this.getlandLordById(id);
+        const landlord = await this.getlandLordByUserId(id);
         if(!landlord) return false;
 
        await landlord.destroy();

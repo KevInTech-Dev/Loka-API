@@ -1,20 +1,36 @@
 import { BusinessTypeEnum } from "@/enums/BusinessTypeEnum";
-import { landLordRepository } from "./landlord.repository";
 import { CreateLandlordInput } from "./landlord.schema";
+import { landLordRepository } from "./landlord.repository";
+import { UserRepository } from "../users/user.repository";
 
 
 export  class landLordService {
     private landlordRepository: landLordRepository;
+    private userRepository: UserRepository;
 
     constructor() {
         this.landlordRepository = new landLordRepository();
+        this.userRepository = new UserRepository();
     }
 
     async createlandLord(data: CreateLandlordInput) {
+    
+        //  Vérifier que l'utilisateur existe
+        const user = await this.userRepository.getUserById(data.userId);
+        if (!user) {
+            return null;
+        }
+
+        //  Vérifier que cet utilisateur n'a pas déjà un profil landlord
+        const existingLandlord = await this.landlordRepository.getlandLordByUserId(data.userId);
+        if (existingLandlord) {
+            return null; 
+        }
 
         const landlord = (await this.landlordRepository.createlandLord({
+            userId: data.userId,
             companyName: data.companyName,
-            businessType: BusinessTypeEnum.AGENCE,
+            businessType: data.businessType ?? BusinessTypeEnum.PARTICULIER,
             taxId: data.taxId,
             registrationNumber: data.registrationNumber,
             phonePrimary: data.phonePrimary,
@@ -40,7 +56,7 @@ export  class landLordService {
     }
 
     async getlandLordById(id: string){
-        const landlord = await this.landlordRepository.getlandLordById(id);
+        const landlord = await this.landlordRepository.getlandLordByUserId(id);
         if(!landlord) {
             return null;
         }
@@ -52,7 +68,7 @@ export  class landLordService {
     }
 
     async getlandLordPaginated(page: number, limit: number) {
-        return this.landlordRepository.getlandLoardPaginated(page, limit);
+        return this.landlordRepository.getlandLordPaginated(page, limit);
     }
 
     async updatelandLord(id: string, data: Partial<CreateLandlordInput>) {

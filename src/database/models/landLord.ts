@@ -1,11 +1,10 @@
 import { BaseModel } from "@/common/models/base.model";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { BusinessTypeEnum } from "@/enums/BusinessTypeEnum";
-import { UUID } from "node:crypto";
 import { User } from "./Users";
 
 export interface landLordAtributes extends BaseModel {
-    // userId: UUID;
+    userId: string;
     companyName: string;
     businessType: BusinessTypeEnum
     taxId: string;
@@ -28,8 +27,7 @@ class landLord
     extends Model<landLordAtributes, landLordCreationAtributes>
     implements landLordAtributes {
         declare id: string;
-        // declare userId: string;
-        // declare userId: `${string}-${string}-${string}-${string}-${string}`;
+        declare userId: string;
         declare businessType: BusinessTypeEnum
         declare taxId: string;
         declare registrationNumber: string;
@@ -40,6 +38,12 @@ class landLord
         declare city: string;
         declare country: string;
         declare isVerified: boolean;
+        static associate(models: any) {
+            landLord.belongsTo(models.User, { 
+                foreignKey: 'userId', 
+                as: 'user' 
+            });
+        }
     }
 
 const initModelandLord = (sequelize: Sequelize) => {
@@ -50,14 +54,15 @@ const initModelandLord = (sequelize: Sequelize) => {
                 defaultValue: DataTypes.UUIDV4,
                 primaryKey: true,
             },
-            // userId: {
-            //     type: DataTypes.INTEGER,
-            //     references: {
-            //         model: User,
-            //         key: "id"
-            //     },
-            //     onDelete: "CASCADE"
-            // },
+            userId: {
+                type: DataTypes.UUID,
+                allowNull: false,
+                references: {
+                    model: "users",
+                    key: "id"
+                },
+                onDelete: "CASCADE"
+            },
             companyName: {
                 type: DataTypes.STRING,
                 allowNull: false,

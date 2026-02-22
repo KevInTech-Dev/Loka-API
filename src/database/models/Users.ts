@@ -37,6 +37,13 @@ class User
     declare isEmailVerified: boolean;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
+    //J'ai ajouté l'association qui est entre landlord et user avec la méthode associate()
+    static associate(models: any) {
+        User.hasOne(models.landLord, { 
+            foreignKey: 'userId', 
+            as: 'landlord' 
+        });
+    }
 }
 
 const initModelUser = (sequelize: Sequelize) => {

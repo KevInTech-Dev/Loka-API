@@ -10,6 +10,11 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
     landlord: {
         type:"object",
         properties: {
+            userId: {
+                type: "string",
+                format: "uuid",
+                description: "The unique identifier of the user (landlord owner)"
+            },
             companyName: {
                 type: "string",
                 default: "",
@@ -56,7 +61,7 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Le pays du propriétaire"
             }
         },
-        required: ["businessType", "taxId", "registrationNumber", "phonePrimary"]
+        required: ["userId", "businessType", "taxId", "registrationNumber", "phonePrimary"]
     }
 }
 
