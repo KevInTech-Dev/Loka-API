@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { PropertyController } from "./property.controller";
+import { createPropertySchema, propertyIdShema } from "./property.schema";
+import validate from "../middleware/validate.middleware";
 
 const router : Router = Router();
 const propertyController = new PropertyController();
@@ -15,9 +17,9 @@ router.get('/:id', propertyController.getProperty);
 router.patch('', propertyController.updateProperty);
 
 // create property
-router.post('', propertyController.createProperty);
+router.post('', validate(createPropertySchema, 'params'),propertyController.createProperty);
 
 // delete property by id
-router.delete('/:id', propertyController.deleteProperty);
+router.delete('/:id', validate(propertyIdShema, 'params'),propertyController.deleteProperty);
 
 export default router;
