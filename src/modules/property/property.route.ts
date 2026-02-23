@@ -17,7 +17,7 @@ router.get('/:id', propertyController.getProperty);
 router.patch('', propertyController.updateProperty);
 
 // create property
-router.post('', validate(createPropertySchema, 'params'),propertyController.createProperty);
+router.post('', validate(createPropertySchema, 'body'),propertyController.createProperty);
 
 // delete property by id
 router.delete('/:id', validate(propertyIdShema, 'params'),propertyController.deleteProperty);

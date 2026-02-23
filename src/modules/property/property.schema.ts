@@ -1,8 +1,8 @@
 import {z} from 'zod'
 
 const createPropertySchema = z.object({
-    name:z.string(),
-    type:z.string(),
+    label:z.string(),
+    type:z.uuid(),
     address:z.string(),
     city:z.string(),
     district:z.string(),
@@ -13,7 +13,7 @@ const createPropertySchema = z.object({
     description:z.string(),
     electricityMeterNumber:z.string(),
     waterMeterNumber:z.string(),
-    documents:z.string(),
+    
 })
 
 const propertyIdShema = z.object({

@@ -1,3 +1,5 @@
+import { PropertyTypeRepository } from "../propertyType/propertyType.repository";
+import { PropertyTypeIdParams } from "../propertyType/propertyType.schema";
 import { PropertyRepository } from "./property.repository";
 import { CreatePropertyInput } from "./property.schema";
 
@@ -5,20 +7,30 @@ import { CreatePropertyInput } from "./property.schema";
 export class PropertyService {
 
     private propertyRepository: PropertyRepository;
+    private propertyTypeRepository: PropertyTypeRepository;
 
     constructor() {
         this.propertyRepository = new PropertyRepository();
+        this.propertyTypeRepository = new PropertyTypeRepository();
     }
 
     async createProperty(data: CreatePropertyInput) {
-        const existingProperty = await this.propertyRepository.getPropertyByName(data.name);
+        const existingProperty = await this.propertyRepository.getPropertyByName(data.label);
 
         if (existingProperty) {
-            return null;
+            throw new Error("This property already exists please")
+        }
+    
+        //Verifier l'existance du type de propriété
+        const existingPropertyType = await this.propertyTypeRepository.getPropertyTypeById(data.type);
+            // console.log("Value of the property type found",existingPropertyType);
+        if(!existingPropertyType){
+            throw new Error("This property type does not exits, please enter a valide property type")
         }
 
+
         const property = (await this.propertyRepository.createProperty({
-            name:data.name,
+            name:data.label,
             type:data.type,
             address:data.address,
             city:data.city,
@@ -30,7 +42,7 @@ export class PropertyService {
             description:data.description,
             electricityMeterNumber:data.electricityMeterNumber,
             waterMeterNumber:data.waterMeterNumber,
-            documents:data.documents,
+            documents:null
         }));
 
         return {

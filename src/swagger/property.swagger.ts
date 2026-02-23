@@ -15,6 +15,7 @@ const propertyShema: OpenAPIV3.ComponentsObject['schemas'] = {
             },
             type : {
                 type: "string",
+                format:"uuid",
                 description: "Type of the property"
             },
             address : {
@@ -34,11 +35,11 @@ const propertyShema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Country of the property"
             },
             numberOfUnits : {
-                type: "string",
+                type: "number",
                 description: "Number of units in the property"
             },
             numberOfFloors : {
-                type: "string",
+                type: "number",
                 description: "Number of floors of the property"
             },
             yearBuilt : {
@@ -73,6 +74,7 @@ const propertyShema: OpenAPIV3.ComponentsObject['schemas'] = {
             },
             type : {
                 type: "string",
+                format: "uuid",
                 description: "Type of the property"
             },
             address : {
@@ -92,11 +94,11 @@ const propertyShema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Country of the property"
             },
             numberOfUnits : {
-                type: "string",
+                type: "number",
                 description: "Number of units in the property"
             },
             numberOfFloors : {
-                type: "string",
+                type: "number",
                 description: "Number of floors of the property"
             },
             yearBuilt : {
