@@ -36,6 +36,8 @@ export class UserService {
       isActive: user.isActive,
       profilePhotoUrl: user.profilePhotoUrl,
       isEmailVerified: user.isEmailVerified,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
   }
 
@@ -60,11 +62,41 @@ export class UserService {
   }
 
   async getAllUsers(): Promise<UserResponse[]> {
-    return this.userRepository.getAllUsers();
+    return (await this.userRepository.getAllUsers()).map((user) => {
+      return {
+        id: user.id,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        role: user.role,
+        email: user.email,
+        isActive: user.isActive,
+        profilePhotoUrl: user.profilePhotoUrl,
+        isEmailVerified: user.isEmailVerified,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      };
+    });
   }
 
   async getUserPaginated(page: number, limit: number): Promise<UserResponse[]> {
-    return this.userRepository.getUserPaginated(page, limit);
+    return (await this.userRepository.getUserPaginated(page, limit)).map(
+      (user) => {
+        return {
+          id: user.id,
+          username: user.username,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          role: user.role,
+          email: user.email,
+          isActive: user.isActive,
+          profilePhotoUrl: user.profilePhotoUrl,
+          isEmailVerified: user.isEmailVerified,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        };
+      },
+    );
   }
 
   async updateUser(
