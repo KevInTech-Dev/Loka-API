@@ -11,9 +11,9 @@ export class PropertyService {
     }
 
     async createProperty(data: CreatePropertyInput) {
-        const existingProperty = this.propertyRepository.getPropertyByName(data.name);
+        const existingProperty = await this.propertyRepository.getPropertyByName(data.name);
 
-        if (!existingProperty) {
+        if (existingProperty) {
             return null;
         }
 

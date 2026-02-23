@@ -1,6 +1,5 @@
 import {z} from 'zod'
 
-
 const createPropertySchema = z.object({
     name:z.string(),
     type:z.string(),

@@ -8,8 +8,8 @@ export interface PropertyTypeAttributes extends BaseModel {
 export interface PropertyTypeCreationAttributes extends Optional<PropertyTypeAttributes, "id" | "createdAt" | "updatedAt"> { }
 
 class PropertyType extends Model<PropertyTypeAttributes, PropertyTypeCreationAttributes> implements PropertyTypeAttributes {
-    id!: string;
-    label!: string;
+    declare id: string;
+    declare label: string;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
 }

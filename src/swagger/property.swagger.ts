@@ -11,71 +11,131 @@ const propertyShema: OpenAPIV3.ComponentsObject['schemas'] = {
         properties: {
             label: {
                 type: "string",
-                default: "",
                 description: "Label of the property"
             },
             type : {
                 type: "string",
-                default:"",
                 description: "Type of the property"
             },
             address : {
                 type: "string",
-                default:"",
                 description: "Address of the property"
             },
             city : {
                 type: "string",
-                default:"",
                 description: "City of the property"
             },
             district : {
                 type: "string",
-                default:"",
                 description: "District of the property"
             },
             country : {
                 type: "string",
-                default:"",
                 description: "Country of the property"
             },
             numberOfUnits : {
                 type: "string",
-                default:"",
                 description: "Number of units in the property"
             },
             numberOfFloors : {
                 type: "string",
-                default:"",
                 description: "Number of floors of the property"
             },
             yearBuilt : {
                 type: "string",
-                default:"",
                 description: "The year the property was built"
             },
             description : {
                 type: "string",
-                default:"",
                 description: "Description of the property"
             },
             electricityMeterNumber : {
                 type: "string",
-                default:"",
                 description: "Electricity meter number of the property"
             },
             waterMeterNumber : {
                 type: "string",
-                default:"",
                 description: "Water meter number of the property"
             },
             documents : {
                 type: "string",
-                default:"",
                 description: "documents of the property"
             },
         },
-        required: ["label","label","type","address","city","district" ,"country","numberOfUnits","numberOfFloors","yearBuilt","description","electricityMeterNumber","waterMeterNumber","documents"]
+        required: ["label","type","address","city","district" ,"country","numberOfUnits","numberOfFloors","yearBuilt","description","electricityMeterNumber","waterMeterNumber"]
+    },
+    createPropertyRequest: {
+        type: "object",
+        properties: {
+            label: {
+                type: "string",
+                description: "Label of the property"
+            },
+            type : {
+                type: "string",
+                description: "Type of the property"
+            },
+            address : {
+                type: "string",
+                description: "Address of the property"
+            },
+            city : {
+                type: "string",
+                description: "City of the property"
+            },
+            district : {
+                type: "string",
+                description: "District of the property"
+            },
+            country : {
+                type: "string",
+                description: "Country of the property"
+            },
+            numberOfUnits : {
+                type: "string",
+                description: "Number of units in the property"
+            },
+            numberOfFloors : {
+                type: "string",
+                description: "Number of floors of the property"
+            },
+            yearBuilt : {
+                type: "string",
+                description: "The year the property was built"
+            },
+            description : {
+                type: "string",
+                description: "Description of the property"
+            },
+            electricityMeterNumber : {
+                type: "string",
+                description: "Electricity meter number of the property"
+            },
+            waterMeterNumber : {
+                type: "string",
+                description: "Water meter number of the property"
+            },
+        },
+        required: ["label","type","address","city","district" ,"country","numberOfUnits","numberOfFloors","yearBuilt","description","electricityMeterNumber","waterMeterNumber"]
+    },
+    paginatedProperty: {
+        type: "object",
+        properties: {
+            page: {
+                type: "integer",
+                description: "Current page number"
+            },
+            limit: {
+                type: "integer",
+                description: "Number of items per page"
+            },
+            data: {
+                type: "array",
+                items: {
+                    $ref: "#/components/schemas/property"
+                }
+            }
+        }
     }
 }
 
@@ -85,15 +145,46 @@ const propertyPath: OpenAPIV3.PathsObject = {
             tags: ["Property"],
             summary: "Get all propertys",
             description: "Retrieve a list of all propertys in the system",
+                        parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 1
+                    },
+                    description: "Page number (starting from 1)"
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 10
+                    },
+                    description: "Number of items per page"
+                }
+            ],
             responses: {
                 "200": {
                     description: "A list of propertys",
                     content: {
                         "application/json": {
                             schema: {
-                                type: "array",
-                                items: {
-                                    $ref: "#/components/schemas/property"
+                                type: "object",
+                                properties: {
+                                    page: {
+                                        type: "integer"
+                                    },
+                                    limit: {
+                                        type: "integer"
+                                    },
+                                    data: {
+                                        type: "array",
+                                        items: {
+                                            $ref: "#/components/schemas/property"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -110,7 +201,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/property"
+                            $ref: "#/components/schemas/createPropertyRequest"
                         }
                     }
                 }
@@ -121,10 +212,18 @@ const propertyPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/property"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/property"
+                                    }
+                                }
                             }
                         }
                     }
+                },
+                "400":{
+                    description:"Invalid input"
                 }
             }
         }
@@ -140,7 +239,8 @@ const propertyPath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format:"uuid"
                     },
                     description: "The unique identifier of the property"
                 }
@@ -151,7 +251,12 @@ const propertyPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/property"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/property"
+                                    }
+                                }
                             }
                         }
                     }
@@ -171,7 +276,8 @@ const propertyPath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format:"uuid"
                     },
                     description: "The unique identifier of the property"
                 }
@@ -181,7 +287,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/property"
+                            $ref: "#/components/schemas/createPropertyRequest"
                         }
                     }
                 }
@@ -192,7 +298,12 @@ const propertyPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/property"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/property"
+                                    }
+                                }
                             }
                         }
                     }
@@ -212,14 +323,27 @@ const propertyPath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format:"uuid"
                     },
                     description: "The unique identifier of the property"
                 }
             ],
             responses: {
                 "200": {
-                    description: "property deleted successfully"
+                    description: "property deleted successfully",
+                    content:{
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        type: "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 "404": {
                     description: "property not found"

@@ -1,8 +1,8 @@
 import env from "@config/env";
 import {OpenAPIV3} from "openapi-types";
 import {userPath, userSchema, userTags} from "@/swagger/user.swagger";
-import { propertyShema } from "./property.swagger";
-import { propertyTypeShema } from "./propertType.swagger";
+import { propertyPath, propertyShema } from "./property.swagger";
+import { propertyTypePath, propertyTypeShema } from "./propertType.swagger";
 import { abonnementsSchema } from "./abonnement.swagger";
 import { landlordPath, landlordSchema, landlordTags } from "./landLord.swagger";
 
@@ -42,8 +42,8 @@ export const paths: OpenAPIV3.PathsObject = {
     },
     // Module paths
     ...userPath,
-    ...propertyShema,
-    ...propertyTypeShema
+    ...propertyPath,
+    ...propertyTypePath
     // ...landlordPath
 };
 

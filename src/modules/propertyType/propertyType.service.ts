@@ -11,9 +11,10 @@ export class PropertyTypeService {
     }
 
     async createPropertyType(data: CreatePropertyTypeInput) {
-        const existingPropertyType = this.propertyTypeRepository.getPropertyTypeByLabel(data.label);
+        const existingPropertyType = await this.propertyTypeRepository.getPropertyTypeByLabel(data.label);
+        console.log(existingPropertyType)
 
-        if (!existingPropertyType) {
+        if (existingPropertyType) {
             return null;
         }
 
