@@ -1,19 +1,23 @@
-import { landLord, landLordCreationAtributes } from "@/database/models/landLord";
+import { LandLord, landLordCreationAtributes } from "@/database/models/landLord";
 import { ModelStatic } from "sequelize";
 
 export class landLordRepository{
-    private landlord: ModelStatic<landLord>
+    private landlord: ModelStatic<LandLord>
 
     constructor(){
-        this.landlord = landLord;
+        this.landlord = LandLord;
     }
 
     async createlandLord(data: landLordCreationAtributes) {
         return this.landlord.create(data);
     }
 
-    async getlandLordByUserId(userId: string) {
-        return this.landlord.findOne({ where: {userId}});
+    async getlandLordById(id: string) {
+        return this.landlord.findByPk(id);
+    }
+
+     async getlandLordByUserId(userId: string) {
+        return this.landlord.findOne({ where: { userId } });
     }
 
     async getAllLandlords(){
@@ -26,7 +30,7 @@ export class landLordRepository{
 }
 
     async updatelandLord(id: string, data: Partial<landLordCreationAtributes>){
-        const landlord = await this.getlandLordByUserId(id);
+        const landlord = await this.getlandLordById(id);
         if (!landlord) return null;
 
         await landlord.update(data);
@@ -34,7 +38,7 @@ export class landLordRepository{
     }
 
     async deletelandLord(id: string) {
-        const landlord = await this.getlandLordByUserId(id);
+        const landlord = await this.getlandLordById(id);
         if(!landlord) return false;
 
        await landlord.destroy();

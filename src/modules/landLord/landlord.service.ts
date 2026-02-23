@@ -42,6 +42,8 @@ export  class landLordService {
         }));
 
         return {
+            id: landlord.id,
+            userId: landlord.userId,
             companyName: landlord.companyName,
             businessType: landlord.businessType,
             taxId: landlord.taxId,
@@ -56,7 +58,7 @@ export  class landLordService {
     }
 
     async getlandLordById(id: string){
-        const landlord = await this.landlordRepository.getlandLordByUserId(id);
+        const landlord = await this.landlordRepository.getlandLordById(id);
         if(!landlord) {
             return null;
         }

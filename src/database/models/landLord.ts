@@ -1,7 +1,6 @@
 import { BaseModel } from "@/common/models/base.model";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { BusinessTypeEnum } from "@/enums/BusinessTypeEnum";
-import { User } from "./Users";
 
 export interface landLordAtributes extends BaseModel {
     userId: string;
@@ -17,13 +16,14 @@ export interface landLordAtributes extends BaseModel {
     isVerified: boolean;
 }
 
+//l'id est optionnel parceque Sequelize génère le UUID automatiquement
 export interface landLordCreationAtributes extends Optional<
     landLordAtributes,
     "id"
 > {
 }
 
-class landLord
+class LandLord
     extends Model<landLordAtributes, landLordCreationAtributes>
     implements landLordAtributes {
         declare id: string;
@@ -39,7 +39,7 @@ class landLord
         declare country: string;
         declare isVerified: boolean;
         static associate(models: any) {
-            landLord.belongsTo(models.User, { 
+            LandLord.belongsTo(models.User, { 
                 foreignKey: 'userId', 
                 as: 'user' 
             });
@@ -47,7 +47,7 @@ class landLord
     }
 
 const initModelandLord = (sequelize: Sequelize) => {
-    landLord.init(
+    LandLord.init(
         {
             id: {
                 type: DataTypes.UUID,
@@ -65,7 +65,7 @@ const initModelandLord = (sequelize: Sequelize) => {
             },
             companyName: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             businessType: {
                 type: DataTypes.ENUM(...Object.values(BusinessTypeEnum)),
@@ -87,12 +87,12 @@ const initModelandLord = (sequelize: Sequelize) => {
             },
             phoneSecondary: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 unique: true,
             },
             address: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             city: {
                 type: DataTypes.STRING,
@@ -112,4 +112,4 @@ const initModelandLord = (sequelize: Sequelize) => {
     );
 };
 
-export {landLord, initModelandLord}
+export {LandLord, initModelandLord}
