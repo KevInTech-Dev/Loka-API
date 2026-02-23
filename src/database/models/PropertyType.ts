@@ -5,7 +5,7 @@ export interface PropertyTypeAttributes extends BaseModel {
     label: string;
 }
 
-export interface PropertyTypeCreationAttributes extends Optional<BaseModel, "id" | "createdAt" | "updatedAt"> { }
+export interface PropertyTypeCreationAttributes extends Optional<PropertyTypeAttributes, "id" | "createdAt" | "updatedAt"> { }
 
 class PropertyType extends Model<PropertyTypeAttributes, PropertyTypeCreationAttributes> implements PropertyTypeAttributes {
     id!: string;
