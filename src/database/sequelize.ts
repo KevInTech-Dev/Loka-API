@@ -24,7 +24,7 @@ const testConnection = async () => {
   }
 };
 
-const syncDatabase = async (force: boolean = false) => {
+const syncDatabase = async (force: boolean = false, alter: boolean = false) => {
   if (env.NODE_ENV === "production") {
     console.warn(
       "Database synchronization is disabled in production environment.",
@@ -33,7 +33,7 @@ const syncDatabase = async (force: boolean = false) => {
   }
 
   try {
-    await sequelize.sync({ force, alter: true });
+    await sequelize.sync({ force, alter });
     console.log("Database synchronized successfully.");
   } catch (error) {
     console.error("Unable to synchronize the database:", error);
