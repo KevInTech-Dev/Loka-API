@@ -5,6 +5,8 @@ import { initModelUser } from "./models/Users";
 import { initModelAbonnement } from "./models/Abonnements";
 
 import { initModelandLord } from "./models/landLord";
+import { initModelProperty } from "./models/Property";
+import { initModelPropertyType } from "./models/PropertyType";
 
 const sequelize = new Sequelize({
   ...options,
@@ -51,6 +53,8 @@ const initModels = async () => {
   initModelUser(sequelize);
   initModelAbonnement(sequelize);
   initModelandLord(sequelize);
+  initModelProperty(sequelize);
+  initModelPropertyType(sequelize);
 
   // If you have more models, initialize them here and set up associations if needed before syncing the database.
   Object.values(sequelize).forEach((model) => {

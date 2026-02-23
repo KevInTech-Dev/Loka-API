@@ -1,35 +1,33 @@
 import { BaseModel } from "@/common/models/base.model";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { BusinessTypeEnum } from "@/enums/BusinessTypeEnum";
-import { UUID } from "node:crypto";
-import { User } from "./Users";
 
 export interface landLordAtributes extends BaseModel {
-    // userId: UUID;
-    companyName: string;
+    userId: string;
+    companyName?: string;
     businessType: BusinessTypeEnum
-    taxId: string;
     registrationNumber: string;
+    taxId: string;
     phonePrimary: string;
-    phoneSecondary: string;
+    phoneSecondary?: string;
     address: string;
-    city: string;
-    country: string;
+    city?: string;
+    country?: string;
     isVerified: boolean;
 }
 
+//l'id est optionnel parceque Sequelize génère le UUID automatiquement
 export interface landLordCreationAtributes extends Optional<
     landLordAtributes,
-    "id"
+    "id" | "companyName" | "phoneSecondary" | "city" | "country"
 > {
 }
 
-class landLord
+class LandLord
     extends Model<landLordAtributes, landLordCreationAtributes>
     implements landLordAtributes {
         declare id: string;
-        // declare userId: string;
-        // declare userId: `${string}-${string}-${string}-${string}-${string}`;
+        declare userId: string;
         declare businessType: BusinessTypeEnum
         declare taxId: string;
         declare registrationNumber: string;
@@ -40,27 +38,34 @@ class landLord
         declare city: string;
         declare country: string;
         declare isVerified: boolean;
+        static associate(models: any) {
+            LandLord.belongsTo(models.User, { 
+                foreignKey: 'userId', 
+                as: 'user' 
+            });
+        }
     }
 
 const initModelandLord = (sequelize: Sequelize) => {
-    landLord.init(
+    LandLord.init(
         {
             id: {
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
                 primaryKey: true,
             },
-            // userId: {
-            //     type: DataTypes.INTEGER,
-            //     references: {
-            //         model: User,
-            //         key: "id"
-            //     },
-            //     onDelete: "CASCADE"
-            // },
+            userId: {
+                type: DataTypes.UUID,
+                allowNull: false,
+                references: {
+                    model: "users",
+                    key: "id"
+                },
+                onDelete: "CASCADE"
+            },
             companyName: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             businessType: {
                 type: DataTypes.ENUM(...Object.values(BusinessTypeEnum)),
@@ -82,12 +87,12 @@ const initModelandLord = (sequelize: Sequelize) => {
             },
             phoneSecondary: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
                 unique: true,
             },
             address: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             city: {
                 type: DataTypes.STRING,
@@ -107,4 +112,4 @@ const initModelandLord = (sequelize: Sequelize) => {
     );
 };
 
-export {landLord, initModelandLord}
+export {LandLord, initModelandLord}
