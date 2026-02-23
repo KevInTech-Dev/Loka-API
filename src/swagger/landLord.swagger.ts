@@ -30,11 +30,6 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 default: "",
                 description: "Numero fiscal"
             },
-            registrationNumber: {
-                type: "string",
-                default: "",
-                description: "Numero d'enrégistrement du propriétaire"
-            },
             phonePrimary: {
                 type: "string",
                 default: "+228 XX XX XX XX",
@@ -61,7 +56,28 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Le pays du propriétaire"
             }
         },
-        required: ["userId", "businessType", "taxId", "registrationNumber", "phonePrimary"]
+        required: ["userId", "businessType", "taxId", "phonePrimary"]
+    },
+    paginatedlandLord: {
+        type: "object",
+        properties: {
+            page: {
+                type: "integer",
+                description: "Current page number"
+            },
+            limit: {
+                type: "integer",
+                description: "Number of items per page"
+            },
+            data: {
+                
+                    type: "array",
+                    items: {
+                        $ref: "#/components/schemas/landlord"
+                    }
+                
+            }
+        }
     }
 }
 
@@ -69,17 +85,48 @@ const landlordPath: OpenAPIV3.PathsObject = {
     "/landlords": {
         get: {
             tags: ["landLord"],
-            summary: "Get all landlords",
-            description: "Retrieve a list of all landlords in the system",
+            summary: "Get all landlords with pagination",
+            description: "Retrieve paginated a list of all landlords in the system",
+            parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 1
+                    },
+                    description: "Page number(startint from 1)"
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: "10"
+                    },
+                    description: "Number of items per page"
+                },
+            ],
             responses: {
                 "200": {
-                    description: "A list of landlords",
+                    description: "A paginated list of landlords",
                     content: {
                         "application/json": {
                             schema: {
-                                type: "array",
-                                items: {
-                                    $ref: "#/components/schemas/landlord"
+                                type: "object",
+                                properties: {
+                                    page: {
+                                        type: "integer"
+                                    },
+                                    limit: {
+                                        type: "integer"
+                                    },
+                                    data: {
+                                        type: "array",
+                                        items: {
+                                            $ref: "#/components/schemas/landlord"
+                                        }
+                                    }
                                 }
                             }
                         }

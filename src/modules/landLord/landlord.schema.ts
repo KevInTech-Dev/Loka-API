@@ -8,9 +8,6 @@ const createlandLordSchema = z.object({
     taxId: z.string()
         .min(1, "Tax ID is required")
         .max(100, "Tax id myst be at most 100 characters long"),
-    registrationNumber: z.string()
-        .min(1, "Registration number is required")
-        .max(100, "Registration number must be at most 100 characters long"),
     phonePrimary: z.string()
         .min(1, "Primary phone is required")
         .max(20, "Primary phone must be at most 20 characters long"),

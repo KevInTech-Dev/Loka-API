@@ -4,22 +4,22 @@ import { BusinessTypeEnum } from "@/enums/BusinessTypeEnum";
 
 export interface landLordAtributes extends BaseModel {
     userId: string;
-    companyName: string;
+    companyName?: string;
     businessType: BusinessTypeEnum
-    taxId: string;
     registrationNumber: string;
+    taxId: string;
     phonePrimary: string;
-    phoneSecondary: string;
+    phoneSecondary?: string;
     address: string;
-    city: string;
-    country: string;
+    city?: string;
+    country?: string;
     isVerified: boolean;
 }
 
 //l'id est optionnel parceque Sequelize génère le UUID automatiquement
 export interface landLordCreationAtributes extends Optional<
     landLordAtributes,
-    "id"
+    "id" | "companyName" | "phoneSecondary" | "city" | "country"
 > {
 }
 

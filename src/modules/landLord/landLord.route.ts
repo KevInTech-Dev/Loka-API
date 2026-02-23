@@ -18,6 +18,6 @@ router.patch('/:id', validate({
 
 router.post('', validate(createlandLordSchema, 'body'),landlordController.createlandLord);
 
-router.delete('', validate(landlordIdSchema, 'params'),landlordController.deletelandLord);
+router.delete('/:id', validate(landlordIdSchema, 'params'),landlordController.deletelandLord);
 
 export default router;

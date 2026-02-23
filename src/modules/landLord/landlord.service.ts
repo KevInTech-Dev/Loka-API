@@ -14,7 +14,10 @@ export  class landLordService {
     }
 
     async createlandLord(data: CreateLandlordInput) {
-    
+        
+        //J'ai généré le numero d'enrégistrement du propriétaire
+        const registrationNumber = `REG-${data.userId.substring(0,8)}-${Date.now()}`;
+
         //  Vérifier que l'utilisateur existe
         const user = await this.userRepository.getUserById(data.userId);
         if (!user) {
@@ -32,7 +35,7 @@ export  class landLordService {
             companyName: data.companyName,
             businessType: data.businessType ?? BusinessTypeEnum.PARTICULIER,
             taxId: data.taxId,
-            registrationNumber: data.registrationNumber,
+            registrationNumber: registrationNumber,
             phonePrimary: data.phonePrimary,
             phoneSecondary: data.phoneSecondary,
             address: data.address,
