@@ -2,7 +2,7 @@
   "name": "loka-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "npx tsx --watch src/server.ts",
     "build": "tsc",
@@ -36,6 +36,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/js-yaml": "^4.0.9",
+    "@types/multer": "^2.0.0",
     "@types/sequelize": "^6.12.0",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
