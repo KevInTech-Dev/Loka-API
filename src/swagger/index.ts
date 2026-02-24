@@ -1,19 +1,11 @@
 import env from "@config/env";
 import {OpenAPIV3} from "openapi-types";
-<<<<<<< Updated upstream
-import {userPath, userShema, userTags} from "@/swagger/user.swagger";
-import { abonnementsSchema } from "./abonnement.swagger";
-
-
-export const tags: OpenAPIV3.TagObject[] = [
-    userTags
-=======
 import {userPath, userSchema, userTags} from "@/swagger/user.swagger";
-import { propertyShema } from "./property.swagger";
+import { propertyPath, propertyShema } from "./property.swagger";
 import { propertyTypeShema } from "./propertType.swagger";
 import { abonnementsSchema, abonnementsTags, abonnementPath } from "./abonnement.swagger";
 import { landlordPath, landlordSchema, landlordTags } from "./landLord.swagger";
-import { utilisateurAbonnementPath, utilisateurAbonnementTags } from "./utilisateur_abonnement.swagger";
+import { utilisateurAbonnementPath, utilisateurAbonnementSchema, utilisateurAbonnementTags } from "./utilisateur_abonnement.swagger";
 
 
 export const tags: OpenAPIV3.TagObject[] = [
@@ -21,8 +13,6 @@ export const tags: OpenAPIV3.TagObject[] = [
     landlordTags, 
     abonnementsTags,
     utilisateurAbonnementTags,
-    
->>>>>>> Stashed changes
 ];
 
 export const paths: OpenAPIV3.PathsObject = {
@@ -53,28 +43,23 @@ export const paths: OpenAPIV3.PathsObject = {
         },
     },
     // Module paths
-<<<<<<< Updated upstream
-    ...userPath
-=======
-    ...userPath,
+
+  ...userPath,
     ...propertyShema,
-    ...abonnementPath,
-    ... utilisateurAbonnementPath,
     ...propertyTypeShema,
-    ...abonnementsSchema,
-   
->>>>>>> Stashed changes
+    ...landlordPath,
+    ...abonnementPath,
+    ...utilisateurAbonnementPath,
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
-    ...userShema, //abonnementsSchema,
-
-<<<<<<< Updated upstream
-=======
-    ...abonnementsSchema, 
+  ...userSchema,
     ...propertyShema,
-    ...propertyTypeShema
->>>>>>> Stashed changes
+    ...propertyTypeShema,
+    ...landlordSchema,
+    ...abonnementsSchema, //abonnementsSchema,
+    ...utilisateurAbonnementSchema,
+
 };
 
 
@@ -101,30 +86,16 @@ export const swaggerSpec: OpenAPIV3.Document = {
 
     ],
     tags,
-<<<<<<< Updated upstream
     components: {
         // securitySchemes,
         schemas,
         // responses,
     },
-    security: [
+   /* security: [
         {
             bearerAuth: [],
         },
-    ],
-=======
-   components: {
-    securitySchemes: {
-        bearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT',
-        },
-    },
-    schemas,
-},
-security: [{ bearerAuth: [] }],
->>>>>>> Stashed changes
+    ],*/
     paths,
 };
 

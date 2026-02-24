@@ -5,27 +5,102 @@ const userTags: OpenAPIV3.TagObject = {
     description: "Operations related to user management"
 }
 
-const userShema: OpenAPIV3.ComponentsObject['schemas'] = {
+const userSchema: OpenAPIV3.ComponentsObject['schemas'] = {
     user: {
         type: "object",
         properties: {
-            usename: {
+            id: {
                 type: "string",
-                default: "",
-                description: "Name of the user"
+                format: "uuid",
+                description: "Unique identifier of the user"
+            },
+            firstname: {
+                type: "string",
+                description: "First name of the user"
+            },
+            lastname: {
+                type: "string",
+                description: "Last name of the user"
             },
             email: {
                 type: "string",
-                default: 'user@fmail.com',
+                format: "email",
                 description: "Email address of the user"
             },
             password: {
                 type: "string",
-                default: "P@$$w0rd",
-                description: "Password for the user account"
+                description: "Password for the user account (hashed in response)"
+            },
+            role: {
+                type: "string",
+                enum: ["locataire", "proprietaire", "admin"],
+                description: "Role of the user"
+            },
+            isActive: {
+                type: "boolean",
+                description: "Whether the user account is active"
+            },
+            profilePhotoUrl: {
+                type: "string",
+                nullable: true,
+                description: "URL to the user's profile photo"
+            },
+            isEmailVerified: {
+                type: "boolean",
+                description: "Whether the user's email has been verified"
+            },
+            createdAt: {
+                type: "string",
+                format: "date-time",
+                description: "Timestamp when the user was created"
+            },
+            updatedAt: {
+                type: "string",
+                format: "date-time",
+                description: "Timestamp when the user was last updated"
             }
         },
-        required: ["username", "email", "password"]
+        required: ["id", "email", "role", "isActive", "isEmailVerified", "createdAt", "updatedAt"]
+    },
+    createUserRequest: {
+        type: "object",
+        properties: {
+            email: {
+                type: "string",
+                format: "email",
+                example: "user@example.com",
+                description: "Email address of the user"
+            },
+            password: {
+                type: "string",
+                example: "P@$$w0rd123",
+                description: "Password for the user account"
+            },
+            username: {
+                type: "string",
+                description: "Optional username"
+            }
+        },
+        required: ["email", "password"]
+    },
+    paginatedUsers: {
+        type: "object",
+        properties: {
+            page: {
+                type: "integer",
+                description: "Current page number"
+            },
+            limit: {
+                type: "integer",
+                description: "Number of items per page"
+            },
+            data: {
+                type: "array",
+                items: {
+                    $ref: "#/components/schemas/user"
+                }
+            }
+        }
     }
 }
 
@@ -33,17 +108,48 @@ const userPath: OpenAPIV3.PathsObject = {
     "/users": {
         get: {
             tags: ["User"],
-            summary: "Get all users",
-            description: "Retrieve a list of all users in the system",
+            summary: "Get all users with pagination",
+            description: "Retrieve a paginated list of all users in the system",
+            parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 1
+                    },
+                    description: "Page number (starting from 1)"
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 10
+                    },
+                    description: "Number of items per page"
+                }
+            ],
             responses: {
                 "200": {
-                    description: "A list of users",
+                    description: "A paginated list of users",
                     content: {
                         "application/json": {
                             schema: {
-                                type: "array",
-                                items: {
-                                    $ref: "#/components/schemas/user"
+                                type: "object",
+                                properties: {
+                                    page: {
+                                        type: "integer"
+                                    },
+                                    limit: {
+                                        type: "integer"
+                                    },
+                                    data: {
+                                        type: "array",
+                                        items: {
+                                            $ref: "#/components/schemas/user"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -60,7 +166,7 @@ const userPath: OpenAPIV3.PathsObject = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/user"
+                            $ref: "#/components/schemas/createUserRequest"
                         }
                     }
                 }
@@ -71,10 +177,18 @@ const userPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/user"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/user"
+                                    }
+                                }
                             }
                         }
                     }
+                },
+                "400": {
+                    description: "Invalid input"
                 }
             }
         }
@@ -90,7 +204,8 @@ const userPath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format: "uuid"
                     },
                     description: "The unique identifier of the user"
                 }
@@ -101,7 +216,12 @@ const userPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/user"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/user"
+                                    }
+                                }
                             }
                         }
                     }
@@ -121,7 +241,8 @@ const userPath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format: "uuid"
                     },
                     description: "The unique identifier of the user"
                 }
@@ -131,7 +252,7 @@ const userPath: OpenAPIV3.PathsObject = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/user"
+                            $ref: "#/components/schemas/createUserRequest"
                         }
                     }
                 }
@@ -142,7 +263,12 @@ const userPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/user"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/user"
+                                    }
+                                }
                             }
                         }
                     }
@@ -162,14 +288,27 @@ const userPath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format: "uuid"
                     },
                     description: "The unique identifier of the user"
                 }
             ],
             responses: {
                 "200": {
-                    description: "User deleted successfully"
+                    description: "User deleted successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        type: "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 "404": {
                     description: "User not found"
@@ -181,6 +320,6 @@ const userPath: OpenAPIV3.PathsObject = {
 
 export {
     userTags,
-    userShema,
+    userSchema,
     userPath
 }
