@@ -3,22 +3,25 @@ import { PropertyTypeController } from "./propertyType.controller";
 import { createPropertyTypeSchema, propertyTypeIdShema } from "./propertyType.schema";
 import validate from "../middleware/validate.middleware";
 
-const router : Router = Router();
+const router: Router = Router();
 const propertyTypeController = new PropertyTypeController();
+
+// create propertyType
+router.post('', validate(createPropertyTypeSchema, 'body'), propertyTypeController.createpropertyType);
 
 // get all propertyTpe
 router.get('', propertyTypeController.getAllpropertyType);
 
+// delete propertyType by id
+router.delete('/:id', validate(propertyTypeIdShema, 'params'), propertyTypeController.deletepropertyType);
+
 // get propertyType by id
-router.get('/:id', propertyTypeController.getpropertyType);
+router.get('/:id', validate(propertyTypeIdShema, 'params'), propertyTypeController.getpropertyType);
 
 // update propertyType by id
-router.patch('', propertyTypeController.updatepropertyType);
-
-// create propertyType
-router.post('', validate(createPropertyTypeSchema, 'body'),propertyTypeController.createpropertyType);
-
-// delete propertyType by id
-router.delete('/:id', validate(propertyTypeIdShema, 'params'),propertyTypeController.deletepropertyType);
+router.patch('/:id', validate({
+    params: propertyTypeIdShema,
+    body: createPropertyTypeSchema
+}), propertyTypeController.updatepropertyType);
 
 export default router;

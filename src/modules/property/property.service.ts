@@ -20,48 +20,47 @@ export class PropertyService {
         if (existingProperty) {
             throw new Error("This property already exists please")
         }
-    
+
         //Verifier l'existance du type de propriété
         const existingPropertyType = await this.propertyTypeRepository.getPropertyTypeById(data.type);
-            // console.log("Value of the property type found",existingPropertyType);
-        if(!existingPropertyType){
+        if (!existingPropertyType) {
             throw new Error("This property type does not exits, please enter a valide property type")
         }
 
 
         const property = (await this.propertyRepository.createProperty({
-            name:data.label,
-            type:data.type,
-            address:data.address,
-            city:data.city,
-            district:data.district,
-            country:data.country,
-            numberOfUnits:data.numberOfUnits,
-            numberOfFloors:data.numberOfFloors,
-            yearBuilt:data.yearBuilt,
-            description:data.description,
-            electricityMeterNumber:data.electricityMeterNumber,
-            waterMeterNumber:data.waterMeterNumber,
-            documents:null
+            label: data.label,
+            type: data.type,
+            address: data.address,
+            city: data.city,
+            district: data.district,
+            country: data.country,
+            numberOfUnits: data.numberOfUnits,
+            numberOfFloors: data.numberOfFloors,
+            yearBuilt: data.yearBuilt,
+            description: data.description,
+            electricityMeterNumber: data.electricityMeterNumber,
+            waterMeterNumber: data.waterMeterNumber,
+            documents: null
         }));
 
         return {
-            id:property.id,
-            name:property.name,
-            type:property.type,
-            address:property.address,
-            city:property.city,
-            district:property.district,
-            country:property.country,
-            numberOfUnits:property.numberOfUnits,
-            numberOfFloors:property.numberOfFloors,
-            yearBuilt:property.yearBuilt,
-            description:property.description,
-            electricityMeterNumber:property.electricityMeterNumber,
-            waterMeterNumber:property.waterMeterNumber,
-            documents:property.documents,
-            createdAt:property.createdAt,
-            updatedAt:property.updatedAt,
+            id: property.id,
+            label: property.label,
+            type: property.type,
+            address: property.address,
+            city: property.city,
+            district: property.district,
+            country: property.country,
+            numberOfUnits: property.numberOfUnits,
+            numberOfFloors: property.numberOfFloors,
+            yearBuilt: property.yearBuilt,
+            description: property.description,
+            electricityMeterNumber: property.electricityMeterNumber,
+            waterMeterNumber: property.waterMeterNumber,
+            documents: property.documents,
+            createdAt: property.createdAt,
+            updatedAt: property.updatedAt,
         }
 
     }
@@ -83,11 +82,13 @@ export class PropertyService {
     }
 
     async updateProperty(id: string, data: Partial<CreatePropertyInput>) {
-        const updatedProperty = await this.propertyRepository.updateProperty(id, data);
-        if (!updatedProperty) {
-            return null;
+        const verifyPropertyType = await this.propertyTypeRepository.getPropertyTypeById(data.type);
+        if (verifyPropertyType) {
+            const updatedProperty = await this.propertyRepository.updateProperty(id, data);
+            return updatedProperty;
+        } else if (!verifyPropertyType) {
+            throw new Error("The property type does not exist , please check");
         }
-        return updatedProperty;
     }
 
     async deleteProperty(id: string) {

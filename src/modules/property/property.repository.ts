@@ -1,6 +1,6 @@
 
 import { Property, PropertyCreationAttributes } from "@/database/models/Property";
-import {ModelStatic} from "sequelize";
+import { ModelStatic } from "sequelize";
 
 export class PropertyRepository {
     private Property: ModelStatic<Property>
@@ -23,7 +23,7 @@ export class PropertyRepository {
 
     async getPropertyPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.Property.findAll({offset, limit});
+        return this.Property.findAll({ offset, limit });
     }
 
     async updateProperty(id: string, data: Partial<PropertyCreationAttributes>) {
@@ -42,7 +42,7 @@ export class PropertyRepository {
         return true;
     }
 
-    getPropertyByName(name: string) {
-        return this.Property.findOne({where: {name}});
+    getPropertyByName(label: string) {
+        return this.Property.findOne({ where: { label } });
     }
 }

@@ -11,8 +11,8 @@ export class UserService {
     }
 
     async createUser(data: CreateUserInput) {
-        const existingUser =await this.userRepository.getUserByEmail(data.email);
-
+        const existingUser = await this.userRepository.getUserByEmail(data.email);
+       
         if (existingUser) {
             return null;
         }

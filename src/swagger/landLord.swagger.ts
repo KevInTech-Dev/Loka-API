@@ -10,6 +10,11 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
     landlord: {
         type:"object",
         properties: {
+            userId: {
+                type: "string",
+                format: "uuid",
+                description: "The unique identifier of the user (landlord owner)"
+            },
             companyName: {
                 type: "string",
                 default: "",
@@ -24,11 +29,6 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 type: "string",
                 default: "",
                 description: "Numero fiscal"
-            },
-            registrationNumber: {
-                type: "string",
-                default: "",
-                description: "Numero d'enrégistrement du propriétaire"
             },
             phonePrimary: {
                 type: "string",
@@ -56,7 +56,28 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Le pays du propriétaire"
             }
         },
-        required: ["taxId", "registrationNumber", "phonePrimary"]
+        required: ["userId", "businessType", "taxId", "phonePrimary"]
+    },
+    paginatedlandLord: {
+        type: "object",
+        properties: {
+            page: {
+                type: "integer",
+                description: "Current page number"
+            },
+            limit: {
+                type: "integer",
+                description: "Number of items per page"
+            },
+            data: {
+                
+                    type: "array",
+                    items: {
+                        $ref: "#/components/schemas/landlord"
+                    }
+                
+            }
+        }
     }
 }
 
@@ -64,17 +85,48 @@ const landlordPath: OpenAPIV3.PathsObject = {
     "/landlords": {
         get: {
             tags: ["landLord"],
-            summary: "Get all landlords",
-            description: "Retrieve a list of all landlords in the system",
+            summary: "Get all landlords with pagination",
+            description: "Retrieve paginated a list of all landlords in the system",
+            parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 1
+                    },
+                    description: "Page number(startint from 1)"
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: "10"
+                    },
+                    description: "Number of items per page"
+                },
+            ],
             responses: {
                 "200": {
-                    description: "A list of landlords",
+                    description: "A paginated list of landlords",
                     content: {
                         "application/json": {
                             schema: {
-                                type: "array",
-                                items: {
-                                    $ref: "#/components/schema/landlord"
+                                type: "object",
+                                properties: {
+                                    page: {
+                                        type: "integer"
+                                    },
+                                    limit: {
+                                        type: "integer"
+                                    },
+                                    data: {
+                                        type: "array",
+                                        items: {
+                                            $ref: "#/components/schemas/landlord"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -153,7 +205,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
                     schema: {
                         type: "string"
                     },
-                    description: "The unique identifier of the user"
+                    description: "The unique identifier of the landlord"
                 }
             ],
             requestBody: {
