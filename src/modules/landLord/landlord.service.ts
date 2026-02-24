@@ -21,7 +21,7 @@ export  class landLordService {
         //  Vérifier que l'utilisateur existe ou pas
         const user = await this.userRepository.getUserById(data.userId);
         if (!user) {
-            return null;
+            return null ;
         }
 
         //  Vérifier que cet utilisateur n'a pas déjà un profil landlord

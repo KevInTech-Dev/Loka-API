@@ -3,9 +3,7 @@ import { ModelStatic } from "sequelize";
 
 
 export class TenantRepository {
-    getTenantPaginated(page: number, limit: number) {
-        throw new Error("Method not implemented.");
-    }
+
     private tenant: ModelStatic<Tenant>
 
     constructor() {
@@ -24,7 +22,11 @@ export class TenantRepository {
         return this.tenant.findAll();
     }
 
-    async getTenantPaginatedqf(page: number, limit: number) {
+    async getTenantByUserId(userId: string) {
+        return this.tenant.findOne({ where: { userId } });
+    }
+
+    async getTenantPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
         return this.tenant.findAll({offset, limit});
     }

@@ -13,7 +13,7 @@ router.post('', validate(createTenantSchema, 'body'), tenantController.createTen
 
 router.get('/:id', tenantController.getTenant);
 
-router.patch('id/:id', validate({
+router.patch('/:id', validate({
     params: tenantIdSchema,
     body: createTenantSchema
 }), tenantController.updateTenant);

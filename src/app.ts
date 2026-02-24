@@ -7,6 +7,7 @@ import abonnementRoute from "@modules/abonnements/abonnement.route";
 import swaggerSpec from "@/swagger";
 import landLordRoute from "./modules/landLord/landLord.route";
 import propertyRoute from "./modules/property/property.route";
+import tenantRoute from "@/modules/tenant/tenant.routes"
 import propertyTypeRoute from "./modules/propertyType/propertyType.route";
 
 const app: Express = express();
@@ -48,5 +49,6 @@ app.use(`${API_PREFIX}/property`, propertyRoute);
 app.use(`${API_PREFIX}/property-type`,propertyTypeRoute)
 app.use(`${API_PREFIX}/abonnements`, abonnementRoute);
 app.use(`${API_PREFIX}/landLords`, landLordRoute);
+app.use(`${API_PREFIX}/tenants`, tenantRoute)
 
 export default app;

@@ -4,9 +4,6 @@ import { TenantRepository } from "./tenant.repository";
 import { CreateTenantInput } from "./tenant.schema";
 
 export class TenantService {
-    getTenantPa(page: number, limit: number) {
-        throw new Error("Method not implemented.");
-    }
     private tenantRepository: TenantRepository;
     private userRepository: UserRepository;
 
@@ -22,7 +19,7 @@ export class TenantService {
             return null;
         }
 
-        const existingTenant = await this.tenantRepository.getTenantById(data.userId);
+        const existingTenant = await this.tenantRepository.getTenantByUserId(data.userId);
         if (existingTenant) {
             return null; 
         
@@ -38,7 +35,13 @@ export class TenantService {
             id_card_type: data.id_card_type,
             id_card_number: data.id_card_number,
             id_card_front_url: data.id_card_front_url,
-            id_card_back_url: data.id_card_back_url
+            id_card_back_url: data.id_card_back_url,
+            occupation: data.occupation,
+            employer_name: data.employer_name,
+            employer_contact: data.employer_contact,
+            emergency_contact_name: data.emergency_contact_name,
+            emergency_contact_phone: data.emergency_contact_phone,
+            emergenc_contact_relationship: data.emergency_contact_relationship
         }));
 
         return {

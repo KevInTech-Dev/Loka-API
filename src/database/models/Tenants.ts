@@ -73,7 +73,7 @@ class Tenant
                     onDelete: "CASCADE"
                 },
                 date_of_birth: {
-                    type: DataTypes.STRING,
+                    type: DataTypes.DATE,
                     allowNull: false
                 },
                 gender: {

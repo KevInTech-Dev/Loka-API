@@ -22,7 +22,7 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
             },
             businessType: {
                 type: "string",
-                description: "The status of the transaction",
+                description: "agence | particulier | entreprise",
                 enum: [...Object.values(BusinessTypeEnum)]
             },
             taxId: {
@@ -86,7 +86,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["landLord"],
             summary: "Get all landlords with pagination",
-            description: "Retrieve paginated a list of all landlords in the system",
+            description: "Retrieve a paginated list of all landlords in the system",
             parameters: [
                 {
                     name: "page",
