@@ -1,7 +1,7 @@
 import http from "http";
 import app from "./app";
 import env from "./config/env";
-import {syncDatabase, testConnection} from "@database/sequelize";
+import {syncDatabase, testConnection} from "@/config/sequelize";
 
 let server: http.Server;
 

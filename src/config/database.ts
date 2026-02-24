@@ -9,11 +9,11 @@ const options: Options = {
     password: env.DB_PASSWORD,
     database: env.DB_NAME,
     logging:
-        env.NODE_ENV === "development"
+        /*env.NODE_ENV === "development"
             ? (msg) => {
                 console.log(`[SQL ]- ${new Date().toISOString()}  ${msg}`);
             }
-            : false,
+            :*/ false,
     dialect: "postgres",
 };
 
