@@ -18,7 +18,7 @@ export  class landLordService {
         //J'ai généré le numero d'enrégistrement du propriétaire
         const registrationNumber = `REG-${data.userId.substring(0,8)}-${Date.now()}`;
 
-        //  Vérifier que l'utilisateur existe
+        //  Vérifier que l'utilisateur existe ou pas
         const user = await this.userRepository.getUserById(data.userId);
         if (!user) {
             return null;
