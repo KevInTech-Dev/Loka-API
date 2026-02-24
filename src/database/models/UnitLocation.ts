@@ -44,9 +44,9 @@ class UnitLocation extends Model<UnitLocationAttributes, UnitLocationCreationAtt
     declare updatedAt?: Date;
     //Association avec la classe UnitType
     static associate(models: any) {
-        UnitLocation.hasOne(models.unitType, {
-            foreignKey: 'userId',
-            as: 'landlord'
+        UnitLocation.belongsTo(models.unitType, {
+            foreignKey: 'unitTypeId',
+            as: 'unitType'
         });
     }
 
