@@ -15,9 +15,12 @@ import errorHandler, {
 const app: Express = express();
 const API_PREFIX = env.API_PREFIX;
 
-app.use(express.json());
+// Parse JSON bodies
+app.use(express.json({ limit: '10mb' }));
 
-app.use(express.urlencoded({ extended: true }));
+// Parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 
 //cors origin
 app.use(cors());

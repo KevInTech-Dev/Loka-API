@@ -315,6 +315,66 @@ const userPath: OpenAPIV3.PathsObject = {
                 }
             }
         }
+    },
+    "/users/photo/{id}": {
+        post: {
+            tags: ["User"],
+            summary: "Add profile photo to user",
+            description: "Upload a profile photo for a user by their unique ID",
+            parameters: [
+                {
+                    name: "id",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string",
+                        format: "uuid"
+                    },
+                    description: "The unique identifier of the user"
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "multipart/form-data": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                photo: {
+                                    type: "string",
+                                    format: "binary",
+                                    description: "The profile photo file to upload"
+                                }
+                            },
+                            required: ["photo"]
+                        }
+                    }
+                }
+            },
+            responses: {
+                "200": {
+                    description: "Profile photo added successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/user"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    description: "No file uploaded"
+                },
+                "404": {
+                    description: "User not found"
+                }
+            }
+        }
     }
 }
 
