@@ -15,6 +15,10 @@ export interface EnvConfig {
   DB_LOGGING: boolean;
 
   API_PREFIX?: string;
+
+  // File upload settings
+  MAX_FILE_SIZE: number;
+  UPLOAD_DIR: string;
 }
 
 const getEnvVar = (key: string, defaultValue?: string): string => {
@@ -60,6 +64,10 @@ export const env: EnvConfig = {
   //API
   PORT: getEnvVarNumber("PORT"),
   API_PREFIX: getEnvVar("API_PREFIX", "/api"),
+
+  //File upload
+  MAX_FILE_SIZE: getEnvVarNumber("MAX_FILE_SIZE", 5242880), // 5MB default
+  UPLOAD_DIR: getEnvVar("UPLOAD_DIR", "uploads"),
 };
 
 export default env;

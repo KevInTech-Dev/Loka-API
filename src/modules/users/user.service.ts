@@ -2,6 +2,7 @@ import { CreateUserInput } from "@modules/users/user.schema";
 import { UserRepository } from "@modules/users/user.repository";
 import { RoleEnum } from "@/enums/RoleEnum";
 import { UserResponse } from "./user.types";
+import { DuplicateEntryError, NotFoundError } from "@/common/errors";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -14,7 +15,7 @@ export class UserService {
     const existingUser = await this.userRepository.getUserByEmail(data.email);
 
     if (existingUser) {
-      return null;
+      throw new DuplicateEntryError("Email already in use");
     }
 
     const user = await this.userRepository.createUser({
@@ -43,9 +44,11 @@ export class UserService {
 
   async getUserById(id: string): Promise<UserResponse | null> {
     const user = await this.userRepository.getUserById(id);
+
     if (!user) {
-      return null;
+      throw new NotFoundError("User not found");
     }
+
     return {
       id: user.id,
       username: user.username,
