@@ -15,20 +15,20 @@ export class TenantRepository {
     }
 
     async getTenantById(id: string) {
-        return this.tenant.findByPk(id);
+        return this.tenant.findOne({ where: {id, deletedAt: null}});
     }
 
     async getAllTenants() {
-        return this.tenant.findAll();
+        return this.tenant.findAll({ where: { deletedAt: null}});
     }
 
     async getTenantByUserId(userId: string) {
-        return this.tenant.findOne({ where: { userId } });
+        return this.tenant.findOne({ where: { userId , deletedAt: null} });
     }
 
     async getTenantPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.tenant.findAll({offset, limit});
+        return this.tenant.findAll({where: {deletedAt: null }, offset, limit});
     }
 
     async updateTenant(id: string, data: Partial<TenantCreationAttributes>) {
@@ -43,7 +43,7 @@ export class TenantRepository {
         const tenant = await this.getTenantById(id);
         if (!tenant) return false;
 
-        await tenant.destroy();
+        await tenant.update({ deletedAt: new Date()});
         return true;
     }
 }

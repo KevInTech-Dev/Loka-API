@@ -2,6 +2,8 @@ import { BusinessTypeEnum } from "@/enums/BusinessTypeEnum";
 import { CreateLandlordInput } from "./landlord.schema";
 import { landLordRepository } from "./landlord.repository";
 import { UserRepository } from "../users/user.repository";
+import { landLordResponse } from "./landlord.types";
+import { DuplicateEntryError, NotFoundError } from "@/common/errors";
 
 
 export  class landLordService {
@@ -13,7 +15,7 @@ export  class landLordService {
         this.userRepository = new UserRepository();
     }
 
-    async createlandLord(data: CreateLandlordInput) {
+    async createlandLord(data: CreateLandlordInput): Promise<landLordResponse | null> {
         
         //J'ai généré le numero d'enrégistrement du propriétaire
         const registrationNumber = `REG-${data.userId.substring(0,8)}-${Date.now()}`;
@@ -21,16 +23,16 @@ export  class landLordService {
         //  Vérifier que l'utilisateur existe ou pas
         const user = await this.userRepository.getUserById(data.userId);
         if (!user) {
-            return null ;
+           throw new NotFoundError("User ");
         }
 
         //  Vérifier que cet utilisateur n'a pas déjà un profil landlord
         const existingLandlord = await this.landlordRepository.getlandLordByUserId(data.userId);
         if (existingLandlord) {
-            return null; 
+            throw new DuplicateEntryError("The user already has a landlord profile");
         }
 
-        const landlord = (await this.landlordRepository.createlandLord({
+        const landlord = await this.landlordRepository.createlandLord({
             userId: data.userId,
             companyName: data.companyName,
             businessType: data.businessType ?? BusinessTypeEnum.PARTICULIER,
@@ -42,7 +44,7 @@ export  class landLordService {
             city: data.city,
             country: data.country,
             isVerified: false
-        }));
+        });
 
         return {
             id: landlord.id,
@@ -56,38 +58,105 @@ export  class landLordService {
             address: landlord.address,
             city: landlord.city,
             country: landlord.country,
-            isVerified: landlord.isVerified
+            isVerified: landlord.isVerified,
+            createdAt: landlord.createdAt,
+            updatedAt: landlord.updatedAt
         }
     }
 
-    async getlandLordById(id: string){
+    async getlandLordById(id: string): Promise<landLordResponse | null>{
         const landlord = await this.landlordRepository.getlandLordById(id);
         if(!landlord) {
-            return null;
+            throw new NotFoundError("Landlord ");
         }
-        return landlord;
+        return {
+             id: landlord.id,
+            userId: landlord.userId,
+            companyName: landlord.companyName,
+            businessType: landlord.businessType,
+            taxId: landlord.taxId,
+            registrationNumber: landlord.registrationNumber,
+            phonePrimary: landlord.phonePrimary,
+            phoneSecondary: landlord.phoneSecondary,
+            address: landlord.address,
+            city: landlord.city,
+            country: landlord.country,
+            isVerified: landlord.isVerified,
+            createdAt: landlord.createdAt,
+            updatedAt: landlord.updatedAt
+        };
     }
 
-    async getAllLandlords() {
-        return this.landlordRepository.getAllLandlords();
+    async getAllLandlords(): Promise<landLordResponse[]> {
+        return (await this.landlordRepository.getAllLandlords()).map((landlord) => {
+            return {
+                 id: landlord.id,
+                userId: landlord.userId,
+                companyName: landlord.companyName,
+                businessType: landlord.businessType,
+                taxId: landlord.taxId,
+                registrationNumber: landlord.registrationNumber,
+                phonePrimary: landlord.phonePrimary,
+                phoneSecondary: landlord.phoneSecondary,
+                address: landlord.address,
+                city: landlord.city,
+                country: landlord.country,
+                isVerified: landlord.isVerified,
+                createdAt: landlord.createdAt,
+                updatedAt: landlord.updatedAt
+            };
+        });
     }
 
-    async getlandLordPaginated(page: number, limit: number) {
-        return this.landlordRepository.getlandLordPaginated(page, limit);
+    async getlandLordPaginated(page: number, limit: number): Promise<landLordResponse[]> {
+        return (await this.landlordRepository.getlandLordPaginated(page, limit)).map(
+            (landlord) => {
+                return {
+                     id: landlord.id,
+                    userId: landlord.userId,
+                    companyName: landlord.companyName,
+                    businessType: landlord.businessType,
+                    taxId: landlord.taxId,
+                    registrationNumber: landlord.registrationNumber,
+                    phonePrimary: landlord.phonePrimary,
+                    phoneSecondary: landlord.phoneSecondary,
+                    address: landlord.address,
+                    city: landlord.city,
+                    country: landlord.country,
+                    isVerified: landlord.isVerified,
+                    createdAt: landlord.createdAt,
+                    updatedAt: landlord.updatedAt
+                };
+            },
+        );
     }
 
-    async updatelandLord(id: string, data: Partial<CreateLandlordInput>) {
+    async updatelandLord(id: string, data: Partial<CreateLandlordInput>): Promise<landLordResponse | null> {
         const updatelandLord = await this.landlordRepository.updatelandLord(id, data);
         if(!updatelandLord) {
-            return null;
+            throw new NotFoundError("Landlord ")
         }
-        return updatelandLord;
-    }
-
-    async deletelandLord(id: string) {
+        return {
+             id: updatelandLord.id,
+            userId: updatelandLord.userId,
+            companyName: updatelandLord.companyName,
+            businessType: updatelandLord.businessType,
+            taxId: updatelandLord.taxId,
+            registrationNumber: updatelandLord.registrationNumber,
+            phonePrimary: updatelandLord.phonePrimary,
+            phoneSecondary: updatelandLord.phoneSecondary,
+            address: updatelandLord.address,
+            city: updatelandLord.city,
+            country: updatelandLord.country,
+            isVerified: updatelandLord.isVerified,
+            createdAt: updatelandLord.createdAt,
+            updatedAt: updatelandLord.updatedAt,
+    };
+}
+    async deletelandLord(id: string): Promise<boolean> {
         const deleted = await this.landlordRepository.deletelandLord(id);
         if(!deleted) {
-            throw new Error("Landlord not found");
+            throw new Error("Landlord ");
         }
         return true;
     }

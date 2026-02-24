@@ -4,7 +4,8 @@ import z from "zod";
 
 const createTenantSchema = z.object({
     userId: z.uuid("Invalide user ID format"),
-    date_of_birth: z.date(),
+    date_of_birth: z.coerce.date(),
+    // date_of_birth: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$/),
     gender: z.enum(GenderEnum),
     nationality: z.string()
         .min(1, "nationality required")

@@ -1,6 +1,10 @@
 import { BusinessTypeEnum } from "@/enums/BusinessTypeEnum";
 import z from "zod";
 
+const landlordPaginationSchema = z.object({
+    page: z.coerce.number().min(1).default(1),
+    limit: z.coerce.number().min(1).default(10),
+});
 const createlandLordSchema = z.object({
     userId: z.uuid("Invalide user ID format"),
     companyName: z.string().optional(),
@@ -29,4 +33,5 @@ export {
     landlordIdSchema,
     landLordIdParams,
     CreateLandlordInput,
+    landlordPaginationSchema,
 }

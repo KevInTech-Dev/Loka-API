@@ -19,6 +19,7 @@ export interface TenantAttributes extends BaseModel {
     emergency_contact_name? : string;
     emergency_contact_phone?: string;
     emergenc_contact_relationship?: string;
+    deletedAt?: Date | null;
 }
 
 export interface TenantCreationAttributes extends Optional<
@@ -47,6 +48,7 @@ class Tenant
         declare emergency_contact_name?: string;
         declare emergency_contact_phone?: string;
         declare emergenc_contact_relationship?: string;
+        declare deletedAt?: Date | null;
         static associate(models: any) {
             Tenant.belongsTo(models.User, {
                 foreignKey: 'userId',
@@ -73,8 +75,8 @@ class Tenant
                     onDelete: "CASCADE"
                 },
                 date_of_birth: {
-                    type: DataTypes.DATE,
-                    allowNull: false
+                    type: DataTypes.DATEONLY,
+                    allowNull: false,
                 },
                 gender: {
                     type: DataTypes.ENUM(...Object.values(GenderEnum)),
@@ -134,7 +136,12 @@ class Tenant
                 emergenc_contact_relationship: {
                     type: DataTypes.STRING,
                     allowNull: true
-                }
+                },
+                    deletedAt: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: null,
+                 }
             },
             {sequelize, modelName: "Tenant", tableName: "tenants", timestamps: true, underscored: true},
         );

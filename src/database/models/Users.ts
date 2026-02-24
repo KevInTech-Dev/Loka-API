@@ -43,12 +43,10 @@ class User
             foreignKey: 'userId', 
             as: 'landlord' 
         });
-        {
             User.hasOne(models.Tenant, {
                 foreignKey: 'userId',
                 as: 'tenant'
             });
-        }
     }
 }
 
