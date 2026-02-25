@@ -12,11 +12,11 @@ const userController = new UserController();
 router.get("", validate(defaultPaginationQuery, 'query'), userController.getAllUsers);
 
 // create user
-router.post("", validate(createUserSchema, "body"), singleUpload({
+router.post("", singleUpload({
     fieldName: "photo",
     fileType: 'image',
     subFolder: "profiles",
-}), userController.createUser);
+}), validate(createUserSchema, "body"), userController.createUser);
 
 router.post("/photo/:id", validate(userIdShema, 'params'), singleUpload({
     fieldName: "photo",

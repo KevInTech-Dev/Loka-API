@@ -65,6 +65,11 @@ const userSchema: OpenAPIV3.ComponentsObject['schemas'] = {
     createUserRequest: {
         type: "object",
         properties: {
+            photo: {
+                type: "string",
+                format: "binary",
+                description: "The profile photo file to upload"
+            },
             email: {
                 type: "string",
                 format: "email",
@@ -80,13 +85,16 @@ const userSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 type: "string",
                 description: "Optional username"
             },
-            role: {
+            firstname: {
                 type: "string",
-                enum: ["locataire", "proprietaire", "admin"],
-                description: "Role of the user"
-            }
+                description: "Optional first name"
+            },
+            lastname: {
+                type: "string",
+                description: "Optional last name"
+            },
         },
-        required: ["email", "password", "role"]
+        required: ["photo", "email", "password", "username"]
     },
     paginatedUsers: {
         type: "object",
@@ -169,7 +177,7 @@ const userPath: OpenAPIV3.PathsObject = {
             requestBody: {
                 required: true,
                 content: {
-                    "application/json": {
+                    "multipart/form-data": {
                         schema: {
                             $ref: "#/components/schemas/createUserRequest"
                         }

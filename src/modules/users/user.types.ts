@@ -14,11 +14,7 @@ export type UserResponse = BaseTypes & {
 };
 
 
-//
-// export type WhereQueryUser = {
-//   [key in keyof UserAttributes]?: ;
-// }
-//
-// export type whereQueryValue = {
-//
-// }
+
+export type WhereQueryUser = {
+  [key in keyof UserAttributes]?: string | number | boolean;
+};

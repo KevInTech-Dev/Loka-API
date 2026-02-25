@@ -1,6 +1,6 @@
 import {User, UserAttributes, UserCreationAttributes} from "@database/models/Users";
 import {ModelStatic} from "sequelize";
-// import {WhereQueryUser} from "@modules/users/user.types";
+import {WhereQueryUser} from "@modules/users/user.types";
 
 export class UserRepository {
     private user: ModelStatic<User>
@@ -10,7 +10,7 @@ export class UserRepository {
     }
 
     async createUser(data: UserCreationAttributes) {
-        return this.user.create(data);
+        return await this.user.create(data);
     }
 
     async getUserById(id: string) {
@@ -47,4 +47,13 @@ export class UserRepository {
         });
     }
 
+
+    getUserByMutipleAttributs(attribut: WhereQueryUser) {
+
+        return this.user.findOne({
+            where: {
+                ...attribut
+            }
+        })
+    }
 }

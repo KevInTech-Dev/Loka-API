@@ -51,7 +51,7 @@ export class UserController {
     };
 
     createUser = async (req: Request, res: Response) => {
-        const data: CreateUserInput = {...req.body, photo: req.file.path, role: "admin"};
+        const data: CreateUserInput = {...req.body, photo: req?.file?.path ?? null, role: "admin"};
         return res.send({
             data: await this.userService.createUser(data),
         });
