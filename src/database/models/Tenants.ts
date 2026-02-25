@@ -107,11 +107,11 @@ class Tenant
                 },
                 id_card_front_url: {
                     type: DataTypes.STRING,
-                    allowNull: false
+                    allowNull: true
                 },
                 id_card_back_url: {
                     type: DataTypes.STRING,
-                    allowNull: false
+                    allowNull: true
                 },
                 occupation: {
                     type: DataTypes.STRING,

@@ -61,6 +61,7 @@ const initModelUser = (sequelize: Sequelize) => {
             username: {
                 type: DataTypes.STRING,
                 allowNull: true,
+                unique: true
             }, firstname: {
                 type: DataTypes.STRING,
                 allowNull: true,

@@ -1,32 +1,36 @@
-import { GenderEnum } from "@/enums/GenderEnum";
-import { UserRepository } from "../users/user.repository";
-import { TenantRepository } from "./tenant.repository";
-import { CreateTenantInput } from "./tenant.schema";
+import {GenderEnum} from "@/enums/GenderEnum";
+import {TenantRepository} from "./tenant.repository";
+import {CreateTenantInput} from "./tenant.schema";
+import {UserService} from "@modules/users/user.service";
+import {RoleEnum} from "@/enums/RoleEnum";
 
 export class TenantService {
     private tenantRepository: TenantRepository;
-    private userRepository: UserRepository;
+    private userService: UserService
+
 
     constructor() {
         this.tenantRepository = new TenantRepository();
-        this.userRepository = new UserRepository();
+        this.userService = new UserService();
 
     }
 
     async createTenant(data: CreateTenantInput) {
-       const user = await this.userRepository.getUserById(data.userId);
-        if (!user) {
-            return null;
-        }
 
-        const existingTenant = await this.tenantRepository.getTenantByUserId(data.userId);
-        if (existingTenant) {
-            return null; 
-        
-        }
+
+        const {id: userID, ...user} = await this.userService.createUser({
+            email: data.email,
+            username: data.username,
+            password: data.password,
+            role: RoleEnum.LOCATAIRE,
+            firstname: data.firstname,
+            lastname: data.lastname,
+            photo: data.photo
+        })
+
 
         const tenant = (await this.tenantRepository.createTenant({
-            userId: data.userId,
+            userId: userID,
             date_of_birth: data.date_of_birth,
             gender: data.gender ?? GenderEnum.MASCULIN,
             nationality: data.nationality,
@@ -61,13 +65,14 @@ export class TenantService {
             employer_contact: tenant.employer_contact,
             emergency_contact_name: tenant.emergency_contact_name,
             emergency_contact_phone: tenant.emergency_contact_phone,
-            emergency_contact_relationship: tenant.emergenc_contact_relationship
+            emergency_contact_relationship: tenant.emergenc_contact_relationship,
+            ...user
         }
     }
 
     async getTenantById(id: string) {
         const tenant = await this.tenantRepository.getTenantById(id);
-        if(!tenant) {
+        if (!tenant) {
             return null;
         }
         return tenant;
@@ -81,9 +86,9 @@ export class TenantService {
         return this.tenantRepository.getTenantPaginated(page, limit);
     }
 
-    async updateTenant(id: string, data: Partial<CreateTenantInput>){
+    async updateTenant(id: string, data: Partial<CreateTenantInput>) {
         const updateTenant = await this.tenantRepository.updateTenant(id, data);
-        if(!updateTenant) {
+        if (!updateTenant) {
             return null;
         }
 
@@ -92,7 +97,7 @@ export class TenantService {
 
     async deleteTenant(id: string) {
         const deleteTenant = await this.tenantRepository.deleteTenant(id);
-        if(!deleteTenant) {
+        if (!deleteTenant) {
             throw new Error("Tenant not found");
         }
         return true;
