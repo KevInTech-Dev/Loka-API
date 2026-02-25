@@ -1,9 +1,11 @@
+import { RoleEnum } from '@/enums/RoleEnum'
 import {z} from 'zod'
 
 
 const createUserSchema = z.object({
     email: z.email(),
     username: z.string().optional(),
+    role : z.enum(RoleEnum),
     password: z.string()
         .min(6, 'Password must be at least 6 characters long')
         .max(100, 'Password must be at most 100 characters long')

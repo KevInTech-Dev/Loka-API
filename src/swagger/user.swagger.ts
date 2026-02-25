@@ -79,9 +79,14 @@ const userSchema: OpenAPIV3.ComponentsObject['schemas'] = {
             username: {
                 type: "string",
                 description: "Optional username"
+            },
+            role: {
+                type: "string",
+                enum: ["locataire", "proprietaire", "admin"],
+                description: "Role of the user"
             }
         },
-        required: ["email", "password"]
+        required: ["email", "password", "role"]
     },
     paginatedUsers: {
         type: "object",

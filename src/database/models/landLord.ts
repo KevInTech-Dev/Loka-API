@@ -14,6 +14,7 @@ export interface landLordAtributes extends BaseModel {
     city?: string;
     country?: string;
     isVerified: boolean;
+    deletedAt?: Date | null;
 }
 
 //l'id est optionnel parceque Sequelize génère le UUID automatiquement
@@ -38,6 +39,9 @@ class LandLord
         declare city: string;
         declare country: string;
         declare isVerified: boolean;
+        declare readonly createdAt: Date;
+        declare readonly updatedAt?: Date;
+        declare deletedAt: Date | null;
         static associate(models: any) {
             LandLord.belongsTo(models.User, { 
                 foreignKey: 'userId', 
@@ -84,6 +88,11 @@ const initModelandLord = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true
+            },
+            deletedAt: {
+                type: DataTypes.DATE,
+                allowNull: true,
+                defaultValue: null,
             },
             phoneSecondary: {
                 type: DataTypes.STRING,

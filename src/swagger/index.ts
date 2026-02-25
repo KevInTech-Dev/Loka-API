@@ -5,12 +5,14 @@ import { propertyShema } from "./property.swagger";
 import { propertyTypeShema } from "./propertType.swagger";
 import { abonnementsSchema } from "./abonnement.swagger";
 import { landlordPath, landlordSchema, landlordTags } from "./landLord.swagger";
+import { tenantPath, tenantSchema, tenantTags } from "./tenant.swagger";
 
 
 
 export const tags: OpenAPIV3.TagObject[] = [
     userTags,
-    landlordTags
+    landlordTags,
+    tenantTags
 ];
 
 export const paths: OpenAPIV3.PathsObject = {
@@ -44,7 +46,8 @@ export const paths: OpenAPIV3.PathsObject = {
     ...userPath,
     ...propertyShema,
     ...propertyTypeShema,
-    ...landlordPath
+    ...landlordPath,
+    ...tenantPath
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
@@ -53,7 +56,8 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...abonnementsSchema, //abonnementsSchema,
     ...propertyShema,
     ...propertyTypeShema,
-    ...landlordSchema
+    ...landlordSchema,
+    ...tenantSchema
 };
 
 
