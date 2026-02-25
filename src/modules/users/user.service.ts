@@ -1,6 +1,5 @@
 import {CreateUserInput} from "@modules/users/user.schema";
 import {UserRepository} from "@modules/users/user.repository";
-import {RoleEnum} from "@/enums/RoleEnum";
 import {UserResponse} from "./user.types";
 import {DuplicateEntryError, NotFoundError} from "@/common/errors";
 import {deleteFile, fileExists} from "@utils/file.utils";
