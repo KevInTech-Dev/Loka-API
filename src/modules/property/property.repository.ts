@@ -17,10 +17,6 @@ export class PropertyRepository {
         return this.Property.findByPk(id);
     }
 
-    async getAllProperty() {
-        return this.Property.findAll();
-    }
-
     async getPropertyPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
         return this.Property.findAll({ offset, limit });

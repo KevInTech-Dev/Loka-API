@@ -2,7 +2,8 @@ import { z } from 'zod'
 
 
 const createpropertyUnitLocationSchema = z.object({
-    label: z.string(),
+    unitLocationId: z.uuid(),
+    proprieteId: z.uuid()
 })
 
 const propertyUnitLocationIdShema = z.object({

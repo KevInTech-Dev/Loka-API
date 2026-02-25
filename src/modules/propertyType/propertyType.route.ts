@@ -2,6 +2,7 @@ import { Router } from "express";
 import { PropertyTypeController } from "./propertyType.controller";
 import { createPropertyTypeSchema, propertyTypeIdShema } from "./propertyType.schema";
 import validate from "../middleware/validate.middleware";
+import { defaultPaginationQuery } from "@/common/api.schema";
 
 const router: Router = Router();
 const propertyTypeController = new PropertyTypeController();
@@ -10,7 +11,7 @@ const propertyTypeController = new PropertyTypeController();
 router.post('', validate(createPropertyTypeSchema, 'body'), propertyTypeController.createpropertyType);
 
 // get all propertyTpe
-router.get('', propertyTypeController.getAllpropertyType);
+router.get('', validate(defaultPaginationQuery, 'body'), propertyTypeController.getAllpropertyType);
 
 // delete propertyType by id
 router.delete('/:id', validate(propertyTypeIdShema, 'params'), propertyTypeController.deletepropertyType);

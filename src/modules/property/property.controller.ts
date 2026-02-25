@@ -1,11 +1,11 @@
-import {Request, Response} from "express";
+import { Request, Response } from "express";
 import { PropertyService } from "./property.service";
 import { CreatePropertyInput } from "./property.schema";
 
-export class PropertyController{
+export class PropertyController {
     private readonly propertyService: PropertyService;
 
-    constructor(){
+    constructor() {
         this.propertyService = new PropertyService();
     }
 
@@ -15,7 +15,7 @@ export class PropertyController{
         return res.send({
             page: req.query.page,
             limit: req.query.limit,
-            data: await this.propertyService.getPropertyPaginated(page, limit)
+            data: await this.propertyService.getAllPropertys(page, limit)
         });
     }
 

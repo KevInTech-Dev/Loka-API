@@ -4,6 +4,7 @@ import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { Json } from "sequelize/lib/utils";
 
 export interface UnitLocationAttributes extends BaseModel {
+    unitType: string;
     unitNumber: string;
     unitName: string;
     floor: number;
@@ -24,6 +25,7 @@ export interface UnitLocationAttributes extends BaseModel {
 export interface UnitLocationCreationAttributes extends Optional<UnitLocationAttributes, "id" | "createdAt" | "updatedAt"> { }
 
 class UnitLocation extends Model<UnitLocationAttributes, UnitLocationCreationAttributes> implements UnitLocationAttributes {
+    declare unitType: string;
     declare unitNumber: string;
     declare unitName: string;
     declare floor: number;
@@ -59,6 +61,10 @@ const initUnitLocation = (sequelize: Sequelize) => {
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true
         },
+        unitType: {
+            type: DataTypes.UUID,
+            allowNull: false
+        },
         unitName: {
             type: DataTypes.STRING,
             allowNull: false
@@ -81,7 +87,7 @@ const initUnitLocation = (sequelize: Sequelize) => {
         },
         amenities: {
             type: DataTypes.JSON,
-            allowNull: false
+            allowNull: true
         },
         electricityMeterId: {
             type: DataTypes.STRING,

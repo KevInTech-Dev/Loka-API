@@ -12,17 +12,23 @@ class PropertyType extends Model<PropertyTypeAttributes, PropertyTypeCreationAtt
     declare label: string;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
+    static associate(models: any) {
+        PropertyType.hasMany(models.property, {
+            foreignKey: 'propertyTypeId',
+            as: 'property'
+        });
+    }
 }
 
 const initModelPropertyType = (sequelize: Sequelize) => {
     PropertyType.init(
         {
-            id:{
+            id: {
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
                 primaryKey: true,
             },
-            label:{
+            label: {
                 type: DataTypes.STRING,
                 allowNull: false
             },
@@ -31,4 +37,4 @@ const initModelPropertyType = (sequelize: Sequelize) => {
     )
 
 };
-export {PropertyType, initModelPropertyType};
+export { PropertyType, initModelPropertyType };

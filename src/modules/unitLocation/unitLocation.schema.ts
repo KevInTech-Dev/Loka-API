@@ -2,7 +2,21 @@ import { z } from 'zod'
 
 
 const createunitLocationSchema = z.object({
-    label: z.string(),
+    unitTypeId: z.uuid(),
+    unitNumber: z.string(),
+    unitName: z.string(),
+    floor: z.number(),
+    surfaceArea: z.float64(),
+    isFurnished: z.boolean(),
+    electricityMeterId: z.string(),
+    waterMeterId: z.string(),
+    initialElectricityReading: z.float64(),
+    initialWaterReading: z.float64(),
+    monthlyRent: z.float64(),
+    electricityIncluded: z.boolean(),
+    waterIncluded: z.boolean(),
+    unitStatus: UnitSta z.,
+    description: z.,
 })
 
 const unitLocationIdShema = z.object({

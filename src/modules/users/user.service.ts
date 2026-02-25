@@ -3,6 +3,7 @@ import { UserRepository } from "@modules/users/user.repository";
 import { RoleEnum } from "@/enums/RoleEnum";
 import { UserResponse } from "./user.types";
 import { DuplicateEntryError, NotFoundError } from "@/common/errors";
+import { deleteFile, fileExists } from "@utils/file.utils";
 
 export class UserService {
     private userRepository: UserRepository;
@@ -39,6 +40,48 @@ export class UserService {
             isEmailVerified: user.isEmailVerified,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
+        };
+    }
+
+    async addPhoto(id: string, file: Express.Multer.File) {
+        const user = await this.userRepository.getUserById(id);
+
+        if (!user) {
+            throw new NotFoundError("User");
+        }
+
+        try {
+            if (user.profilePhotoUrl && user.profilePhotoUrl.length > 0) {
+                if (fileExists(user.profilePhotoUrl)) {
+                    deleteFile(user.profilePhotoUrl)
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+
+        const updatedUser = await this.userRepository.updateUser(id, {
+            profilePhotoUrl: file.path,
+        });
+
+
+        if (!updatedUser) {
+            throw new NotFoundError("User");
+        }
+
+        return {
+            id: updatedUser.id,
+            username: updatedUser.username,
+            firstname: updatedUser.firstname,
+            lastname: updatedUser.lastname,
+            role: updatedUser.role,
+            email: updatedUser.email,
+            isActive: updatedUser.isActive,
+            profilePhotoUrl: updatedUser.profilePhotoUrl,
+            isEmailVerified: updatedUser.isEmailVerified,
+            createdAt: updatedUser.createdAt,
+            updatedAt: updatedUser.updatedAt,
         };
     }
 

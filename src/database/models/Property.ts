@@ -36,6 +36,12 @@ class Property extends Model<PropertyAttribute, PropertyCreationAttributes> impl
     declare id: string;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
+    static associate(models: any) {
+        Property.belongsTo(models.propertyTpe, {
+            foreignKey: 'propertyTypeId',
+            as: 'propertyType'
+        });
+    }
 }
 
 const initModelProperty = (sequelize: Sequelize) => {
