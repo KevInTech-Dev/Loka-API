@@ -105,7 +105,7 @@ export const upload = (options?: Omit<UploadOptions,'fieldName'| 'maxFiles'>) =>
         fileSize: options?.maxFileSize || MAX_FILE_SIZE,
         files: 1,
     },
-    fileFilter: fileFilter(options?.fileType),
+    fileFilter: fileFilter(options?.fileType||'image'),
 });
 
 // Multi-file upload configuration
@@ -116,7 +116,7 @@ export const uploadMultiple = (option?: Omit<UploadOptions, 'fieldName'>) => mul
         fileSize: option?.maxFileSize || MAX_FILE_SIZE,
         files: option?.maxFiles || 5,
     },
-    fileFilter: fileFilter(option.fileType),
+    fileFilter: fileFilter(option.fileType||'image'),
 });
 
 // Export configured middleware
