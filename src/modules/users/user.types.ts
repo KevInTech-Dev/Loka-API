@@ -1,5 +1,6 @@
 import { BaseTypes } from "@/common/models/base.model";
 import { RoleEnum } from "@/enums/RoleEnum";
+import {UserAttributes} from "@database/models/Users";
 
 export type UserResponse = BaseTypes & {
   username: string;
@@ -11,3 +12,13 @@ export type UserResponse = BaseTypes & {
   profilePhotoUrl?: string;
   isEmailVerified: boolean;
 };
+
+
+//
+// export type WhereQueryUser = {
+//   [key in keyof UserAttributes]?: ;
+// }
+//
+// export type whereQueryValue = {
+//
+// }

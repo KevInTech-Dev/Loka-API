@@ -1,9 +1,9 @@
 import {CreateUserInput} from "@modules/users/user.schema";
 import {UserRepository} from "@modules/users/user.repository";
-import {RoleEnum} from "@/enums/RoleEnum";
 import {UserResponse} from "./user.types";
 import {DuplicateEntryError, NotFoundError} from "@/common/errors";
 import {deleteFile, fileExists} from "@utils/file.utils";
+import {hashWord} from "@utils/bcrypt.utils";
 
 export class UserService {
     private userRepository: UserRepository;
@@ -13,19 +13,27 @@ export class UserService {
     }
 
     async createUser(data: CreateUserInput): Promise<UserResponse | null> {
-        const existingUser = await this.userRepository.getUserByEmail(data.email);
+        const existingUser = await this.userRepository.getUserByAttribut('email', data.email);
+        const existingUsername = await this.userRepository.getUserByAttribut('username', data.username);
 
         if (existingUser) {
             throw new DuplicateEntryError("Email already in use");
         }
 
+        if (existingUsername) {
+            throw new DuplicateEntryError("Username already in use");
+        }
+
         const user = await this.userRepository.createUser({
             email: data.email,
             username: data.username,
-            password: data.password,
+            password: await hashWord(data.password),
             role: data.role,
             isEmailVerified: false,
             isActive: false,
+            firstname: data.firstname,
+            lastname: data.lastname,
+            profilePhotoUrl: data.photo
         });
 
         return {
@@ -106,7 +114,7 @@ export class UserService {
             updatedAt: user.updatedAt,
         };
     }
-    
+
     async getUserPaginated(page: number, limit: number): Promise<UserResponse[]> {
         return (await this.userRepository.getUserPaginated(page, limit)).map(
             (user) => {

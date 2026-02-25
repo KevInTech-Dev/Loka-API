@@ -1,5 +1,6 @@
-import {User, UserCreationAttributes} from "@database/models/Users";
+import {User, UserAttributes, UserCreationAttributes} from "@database/models/Users";
 import {ModelStatic} from "sequelize";
+// import {WhereQueryUser} from "@modules/users/user.types";
 
 export class UserRepository {
     private user: ModelStatic<User>
@@ -16,9 +17,6 @@ export class UserRepository {
         return this.user.findByPk(id);
     }
 
-    async getAllUsers() {
-        return this.user.findAll();
-    }
 
     async getUserPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
@@ -41,7 +39,12 @@ export class UserRepository {
         return true;
     }
 
-    getUserByEmail(email: string) {
-        return this.user.findOne({where: {email}});
+    getUserByAttribut(attribut: keyof UserAttributes, value: string) {
+        return this.user.findOne({
+            where: {
+                [attribut]: value
+            }
+        });
     }
+
 }
