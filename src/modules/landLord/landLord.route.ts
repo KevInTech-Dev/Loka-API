@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { LandLordController } from "./landLord.controller";
 import validate from "../middleware/validate.middleware";
-import { createlandLordSchema, landlordIdSchema } from "./landlord.schema";
+import { createlandLordSchema, landlordIdSchema, landlordPaginationSchema } from "./landlord.schema";
 
 
 const router: Router = Router();
 const landlordController = new LandLordController();
 
-router.get('', landlordController.getAllLandlords);
+router.get('', validate(landlordPaginationSchema, 'query'), landlordController.getAllLandlords);
 
 router.get('/:id', landlordController.getlandLord);
 
