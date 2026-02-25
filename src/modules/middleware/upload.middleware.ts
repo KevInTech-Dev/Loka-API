@@ -17,8 +17,18 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, {recursive: true});
 }
 
+type FileType = 'image' | 'document';
+
+type UploadOptions = {
+    fieldName?: string; // form field name, default 'file'
+    subFolder?: string;
+    fileType?: FileType;
+    maxFileSize?: number; // in bytes
+    maxFiles?: number; // for multiple uploads
+};
+
 // Allowed MIME types
-const ALLOWED_MIME_TYPES: Record<string, string[]> = {
+const ALLOWED_MIME_TYPES: Record<FileType, string[]> = {
     image: ["image/jpeg", "image/png", "image/gif", "image/webp"],
     document: [
         "application/pdf",
@@ -31,58 +41,56 @@ const ALLOWED_MIME_TYPES: Record<string, string[]> = {
     ],
 };
 
-const ALL_ALLOWED_MIME_TYPES = [
-    ...ALLOWED_MIME_TYPES.image,
-    ...ALLOWED_MIME_TYPES.document,
-];
 
 // File size limits (in bytes)
 const MAX_FILE_SIZE = env.MAX_FILE_SIZE || 5242880; // 5MB default
 
 // Configure storage
-const storage = multer.diskStorage({
-    destination: (
-        req: Request,
-        file: Express.Multer.File,
-        cb: (error: Error | null, destination: string) => void,
-    ) => {
-        // Create subdirectory based on entity type if provided
-        const entityType = req.body.entityType || "general";
-        const subDir = path.join(uploadDir, entityType);
+const storage = (fileSubFolder: string = 'general') => {
+    return multer.diskStorage({
+        destination: (
+            req: Request,
+            file: Express.Multer.File,
+            cb: (error: Error | null, destination: string) => void,
+        ) => {
+            // Create subdirectory based on entity type if provided
 
-        if (!fs.existsSync(subDir)) {
-            fs.mkdirSync(subDir, {recursive: true});
-        }
+            const subDir = path.join(uploadDir, fileSubFolder);
 
-        cb(null, subDir);
-    },
-    filename: (
-        req: Request,
-        file: Express.Multer.File,
-        cb: (error: Error | null, filename: string) => void,
-    ) => {
-        // Generate unique filename
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-        const ext = path.extname(file.originalname);
-        const baseName = path
-            .basename(file.originalname, ext)
-            .replace(/[^a-zA-Z0-9]/g, "_");
-        cb(null, `${baseName}-${uniqueSuffix}${ext}`);
-    },
-});
+            if (!fs.existsSync(subDir)) {
+                fs.mkdirSync(subDir, {recursive: true});
+            }
+
+            cb(null, subDir);
+        },
+        filename: (
+            req: Request,
+            file: Express.Multer.File,
+            cb: (error: Error | null, filename: string) => void,
+        ) => {
+            // Generate unique filename
+            const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+            const ext = path.extname(file.originalname);
+            const baseName = path
+                .basename(file.originalname, ext)
+                .replace(/[^a-zA-Z0-9]/g, "_");
+            cb(null, `${baseName}-${uniqueSuffix}${ext}`);
+        },
+    });
+}
 
 // File filter function
-const fileFilter = (
+const fileFilter = (filetype: FileType = 'image') => (
     req: Request,
     file: Express.Multer.File,
     cb: FileFilterCallback,
 ) => {
-    if (ALL_ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+    if (ALLOWED_MIME_TYPES[filetype].includes(file.mimetype)) {
         cb(null, true);
     } else {
         cb(
             new AppError(
-                `File type ${file.mimetype} is not allowed. Allowed types: ${ALL_ALLOWED_MIME_TYPES.join(", ")}`,
+                `File type ${file.mimetype} is not allowed. Allowed types: ${ALLOWED_MIME_TYPES[filetype].join(", ")}`,
                 "UNSUPPORTED_MEDIA_TYPE",
                 415,
             ),
@@ -91,28 +99,31 @@ const fileFilter = (
 };
 
 // Create multer instance
-export const upload = multer({
-    storage,
+export const upload = (options?: Omit<UploadOptions,'fieldName'| 'maxFiles'>) => multer({
+    storage: storage(options?.subFolder),
     limits: {
-        fileSize: MAX_FILE_SIZE,
-        files: 1, // Single file upload per request
+        fileSize: options?.maxFileSize || MAX_FILE_SIZE,
+        files: 1,
     },
-    fileFilter,
+    fileFilter: fileFilter(options?.fileType||'image'),
 });
 
 // Multi-file upload configuration
-export const uploadMultiple = multer({
-    storage,
+
+export const uploadMultiple = (option?: Omit<UploadOptions, 'fieldName'>) => multer({
+    storage: storage(option?.subFolder),
     limits: {
-        fileSize: MAX_FILE_SIZE,
-        files: 5, // Max 5 files per request
+        fileSize: option?.maxFileSize || MAX_FILE_SIZE,
+        files: option?.maxFiles || 5,
     },
-    fileFilter,
+    fileFilter: fileFilter(option.fileType||'image'),
 });
 
 // Export configured middleware
-export const singleUpload = (fieldName: string = 'file'): RequestHandler => upload.single(fieldName);
-export const multipleUpload = (fieldName: string = 'file', maxFile: number = 5): RequestHandler => uploadMultiple.array(fieldName, maxFile);
+export const singleUpload =
+    ({fieldName='file', ...rest}:UploadOptions): RequestHandler => upload(rest).single(fieldName);
+export const multipleUpload =
+    ({fieldName = 'file', maxFiles = 5,...rest}:UploadOptions): RequestHandler => uploadMultiple(rest).array(fieldName, maxFiles);
 
 // Helper to get file URL
 export const getFileUrl = (req: Request, filePath: string): string => {
@@ -122,5 +133,5 @@ export const getFileUrl = (req: Request, filePath: string): string => {
 
 
 // Export file type constants for use elsewhere
-export const ALLOWED_FILE_TYPES = ALL_ALLOWED_MIME_TYPES;
-export const MAX_UPLOAD_SIZE = MAX_FILE_SIZE;
+export const ALLOWED_FILE_TYPES = ALLOWED_MIME_TYPES;
+export const DEFAULT_MAX_UPLOAD_SIZE = MAX_FILE_SIZE;

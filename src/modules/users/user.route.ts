@@ -13,7 +13,11 @@ router.get("", userController.getAllUsers);
 // create user
 router.post("", validate(createUserSchema, "body"), userController.createUser);
 
-router.post("/photo/:id", validate(userIdShema, 'params'), singleUpload('photo'), userController.addPhoto);
+router.post("/photo/:id", validate(userIdShema, 'params'), singleUpload({
+    fieldName: "photo",
+    fileType: 'image',
+    subFolder: "users",
+}), userController.addPhoto);
 
 // get user by id
 router.get("/:id", userController.getUser);

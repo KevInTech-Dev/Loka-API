@@ -106,25 +106,7 @@ export class UserService {
             updatedAt: user.updatedAt,
         };
     }
-
-    async getAllUsers(): Promise<UserResponse[]> {
-        return (await this.userRepository.getAllUsers()).map((user) => {
-            return {
-                id: user.id,
-                username: user.username,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                role: user.role,
-                email: user.email,
-                isActive: user.isActive,
-                profilePhotoUrl: user.profilePhotoUrl,
-                isEmailVerified: user.isEmailVerified,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-            };
-        });
-    }
-
+    
     async getUserPaginated(page: number, limit: number): Promise<UserResponse[]> {
         return (await this.userRepository.getUserPaginated(page, limit)).map(
             (user) => {
