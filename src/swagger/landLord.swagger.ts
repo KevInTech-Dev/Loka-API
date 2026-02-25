@@ -134,33 +134,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
                 }
             }
         },
-        post: {
-            tags: ["landLord"],
-            summary: "Create a new landlord",
-            description: "Create a new landlord with the provide informations",
-            requestBody: {
-                required: true,
-                content: {
-                    "application/json": {
-                        schema: {
-                            $ref: "#/components/schemas/landlord"
-                        }
-                    }
-                }
-            },
-            responses: {
-                "201": {
-                    description: "Landlord created succefully",
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/landlord"
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // Route POST supprimée du swagger pour centralisation dans users
     },
     "/landlords/{id}": {
         get: {

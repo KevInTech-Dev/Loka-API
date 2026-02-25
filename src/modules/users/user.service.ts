@@ -23,7 +23,7 @@ export class UserService {
             email: data.email,
             username: data.username,
             password: data.password,
-            role: RoleEnum.ADMIN,
+            role: data.role,
             isEmailVerified: false,
             isActive: false,
         });

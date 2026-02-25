@@ -1,7 +1,10 @@
 import { GenderEnum } from "@/enums/GenderEnum";
 import z from "zod";
 
-
+const paginatedTenantSchema = z.object({
+    page: z.coerce.number().min(1).default(1),
+    limit: z.coerce.number().min(10).default(10),
+});
 const createTenantSchema = z.object({
     userId: z.uuid("Invalide user ID format"),
     date_of_birth: z.coerce.date(),
@@ -47,4 +50,5 @@ export {
     tenantIdSchema,
     TenantParams,
     CreateTenantInput,
+    paginatedTenantSchema,
 }

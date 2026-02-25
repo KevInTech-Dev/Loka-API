@@ -27,6 +27,7 @@ const landlordIdSchema = z.object({
 
 type landLordIdParams = z.infer<typeof landlordIdSchema>
 type CreateLandlordInput = z.infer<typeof createlandLordSchema>
+type paginatedlandLord = z.infer<typeof landlordIdSchema>
 
 export {
     createlandLordSchema,
@@ -34,4 +35,5 @@ export {
     landLordIdParams,
     CreateLandlordInput,
     landlordPaginationSchema,
+    paginatedlandLord,
 }
