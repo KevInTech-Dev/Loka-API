@@ -1,5 +1,6 @@
 import { GenderEnum } from "@/enums/GenderEnum";
 import { OpenAPIV3 } from "openapi-types";
+import {userSchema} from "@/swagger/user.swagger";
 
 
 const tenantTags: OpenAPIV3.TagObject = {
@@ -11,11 +12,7 @@ const tenantSchema : OpenAPIV3.ComponentsObject['schemas'] = {
     tenant: {
         type: "object",
         properties: {
-            userId: {
-                type: "string",
-                format: "uuid",
-                description: "The unique identifier of the user (landlord owner)"
-            },
+           ...userSchema["createUserRequest"]["properties"],
             date_of_birth: {
                 type: "string",
                 format: "date",
@@ -51,16 +48,16 @@ const tenantSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 default: "",
                 description: "Numero de la carte"
             },
-            id_card_front_url: {
+           /* id_card_front_url: {
                 type: "string",
-                default: "",
+                format: "binary",
                 description: "Photo recto"
             },
             id_card_back_url: {
                 type: "string",
-                default: "",
+                format: "binary",
                 description: "Photo verso"
-            },
+            },*/
             occupation: {
                 type: "string",
                 default: "",
@@ -92,7 +89,7 @@ const tenantSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Relatioin avec la personne à prévenir"
             }
         },
-        required: ["userId", "date_of_birth", "gender", "nationality", "phone_primary", "id_card_type", "id_card_number", "id_card_front_url", "id_card_back_url"]
+        // required: ["userId", "date_of_birth", "gender", "nationality", "phone_primary", "id_card_type", "id_card_number", "id_card_front_url", "id_card_back_url", ...userSchema["createUserRequest"]["required"]]
     },
 
     paginatedTenant: {
@@ -176,7 +173,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
             requestBody: {
                 required: true,
                 content: {
-                    "application/json": {
+                    "multipart/form-data": {
                         schema: {
                             $ref: "#/components/schemas/tenant"
                         }

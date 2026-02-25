@@ -21,7 +21,7 @@ router.post("", singleUpload({
 router.post("/photo/:id", validate(userIdShema, 'params'), singleUpload({
     fieldName: "photo",
     fileType: 'image',
-    subFolder: "users",
+    subFolder: "profiles",
 }), userController.addPhoto);
 
 // get user by id
