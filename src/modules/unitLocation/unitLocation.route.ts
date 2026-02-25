@@ -1,27 +1,28 @@
 import { Router } from "express";
-import { createunitLocationSchema, unitLocationIdShema } from "./unitLocation.schema";
+import { createUnitLocationSchema, unitLocationIdShema } from "./unitLocation.schema";
 import validate from "../middleware/validate.middleware";
 import { UnitLocationController } from "./unitLocation.controller";
+import { defaultPaginationQuery } from "@/common/api.schema";
 
 const router: Router = Router();
 const unitLocationController = new UnitLocationController();
 
 // get all unitLocations
-router.get('', unitLocationController.getAllUnitLocations);
+router.get('', validate(defaultPaginationQuery, 'query'), unitLocationController.getAllUnitLocations);
 
 // create unitLocation
-router.post('', validate(createunitLocationSchema, 'body'), unitLocationController.createUnitLocation);
+router.post('', validate(createUnitLocationSchema, 'body'), unitLocationController.createUnitLocation);
 
 // get unitLocation by id
-router.get('/:id', unitLocationController.getUnitLocation);
+router.get('/:id', validate(createUnitLocationSchema, 'params'), unitLocationController.getUnitLocation);
 
 // update unitLocation by id
 router.patch('/:id', validate({
     params: unitLocationIdShema,
-    body: createunitLocationSchema
+    body: createUnitLocationSchema
 }), unitLocationController.updateUnitLocation);
 
 // delete unitLocation by id
-router.delete('/:id', validate(unitLocationIdShema, 'params'), unitLocationController.deleteUnitLocation);
+// router.delete('/:id', validate(unitLocationIdShema, 'params'), unitLocationController.deleteUnitLocation);
 
 export default router;

@@ -1,4 +1,4 @@
-import {OpenAPIV3} from "openapi-types";
+import { OpenAPIV3 } from "openapi-types";
 
 const userTags: OpenAPIV3.TagObject = {
     name: "User",

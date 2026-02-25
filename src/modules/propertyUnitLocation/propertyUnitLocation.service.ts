@@ -1,132 +1,111 @@
-import { RoleEnum } from "@/enums/RoleEnum";
-import { DuplicateEntryError, NotFoundError } from "@/common/errors";
-import { propertyUnitLocationResponse } from "./propertyUnitLocation.type";
+import { NotFoundError } from "@/common/errors";
+import { PropertyUnitLocationResponse } from "./propertyUnitLocation.type";
 import { CreatepropertyUnitLocationInput } from "./propertyUnitLocation.schema";
 import { PropertyUnitLocationRepository } from "./propertyUnitLocation.repository";
+import { PropertyRepository } from "../property/property.repository";
+import { UnitLocationRepository } from "../unitLocation/unitLocation.repository";
+import { PaginatedResult } from "@/common/paginatedResult";
 
 export class PropertyUnitLocationService {
+    //Injection du propertyUnitLocationRepository
     private propertyUnitLocationRepository: PropertyUnitLocationRepository;
+    private propertyRepository: PropertyRepository;
+    private unitLocationRepository: UnitLocationRepository;
 
+    //constructeur sans parametre de la classe propertyUnitLocation
     constructor() {
         this.propertyUnitLocationRepository = new PropertyUnitLocationRepository();
+        this.propertyRepository = new PropertyRepository();
+        this.unitLocationRepository = new UnitLocationRepository();
     }
 
-    async createPropertyUnitLocation(data: CreatepropertyUnitLocationInput): Promise<propertyUnitLocationResponse | null> {
-        const existingpropertyUnitLocation = await this.propertyUnitLocationRepository.getPropertyUnitLocationById(data.label);
-
-        if (existingpropertyUnitLocation) {
-            throw new DuplicateEntryError("Email already in use");
+    //méthode pour creer l'association entre unitLocation et propriet
+    async createPropertyUnitLocation(data: CreatepropertyUnitLocationInput): Promise<PropertyUnitLocationResponse | null> {
+        //verifier si la propriete existe
+        const existingProperty = await this.propertyRepository.getPropertyById(data.proprieteId);
+        if (!existingProperty) {
+            throw new NotFoundError("The property doesn/'t exist");
+        }
+        //verifier si l'unite de location existe
+        const existingUnitLocation = await this.unitLocationRepository.getUnitLocationById(data.unitLocationId);
+        if (!existingUnitLocation) {
+            throw new NotFoundError("The unit location doesn/'t exist")
         }
 
-        const propertyUnitLocation = await this.propertyUnitLocationRepository.createPropertyUnitLocation({
-            unitLocationId: data.unitLocationId;
-            propertyId: data.proprieteId;
-        }
-        });
+        const propertyUnitLocation = (await this.propertyUnitLocationRepository.createPropertyUnitLocation({
+            unitLocationId: data.unitLocationId,
+            propertyId: data.proprieteId
+        }));
 
-        return {
-    id: propertyUnitLocation.id,
-    propertyUnitLocationname: propertyUnitLocation.propertyUnitLocationname,
-    firstname: propertyUnitLocation.firstname,
-    lastname: propertyUnitLocation.lastname,
-    role: propertyUnitLocation.role,
-    email: propertyUnitLocation.email,
-    isActive: propertyUnitLocation.isActive,
-    profilePhotoUrl: propertyUnitLocation.profilePhotoUrl,
-    isEmailVerified: propertyUnitLocation.isEmailVerified,
-    createdAt: propertyUnitLocation.createdAt,
-    updatedAt: propertyUnitLocation.updatedAt,
-};
-    }
-
-    async getpropertyUnitLocationById(id: string): Promise < propertyUnitLocationResponse | null > {
-    const propertyUnitLocation = await this.propertyUnitLocationRepository.getPropertyUnitLocationById(id);
-
-    if(!propertyUnitLocation) {
-        throw new NotFoundError("propertyUnitLocation not found");
-    }
-
-        return {
-        id: propertyUnitLocation.id,
-        propertyUnitLocationname: propertyUnitLocation.propertyUnitLocationname,
-        firstname: propertyUnitLocation.firstname,
-        lastname: propertyUnitLocation.lastname,
-        role: propertyUnitLocation.role,
-        email: propertyUnitLocation.email,
-        isActive: propertyUnitLocation.isActive,
-        profilePhotoUrl: propertyUnitLocation.profilePhotoUrl,
-        isEmailVerified: propertyUnitLocation.isEmailVerified,
-        createdAt: propertyUnitLocation.createdAt,
-        updatedAt: propertyUnitLocation.updatedAt,
-    };
-}
-
-    async getAllpropertyUnitLocations(): Promise < propertyUnitLocationResponse[] > {
-    return(await this.propertyUnitLocationRepository.getAllPropertyUnitLocations()).map((propertyUnitLocation) => {
         return {
             id: propertyUnitLocation.id,
-            propertyUnitLocationname: propertyUnitLocation.propertyUnitLocationname,
-            firstname: propertyUnitLocation.firstname,
-            lastname: propertyUnitLocation.lastname,
-            role: propertyUnitLocation.role,
-            email: propertyUnitLocation.email,
-            isActive: propertyUnitLocation.isActive,
-            profilePhotoUrl: propertyUnitLocation.profilePhotoUrl,
-            isEmailVerified: propertyUnitLocation.isEmailVerified,
+            unitLocationId: propertyUnitLocation.unitLocationId,
+            propertyId: propertyUnitLocation.propertyId,
             createdAt: propertyUnitLocation.createdAt,
-            updatedAt: propertyUnitLocation.updatedAt,
-        };
-    });
-}
+            updatedAt: propertyUnitLocation.updatedAt
+        }
+    };
 
-    async getpropertyUnitLocationPaginated(page: number, limit: number): Promise < propertyUnitLocationResponse[] > {
-    return(await this.propertyUnitLocationRepository.getPropertyUnitLocationPaginated(page, limit)).map(
-        (propertyUnitLocation) => {
-            return {
-                id: propertyUnitLocation.id,
-                propertyUnitLocationname: propertyUnitLocation.propertyUnitLocationname,
-                firstname: propertyUnitLocation.firstname,
-                lastname: propertyUnitLocation.lastname,
-                role: propertyUnitLocation.role,
-                email: propertyUnitLocation.email,
-                isActive: propertyUnitLocation.isActive,
-                profilePhotoUrl: propertyUnitLocation.profilePhotoUrl,
-                isEmailVerified: propertyUnitLocation.isEmailVerified,
-                createdAt: propertyUnitLocation.createdAt,
-                updatedAt: propertyUnitLocation.updatedAt,
-            };
-        },
-    );
-}
+    //recuperer par id
+    async getpropertyUnitLocationById(id: string): Promise<PropertyUnitLocationResponse | null> {
+        const isPropertyUnitExisting = await this.propertyUnitLocationRepository.getPropertyUnitLocationById(id);
+        if (!isPropertyUnitExisting) {
+            throw new NotFoundError("The property unit location line doesn't exist");
+        }
+
+        return {
+            id: isPropertyUnitExisting.id,
+            unitLocationId: isPropertyUnitExisting.unitLocationId,
+            propertyId: isPropertyUnitExisting.propertyId,
+            createdAt: isPropertyUnitExisting.createdAt,
+            updatedAt: isPropertyUnitExisting.updatedAt,
+        }
+    }
+
+    //Recuperer toutes les proprietes paginé
+    async getAllpropertyUnitLocations(
+        page: number,
+        limit: number
+    ): Promise<PaginatedResult<PropertyUnitLocationResponse>> {
+
+        const { rows, count } =
+            await this.propertyUnitLocationRepository
+                .getPropertyUnitLocationPaginated(page, limit);
+
+        const mappedData = rows.map((objects) => ({
+            id: objects.id,
+            unitLocationId: objects.unitLocationId,
+            propertyId: objects.propertyId,
+            createdAt: objects.createdAt,
+            updatedAt: objects.updatedAt
+        }));
+
+        return {
+            data: mappedData,
+            total: count
+        };
+    }
 
     async updatepropertyUnitLocation(
-    id: string,
-    data: Partial<CreatepropertyUnitLocationInput>,
-): Promise < propertyUnitLocationResponse | null > {
-    const updatedpropertyUnitLocation = await this.propertyUnitLocationRepository.updatePropertyUnitLocation(id, data);
-    if(!updatedpropertyUnitLocation) {
-        return null;
-    }
+        id: string,
+        data: Partial<CreatepropertyUnitLocationInput>,
+    ): Promise<PropertyUnitLocationResponse> {
+        const existingPropertyUnitLocation = await this.propertyUnitLocationRepository.getPropertyUnitLocationById(id);
+        if (!existingPropertyUnitLocation) {
+            throw new NotFoundError("The property unit location line doesn/'t exist");
+        }
+        const modifyData = await this.propertyUnitLocationRepository.updatePropertyUnitLocation(id, data);
         return {
-        id: updatedpropertyUnitLocation.id,
-        propertyUnitLocationname: updatedpropertyUnitLocation.propertyUnitLocationname,
-        firstname: updatedpropertyUnitLocation.firstname,
-        lastname: updatedpropertyUnitLocation.lastname,
-        role: updatedpropertyUnitLocation.role,
-        email: updatedpropertyUnitLocation.email,
-        isActive: updatedpropertyUnitLocation.isActive,
-        profilePhotoUrl: updatedpropertyUnitLocation.profilePhotoUrl,
-        isEmailVerified: updatedpropertyUnitLocation.isEmailVerified,
-        createdAt: updatedpropertyUnitLocation.createdAt,
-        updatedAt: updatedpropertyUnitLocation.updatedAt,
-    };
-}
-
-    async deletepropertyUnitLocation(id: string): Promise < boolean > {
-    const deleted = await this.propertyUnitLocationRepository.deletePropertyUnitLocation(id);
-    if(!deleted) {
-        throw new Error("propertyUnitLocation not found");
+            id: modifyData.id,
+            unitLocationId: modifyData.unitLocationId,
+            propertyId: modifyData.propertyId,
+            createdAt: modifyData.createdAt,
+            updatedAt: modifyData.updatedAt
+        }
     }
-        return true;
-}
+
+    //Implementer le soft delete
+    // async deletepropertyUnitLocation(id: string): Promise<boolean> {
+
+    // }
 }

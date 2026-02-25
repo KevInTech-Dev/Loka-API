@@ -60,7 +60,8 @@ const propertyShema: OpenAPIV3.ComponentsObject['schemas'] = {
             },
             documents: {
                 type: "string",
-                description: "documents of the property"
+                nullable: true,
+                description: "URL to documents of properties"
             },
         },
         required: ["label", "type", "address", "city", "district", "country", "numberOfUnits", "numberOfFloors", "yearBuilt", "description", "electricityMeterNumber", "waterMeterNumber"]
@@ -349,6 +350,66 @@ const propertyPath: OpenAPIV3.PathsObject = {
                 },
                 "404": {
                     description: "property not found"
+                }
+            }
+        }
+    },
+    "property/documents/{id}": {
+        post: {
+            tags: ["Property"],
+            summary: "Add your property documents",
+            description: "Upload a document for a property by their unique ID",
+            parameters: [
+                {
+                    name: "id",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string",
+                        format: "uuid"
+                    },
+                    description: "The unique identifier of the property"
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "multipart/form-data": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                photo: {
+                                    type: "string",
+                                    format: "binary",
+                                    description: "The document file to upload"
+                                }
+                            },
+                            required: ["documents"]
+                        }
+                    }
+                }
+            },
+            responses: {
+                "200": {
+                    description: "Document added successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/property"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    description: "No file uploaded"
+                },
+                "404": {
+                    description: "Property not found"
                 }
             }
         }

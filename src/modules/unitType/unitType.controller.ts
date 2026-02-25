@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UnitTypeService } from "./unitType.service";
 import { CreateUnitTypeInput } from "./unitType.schema";
+import { sendCreated, sendPaginated, sendSuccess } from "@/common/api.response";
 
 export class UnitTypeController {
 
@@ -10,49 +11,60 @@ export class UnitTypeController {
         this.unitTypeService = new UnitTypeService();
     }
 
-    getAllUnitTypes = async (req: Request, res: Response) => {
+    getAllUnitTypes = async (req: Request, res: Response): Promise<Response> => {
 
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
 
-        return res.send({
-            page: req.query.page,
-            limit: req.query.limit,
-            data: await this.unitTypeService.getUnitTypePaginated(page, limit)
-        });
+        const { data, total } = await this.unitTypeService.getAllUnitTypes(page, limit);
+        return sendPaginated(
+            res,
+            data,
+            total,
+            page,
+            limit
+        );
     }
 
-    getUnitType = async (req: Request, res: Response) => {
+    getUnitType = async (req: Request, res: Response): Promise<Response> => {
 
         const id = req.params.id as string;
+        const data = await this.unitTypeService.getUnitTypeById(id);
 
-        return res.send({
-            data: await this.unitTypeService.getUnitTypeById(id),
-        });
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful",
+            201
+        );
     }
 
-    updateUnitType = async (req: Request, res: Response) => {
+    updateUnitType = async (req: Request, res: Response): Promise<Response> => {
 
         const id = req.params.id as string;
-        const data = req.body as CreateUnitTypeInput;
-
-        return res.send({
-            data: await this.unitTypeService.updateUnitType(id, data),
-        });
+        const dataToModify = req.body as CreateUnitTypeInput;
+        const data = await this.unitTypeService.updateUnitType(id, dataToModify);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful",
+            201
+        );
     }
 
-    createUnitType = async (req: Request, res: Response) => {
-        const data: CreateUnitTypeInput = req.body;
-        return res.send({
-            data: await this.unitTypeService.createUnitType(data),
-        });
+    createUnitType = async (req: Request, res: Response): Promise<Response> => {
+        const dataToCreate: CreateUnitTypeInput = req.body;
+        const data = await this.unitTypeService.createUnitType(dataToCreate);
+        return sendCreated(
+            res,
+            data,
+            "Resource created successfully"
+        );
     }
 
-    deleteUnitType = async (req: Request, res: Response) => {
-        const id = req.params.id as string;
-        return res.send({
-            data: await this.unitTypeService.deleteUnitType(id),
-        });
-    }
+    // deleteUnitType = async (req: Request, res: Response) => {
+    //     const id = req.params.id as string;
+    //     return 
+    // }
 
 }

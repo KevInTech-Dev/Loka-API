@@ -22,7 +22,7 @@ export interface UnitLocationAttributes extends BaseModel {
     description: string;
 }
 
-export interface UnitLocationCreationAttributes extends Optional<UnitLocationAttributes, "id" | "createdAt" | "updatedAt"> { }
+export interface UnitLocationCreationAttributes extends Optional<UnitLocationAttributes, "id" | "createdAt" | "updatedAt" | "amenities"> { }
 
 class UnitLocation extends Model<UnitLocationAttributes, UnitLocationCreationAttributes> implements UnitLocationAttributes {
     declare unitType: string;

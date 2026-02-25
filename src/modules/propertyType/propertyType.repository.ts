@@ -1,4 +1,5 @@
 
+import { NotFoundError } from "@/common/errors";
 import { PropertyType, PropertyTypeCreationAttributes } from "@/database/models/PropertyType";
 import { ModelStatic } from "sequelize";
 
@@ -19,24 +20,24 @@ export class PropertyTypeRepository {
 
     async getPropertyTypePaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.PropertyType.findAll({ offset, limit });
+        return this.PropertyType.findAndCountAll({ offset, limit });
     }
 
     async updatePropertyType(id: string, data: Partial<PropertyTypeCreationAttributes>) {
         const PropertyType = await this.getPropertyTypeById(id);
-        if (!PropertyType) return null;
+        if (!PropertyType) { throw new NotFoundError("Id not found") };
 
         await PropertyType.update(data);
         return PropertyType;
     }
 
-    async deletePropertyType(id: string) {
-        const PropertyType = await this.getPropertyTypeById(id);
-        if (!PropertyType) return false;
+    // async deletePropertyType(id: string) {
+    //     const PropertyType = await this.getPropertyTypeById(id);
+    //     if (!PropertyType) return false;
 
-        await PropertyType.destroy();
-        return true;
-    }
+    //     await PropertyType.destroy();
+    //     return true;
+    // }
 
     getPropertyTypeByLabel(label: string) {
         return this.PropertyType.findOne({ where: { label } });

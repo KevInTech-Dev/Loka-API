@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 
-const createunitTypeSchema = z.object({
+const createUnitTypeSchema = z.object({
     code: z.string(),
     label: z.string(),
     isActive: z.boolean(),
@@ -13,11 +13,11 @@ const unitTypeIdShema = z.object({
 
 
 type unitTypeIdParams = z.infer<typeof unitTypeIdShema>
-type CreateUnitTypeInput = z.infer<typeof createunitTypeSchema>
+type CreateUnitTypeInput = z.infer<typeof createUnitTypeSchema>
 
 
 export {
-    createunitTypeSchema,
+    createUnitTypeSchema,
     unitTypeIdShema,
     unitTypeIdParams,
     CreateUnitTypeInput,

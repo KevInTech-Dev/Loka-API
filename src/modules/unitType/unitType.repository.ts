@@ -1,3 +1,4 @@
+import { NotFoundError } from "@/common/errors";
 import { UnitType, UnitTypeCreationAttributes } from "@/database/models/UnitType";
 import { ModelStatic } from "sequelize";
 
@@ -17,30 +18,30 @@ export class UnitTypeRepository {
         return this.unitType.findByPk(id);
     }
 
-    async getAllUnitTypes() {
-        return this.unitType.findAll();
-    }
-
     async getUnitTypePaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.unitType.findAll({ offset, limit });
+        return this.unitType.findAndCountAll({ offset, limit });
     }
 
     async updateUnitType(id: string, data: Partial<UnitTypeCreationAttributes>) {
         const unitType = await this.getUnitTypeById(id);
-        if (!unitType) return null;
+        if (!unitType) {
+            throw new NotFoundError("Id not found")
+        };
 
         await unitType.update(data);
         return unitType;
     }
 
-    async deleteUnitType(id: string) {
-        const unitType = await this.getUnitTypeById(id);
-        if (!unitType) return false;
+    // async deleteUnitType(id: string) {
+    //     const unitType = await this.getUnitTypeById(id);
+    //     if (!unitType) {
+    //         throw new NotFoundError("Id not found")
+    //     };
 
-        await unitType.destroy();
-        return true;
-    }
+    //     await unitType.destroy();
+    //     return true;
+    // }
 
     getUnitTypeByLabel(label: string) {
         return this.unitType.findOne({ where: { label } });

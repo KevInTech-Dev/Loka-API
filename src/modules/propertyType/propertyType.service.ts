@@ -1,6 +1,8 @@
-import { DuplicateEntryError } from "@/common/errors";
+import { DuplicateEntryError, InternalServerError, NotFoundError } from "@/common/errors";
 import { PropertyTypeRepository } from "./propertyType.repository";
 import { CreatePropertyTypeInput } from "./propertyType.schema";
+import { PropertyTypeResponse } from "./propertyType.type";
+import { PaginatedResult } from "@/common/paginatedResult";
 
 
 export class PropertyTypeService {
@@ -12,7 +14,7 @@ export class PropertyTypeService {
     }
 
     //Creation d'un type de propriete
-    async createPropertyType(data: CreatePropertyTypeInput) {
+    async createPropertyType(data: CreatePropertyTypeInput): Promise<PropertyTypeResponse> {
         const existingPropertyType = await this.propertyTypeRepository.getPropertyTypeByLabel(data.label);
         if (existingPropertyType) {
             throw new DuplicateEntryError("Property type already exist");
@@ -32,40 +34,60 @@ export class PropertyTypeService {
     }
 
     //Recuperation du type de propriete par id
-    async getPropertyTypeById(id: string) {
-        const PropertyType = await this.propertyTypeRepository.getPropertyTypeById(id);
-        if (!PropertyType) {
-            throw new Error("This property type does not exist");
+    async getPropertyTypeById(id: string): Promise<PropertyTypeResponse> {
+        const propertyType = await this.propertyTypeRepository.getPropertyTypeById(id);
+        if (!propertyType) {
+            throw new NotFoundError("This property type does not exist");
         }
-        return PropertyType;
+        return {
+            id: propertyType.id,
+            label: propertyType.label,
+            createdAt: propertyType.createdAt,
+            updatedAt: propertyType.updatedAt
+        };
     }
 
     //Recuparation de tout les  types de proprietes paginé
-    async getAllPropertyTypes(page: number, limit: number) {
-        return this.propertyTypeRepository.getPropertyTypePaginated(page, limit);
+    async getAllPropertyTypes(page: number, limit: number): Promise<PaginatedResult<PropertyTypeResponse>> {
+        const { rows, count } = await this.propertyTypeRepository.getPropertyTypePaginated(page, limit);
+        const mappedData = rows.map((objects) => ({
+            id: objects.id,
+            label: objects.label,
+            createdAt: objects.createdAt,
+            updatedAt: objects.updatedAt
+        }))
+        return {
+            data: mappedData,
+            total: count
+        }
     }
 
     //Modification du type de propriete
-    async updatePropertyType(id: string, data: Partial<CreatePropertyTypeInput>) {
+    async updatePropertyType(id: string, data: Partial<CreatePropertyTypeInput>): Promise<PropertyTypeResponse> {
         //verifier l'existance du type de propriete
         const existingPropertyType = await this.propertyTypeRepository.getPropertyTypeById(id);
         if (!existingPropertyType) {
-            throw new Error("The property type does not exist");
+            throw new NotFoundError("The property type does not exist");
         }
         const updatedPropertyType = await this.propertyTypeRepository.updatePropertyType(id, data);
         if (!updatedPropertyType) {
-            return Error("The update of the property type failed");
+            throw new InternalServerError("The update of the property type failed");
         }
-        return updatedPropertyType;
+        return {
+            id: updatedPropertyType.id,
+            label: updatedPropertyType.label,
+            createdAt: updatedPropertyType.createdAt,
+            updatedAt: updatedPropertyType.updatedAt
+        };
     }
 
     //Suppression du type de propriete
-    async deletePropertyType(id: string) {
-        const deleted = await this.propertyTypeRepository.deletePropertyType(id);
-        if (!deleted) {
-            throw new Error('PropertyType not found');
-        }
-        return true;
-    }
+    // async deletePropertyType(id: string):Promise<PropertyTypeResponse> {
+    //     const deleted = await this.propertyTypeRepository.deletePropertyType(id);
+    //     if (!deleted) {
+    //         throw new Error('PropertyType not found');
+    //     }
+    //     return true;
+    // }
 
 }

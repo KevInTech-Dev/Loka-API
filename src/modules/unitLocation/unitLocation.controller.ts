@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { UnitLocationService } from "./unitLocation.service";
 import { CreateUnitLocationInput } from "./unitLocation.schema";
+import { sendCreated, sendPaginated, sendSuccess } from "@/common/api.response";
 
 
 export class UnitLocationController {
@@ -11,49 +12,60 @@ export class UnitLocationController {
         this.unitLocationService = new UnitLocationService();
     }
 
-    getAllUnitLocations = async (req: Request, res: Response) => {
+    getAllUnitLocations = async (req: Request, res: Response): Promise<Response> => {
 
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
 
-        return res.send({
-            page: req.query.page,
-            limit: req.query.limit,
-            data: await this.unitLocationService.getUnitLocationPaginated(page, limit)
-        });
+        const { data, total } = await this.unitLocationService.getAllUnitLocations(page, limit);
+
+        return sendPaginated(
+            res,
+            data,
+            limit,
+            page,
+            total
+        );
     }
 
-    getUnitLocation = async (req: Request, res: Response) => {
-
+    getUnitLocation = async (req: Request, res: Response): Promise<Response> => {
         const id = req.params.id as string;
-
-        return res.send({
-            data: await this.unitLocationService.getUnitLocationById(id),
-        });
+        const data = await this.unitLocationService.getUnitLocationById(id);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful",
+            201
+        );
     }
 
-    updateUnitLocation = async (req: Request, res: Response) => {
-
+    updateUnitLocation = async (req: Request, res: Response): Promise<Response> => {
         const id = req.params.id as string;
-        const data = req.body as CreateUnitLocationInput;
-
-        return res.send({
-            data: await this.unitLocationService.updateUnitLocation(id, data),
-        });
+        const dataToUpdate = req.body as CreateUnitLocationInput;
+        const data = await this.unitLocationService.updateUnitLocation(id, dataToUpdate);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful",
+            201
+        );
     }
 
-    createUnitLocation = async (req: Request, res: Response) => {
-        const data: CreateUnitLocationInput = req.body;
-        return res.send({
-            data: await this.unitLocationService.createUnitLocation(data),
-        });
+    createUnitLocation = async (req: Request, res: Response): Promise<Response> => {
+        const dataToCreate: CreateUnitLocationInput = req.body;
+        const data = await this.unitLocationService.createUnitLocation(dataToCreate);
+        return sendCreated(
+            res,
+            data,
+            "Resource created successfully"
+        );
     }
 
-    deleteUnitLocation = async (req: Request, res: Response) => {
-        const id = req.params.id as string;
-        return res.send({
-            data: await this.unitLocationService.deleteUnitLocation(id),
-        });
-    }
+    // deleteUnitLocation = async (req: Request, res: Response) => {
+    //     const id = req.params.id as string;
+    //     return res.send({
+    //         data: await this.unitLocationService.deleteUnitLocation(id),
+    //     });
+    // }
 
 }

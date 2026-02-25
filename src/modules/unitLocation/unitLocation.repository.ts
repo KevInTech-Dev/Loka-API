@@ -1,3 +1,4 @@
+import { NotFoundError } from "@/common/errors";
 import { UnitLocation, UnitLocationCreationAttributes } from "@/database/models/UnitLocation";
 import { ModelStatic } from "sequelize";
 
@@ -17,30 +18,26 @@ export class UnitLocationRepository {
         return this.unitLocation.findByPk(id);
     }
 
-    async getAllUnitLocations() {
-        return this.unitLocation.findAll();
-    }
-
     async getUnitLocationPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.unitLocation.findAll({ offset, limit });
+        return this.unitLocation.findAndCountAll({ offset, limit });
     }
 
     async updateUnitLocation(id: string, data: Partial<UnitLocationCreationAttributes>) {
         const unitLocation = await this.getUnitLocationById(id);
-        if (!unitLocation) return null;
+        if (!unitLocation) { throw new NotFoundError("id not found") };
 
         await unitLocation.update(data);
         return unitLocation;
     }
 
-    async deleteUnitLocation(id: string) {
-        const unitLocation = await this.getUnitLocationById(id);
-        if (!unitLocation) return false;
+    // async deleteUnitLocation(id: string) {
+    //     const unitLocation = await this.getUnitLocationById(id);
+    //     if (!unitLocation) { throw new NotFoundError("id not found") };
 
-        await unitLocation.destroy();
-        return true;
-    }
+    //     await unitLocation.destroy();
+    //     return true;
+    // }
 
     getUnitLocationByUnitName(unitName: string) {
         return this.unitLocation.findOne({ where: { unitName } });

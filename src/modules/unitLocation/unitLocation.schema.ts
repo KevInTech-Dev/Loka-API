@@ -1,8 +1,9 @@
+import { UnitStatusEnum } from '@/enums/UnitStatusEnum'
 import { z } from 'zod'
 
 
-const createunitLocationSchema = z.object({
-    unitTypeId: z.uuid(),
+const createUnitLocationSchema = z.object({
+    unitType: z.uuid(),
     unitNumber: z.string(),
     unitName: z.string(),
     floor: z.number(),
@@ -15,8 +16,8 @@ const createunitLocationSchema = z.object({
     monthlyRent: z.float64(),
     electricityIncluded: z.boolean(),
     waterIncluded: z.boolean(),
-    unitStatus: UnitSta z.,
-    description: z.,
+    unitStatus: z.enum(UnitStatusEnum),
+    description: z.string(),
 })
 
 const unitLocationIdShema = z.object({
@@ -25,11 +26,11 @@ const unitLocationIdShema = z.object({
 
 
 type unitLocationIdParams = z.infer<typeof unitLocationIdShema>
-type CreateUnitLocationInput = z.infer<typeof createunitLocationSchema>
+type CreateUnitLocationInput = z.infer<typeof createUnitLocationSchema>
 
 
 export {
-    createunitLocationSchema,
+    createUnitLocationSchema,
     unitLocationIdShema,
     unitLocationIdParams,
     CreateUnitLocationInput,

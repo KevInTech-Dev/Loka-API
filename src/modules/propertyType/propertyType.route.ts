@@ -14,7 +14,7 @@ router.post('', validate(createPropertyTypeSchema, 'body'), propertyTypeControll
 router.get('', validate(defaultPaginationQuery, 'body'), propertyTypeController.getAllpropertyType);
 
 // delete propertyType by id
-router.delete('/:id', validate(propertyTypeIdShema, 'params'), propertyTypeController.deletepropertyType);
+// router.delete('/:id', validate(propertyTypeIdShema, 'params'), propertyTypeController.deletepropertyType);
 
 // get propertyType by id
 router.get('/:id', validate(propertyTypeIdShema, 'params'), propertyTypeController.getpropertyType);

@@ -1,3 +1,4 @@
+import { NotFoundError } from "@/common/errors";
 import { PropertyUnitLocation, PropertyUnitLocationCreationAttributes } from "@/database/models/PropertyUnitLocation";
 import { ModelStatic } from "sequelize";
 
@@ -17,29 +18,25 @@ export class PropertyUnitLocationRepository {
         return this.PropertyUnitLocation.findByPk(id);
     }
 
-    async getAllPropertyUnitLocations() {
-        return this.PropertyUnitLocation.findAll();
-    }
-
     async getPropertyUnitLocationPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.PropertyUnitLocation.findAll({ offset, limit });
+        return this.PropertyUnitLocation.findAndCountAll({ offset, limit });
     }
 
     async updatePropertyUnitLocation(id: string, data: Partial<PropertyUnitLocationCreationAttributes>) {
         const PropertyUnitLocation = await this.getPropertyUnitLocationById(id);
-        if (!PropertyUnitLocation) return null;
+        if (!PropertyUnitLocation) { throw new NotFoundError("Id not found") };
 
         await PropertyUnitLocation.update(data);
         return PropertyUnitLocation;
     }
 
-    async deletePropertyUnitLocation(id: string) {
-        const PropertyUnitLocation = await this.getPropertyUnitLocationById(id);
-        if (!PropertyUnitLocation) return false;
+    // async deletePropertyUnitLocation(id: string) {
+    //     const PropertyUnitLocation = await this.getPropertyUnitLocationById(id);
+    //     if (!PropertyUnitLocation) return false;
 
-        await PropertyUnitLocation.destroy();
-        return true;
-    }
+    //     await PropertyUnitLocation.destroy();
+    //     return true;
+    // }
 
 }
