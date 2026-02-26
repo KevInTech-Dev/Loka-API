@@ -22,7 +22,7 @@ export class PropertyUnitLocationService {
     //méthode pour creer l'association entre unitLocation et propriet
     async createPropertyUnitLocation(data: CreatepropertyUnitLocationInput): Promise<PropertyUnitLocationResponse | null> {
         //verifier si la propriete existe
-        const existingProperty = await this.propertyRepository.getPropertyById(data.proprieteId);
+        const existingProperty = await this.propertyRepository.getPropertyById(data.propertyId);
         if (!existingProperty) {
             throw new NotFoundError("The property doesn/'t exist");
         }
@@ -34,7 +34,7 @@ export class PropertyUnitLocationService {
 
         const propertyUnitLocation = (await this.propertyUnitLocationRepository.createPropertyUnitLocation({
             unitLocationId: data.unitLocationId,
-            propertyId: data.proprieteId
+            propertyId: data.propertyId
         }));
 
         return {
@@ -42,7 +42,8 @@ export class PropertyUnitLocationService {
             unitLocationId: propertyUnitLocation.unitLocationId,
             propertyId: propertyUnitLocation.propertyId,
             createdAt: propertyUnitLocation.createdAt,
-            updatedAt: propertyUnitLocation.updatedAt
+            updatedAt: propertyUnitLocation.updatedAt,
+
         }
     };
 
@@ -59,6 +60,7 @@ export class PropertyUnitLocationService {
             propertyId: isPropertyUnitExisting.propertyId,
             createdAt: isPropertyUnitExisting.createdAt,
             updatedAt: isPropertyUnitExisting.updatedAt,
+
         }
     }
 
@@ -100,12 +102,18 @@ export class PropertyUnitLocationService {
             unitLocationId: modifyData.unitLocationId,
             propertyId: modifyData.propertyId,
             createdAt: modifyData.createdAt,
-            updatedAt: modifyData.updatedAt
+            updatedAt: modifyData.updatedAt,
+
         }
     }
 
     //Implementer le soft delete
-    // async deletepropertyUnitLocation(id: string): Promise<boolean> {
-
-    // }
+    async deletepropertyUnitLocation(id: string): Promise<boolean> {
+        const deleted = await this.propertyUnitLocationRepository.getPropertyUnitLocationById(id);
+        if (!deleted) {
+            throw new NotFoundError("Property unit location not found")
+        }
+        deleted.destroy();
+        return true;
+    }
 }

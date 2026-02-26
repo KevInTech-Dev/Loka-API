@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 const createpropertyUnitLocationSchema = z.object({
     unitLocationId: z.uuid(),
-    proprieteId: z.uuid()
+    propertyId: z.uuid()
 })
 
 const propertyUnitLocationIdShema = z.object({

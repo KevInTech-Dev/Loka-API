@@ -12,6 +12,16 @@ const propertyTypeShema: OpenAPIV3.ComponentsObject['schemas'] = {
             label: {
                 type: "string",
                 description: "Label of the property type"
+            },
+            createdAt: {
+                type: "string",
+                format: "data-time",
+                description: "Timestamp when the property type was deleted"
+            },
+            updatedAt: {
+                type: "string",
+                format: "data-time",
+                description: "Timestamp when the property type was deleted"
             }
         },
         required: ["label"]
@@ -147,7 +157,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                     required: true,
                     schema: {
                         type: "string",
-                        format:"uuid"
+                        format: "uuid"
                     },
                     description: "The unique identifier of the property type"
                 }
@@ -184,7 +194,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                     required: true,
                     schema: {
                         type: "string",
-                        format:"uuid"
+                        format: "uuid"
                     },
                     description: "The unique identifier of the property type"
                 }
@@ -231,7 +241,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                     required: true,
                     schema: {
                         type: "string",
-                        format:"uuid"
+                        format: "uuid"
                     },
                     description: "The unique identifier of the property type"
                 }
@@ -239,8 +249,8 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
             responses: {
                 "200": {
                     description: "property type deleted successfully",
-                    content:{
-                            "application/json": {
+                    content: {
+                        "application/json": {
                             schema: {
                                 type: "object",
                                 properties: {

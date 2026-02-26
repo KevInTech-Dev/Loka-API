@@ -65,11 +65,14 @@ export class PropertyUnitLocationController {
         );
     }
 
-    // deletepropertyUnitLocation = async (req: Request, res: Response) => {
-    //     const id = req.params.id as string;
-    //     return res.send({
-    //         data: await this.propertyUnitLocationService.deletepropertyUnitLocation(id),
-    //     });
-    // }
+    deletepropertyUnitLocation = async (req: Request, res: Response) => {
+        const id = req.params.id as string;
+        const data = await this.propertyUnitLocationService.deletepropertyUnitLocation(id);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful"
+        );
+    }
 
 }

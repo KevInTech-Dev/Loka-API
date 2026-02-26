@@ -33,15 +33,15 @@ export class UnitTypeRepository {
         return unitType;
     }
 
-    // async deleteUnitType(id: string) {
-    //     const unitType = await this.getUnitTypeById(id);
-    //     if (!unitType) {
-    //         throw new NotFoundError("Id not found")
-    //     };
+    async deleteUnitType(id: string) {
+        const unitType = await this.getUnitTypeById(id);
+        if (!unitType) {
+            throw new NotFoundError("Unit type with id :" + id + "doesn't exist")
+        };
 
-    //     await unitType.destroy();
-    //     return true;
-    // }
+        await unitType.destroy();
+        return true;
+    }
 
     getUnitTypeByLabel(label: string) {
         return this.unitType.findOne({ where: { label } });

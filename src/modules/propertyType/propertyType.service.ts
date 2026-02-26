@@ -28,7 +28,7 @@ export class PropertyTypeService {
             id: propertyType.id,
             label: propertyType.label,
             createdAt: propertyType.createdAt,
-            updatedAt: propertyType.updatedAt,
+
         }
 
     }
@@ -43,7 +43,8 @@ export class PropertyTypeService {
             id: propertyType.id,
             label: propertyType.label,
             createdAt: propertyType.createdAt,
-            updatedAt: propertyType.updatedAt
+            updatedAt: propertyType.updatedAt,
+
         };
     }
 
@@ -54,7 +55,8 @@ export class PropertyTypeService {
             id: objects.id,
             label: objects.label,
             createdAt: objects.createdAt,
-            updatedAt: objects.updatedAt
+            updatedAt: objects.updatedAt,
+
         }))
         return {
             data: mappedData,
@@ -77,17 +79,19 @@ export class PropertyTypeService {
             id: updatedPropertyType.id,
             label: updatedPropertyType.label,
             createdAt: updatedPropertyType.createdAt,
-            updatedAt: updatedPropertyType.updatedAt
+            updatedAt: updatedPropertyType.updatedAt,
+
         };
     }
 
     //Suppression du type de propriete
-    // async deletePropertyType(id: string):Promise<PropertyTypeResponse> {
-    //     const deleted = await this.propertyTypeRepository.deletePropertyType(id);
-    //     if (!deleted) {
-    //         throw new Error('PropertyType not found');
-    //     }
-    //     return true;
-    // }
+    async deletePropertyType(id: string) {
+        const deleted = await this.propertyTypeRepository.getPropertyTypeById(id);
+        if (!deleted) {
+            throw new Error('PropertyType not found');
+        }
+        deleted.destroy();
+        return true;
+    }
 
 }

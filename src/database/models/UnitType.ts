@@ -14,8 +14,8 @@ class UnitType extends Model<UnitTypeAttributes, UnitTypeCreationAttributes> imp
     declare label: string;
     declare isActive: Boolean;
     declare id: string;
-    declare createdAt?: Date;
-    declare updatedAt?: Date;
+    declare readonly createdAt?: Date;
+    declare readonly updatedAt?: Date;
     static associate(models: any) {
         UnitType.hasMany(models.unitLocation, {
             foreignKey: 'unitTypeId',
@@ -44,7 +44,7 @@ const initUnitType = (sequelize: Sequelize) => {
             allowNull: false,
         }
     },
-        { sequelize, modelName: "UnitType", tableName: 'unitType', timestamps: true, underscored: true },
+        { sequelize, modelName: "UnitType", tableName: 'unitType', timestamps: true, underscored: true, paranoid: true }
     )
 }
 

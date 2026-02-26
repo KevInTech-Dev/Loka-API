@@ -31,12 +31,12 @@ export class PropertyUnitLocationRepository {
         return PropertyUnitLocation;
     }
 
-    // async deletePropertyUnitLocation(id: string) {
-    //     const PropertyUnitLocation = await this.getPropertyUnitLocationById(id);
-    //     if (!PropertyUnitLocation) return false;
+    async deletePropertyUnitLocation(id: string) {
+        const PropertyUnitLocation = await this.getPropertyUnitLocationById(id);
+        if (!PropertyUnitLocation) { throw new NotFoundError("Property unit location with id :" + id + "doesn't exist") };
 
-    //     await PropertyUnitLocation.destroy();
-    //     return true;
-    // }
+        await PropertyUnitLocation.destroy();
+        return true;
+    }
 
 }

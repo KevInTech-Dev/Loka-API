@@ -15,7 +15,7 @@ router.post('', validate(createPropertySchema, 'body'), propertyController.creat
 router.get('', validate(defaultPaginationQuery, 'query'), propertyController.getAllProperty);
 
 // delete property by id
-// router.delete('/:id', validate(propertyIdShema, 'params'), propertyController.deleteProperty);
+router.delete('/:id', validate(propertyIdShema, 'params'), propertyController.deleteProperty);
 
 // get property by id
 router.get('/:id', validate(propertyIdShema, 'params'), propertyController.getProperty);

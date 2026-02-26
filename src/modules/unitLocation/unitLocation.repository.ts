@@ -31,13 +31,13 @@ export class UnitLocationRepository {
         return unitLocation;
     }
 
-    // async deleteUnitLocation(id: string) {
-    //     const unitLocation = await this.getUnitLocationById(id);
-    //     if (!unitLocation) { throw new NotFoundError("id not found") };
+    async deleteUnitLocation(id: string) {
+        const unitLocation = await this.getUnitLocationById(id);
+        if (!unitLocation) { throw new NotFoundError("Unit location with id :" + id + "doesn't exist") };
 
-    //     await unitLocation.destroy();
-    //     return true;
-    // }
+        await unitLocation.destroy();
+        return true;
+    }
 
     getUnitLocationByUnitName(unitName: string) {
         return this.unitLocation.findOne({ where: { unitName } });

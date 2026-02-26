@@ -3,7 +3,7 @@ import { UnitStatusEnum } from "@/enums/UnitStatusEnum";
 import { Json } from "sequelize/lib/utils";
 
 export type unitLocationResponse = BaseTypes & {
-    unitType: string;
+    unitTypeId: string;
     unitNumber: string;
     unitName: string;
     floor: number;

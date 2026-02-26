@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 
 const createUnitLocationSchema = z.object({
-    unitType: z.uuid(),
+    unitTypeId: z.uuid(),
     unitNumber: z.string(),
     unitName: z.string(),
     floor: z.number(),

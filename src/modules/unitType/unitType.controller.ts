@@ -62,9 +62,14 @@ export class UnitTypeController {
         );
     }
 
-    // deleteUnitType = async (req: Request, res: Response) => {
-    //     const id = req.params.id as string;
-    //     return 
-    // }
+    deleteUnitType = async (req: Request, res: Response): Promise<Response> => {
+        const id = req.params.id as string;
+        const data = await this.unitTypeService.deleteUnitType(id);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful"
+        );
+    }
 
 }

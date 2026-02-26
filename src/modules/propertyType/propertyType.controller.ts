@@ -50,7 +50,8 @@ export class PropertyTypeController {
     }
 
     createpropertyType = async (req: Request, res: Response): Promise<Response> => {
-        const data: CreatePropertyTypeInput = req.body;
+        const dataToCreate: CreatePropertyTypeInput = req.body;
+        const data = await this.propertyTypeService.createPropertyType(dataToCreate);
         return sendCreated(
             res,
             data,
@@ -58,10 +59,13 @@ export class PropertyTypeController {
         );
     }
 
-    // deletepropertyType = async (req: Request, res: Response): Promise<Response> => {
-    //     const id = req.params.id as string;
-    //     return res.send({
-    //         data: await this.propertyTypeService.deletePropertyType(id),
-    //     });
-    // }
+    deletepropertyType = async (req: Request, res: Response): Promise<Response> => {
+        const id = req.params.id as string;
+        const data = await this.propertyTypeService.deletePropertyType(id);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful"
+        );
+    }
 }

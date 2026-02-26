@@ -63,8 +63,18 @@ const propertyShema: OpenAPIV3.ComponentsObject['schemas'] = {
                 nullable: true,
                 description: "URL to documents of properties"
             },
+            createdAt: {
+                type: "string",
+                format: "data-time",
+                description: "Timestamp when the property was created"
+            },
+            updatedAt: {
+                type: "string",
+                format: "data-time",
+                description: "Timestamp when the property was updated"
+            }
         },
-        required: ["label", "type", "address", "city", "district", "country", "numberOfUnits", "numberOfFloors", "yearBuilt", "description", "electricityMeterNumber", "waterMeterNumber"]
+        required: ["label", "type", "address", "city", "district", "country", "numberOfUnits", "numberOfFloors", "yearBuilt", "description", "electricityMeterNumber", "waterMeterNumber", "createdAt", "updatedAt"]
     },
     createPropertyRequest: {
         type: "object",

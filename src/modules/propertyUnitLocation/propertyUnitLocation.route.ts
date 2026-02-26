@@ -22,7 +22,7 @@ router.patch('/:id', validate({
     body: createpropertyUnitLocationSchema
 }), propertyUnitLocationController.updatepropertyUnitLocation);
 
-// // delete propertyUnitLocation by id
-// router.delete('/:id', validate(propertyUnitLocationIdShema, 'params'), propertyUnitLocationController.deletepropertyUnitLocation);
+// delete propertyUnitLocation by id
+router.delete('/:id', validate(propertyUnitLocationIdShema, 'params'), propertyUnitLocationController.deletepropertyUnitLocation);
 
 export default router;

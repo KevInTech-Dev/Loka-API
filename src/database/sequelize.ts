@@ -7,9 +7,11 @@ import { initModelAbonnement } from "./models/Abonnements";
 import { initModelandLord } from "./models/landLord";
 import { initModelProperty } from "./models/Property";
 import { initModelPropertyType } from "./models/PropertyType";
+import { initPropertyUnitLocation } from "./models/PropertyUnitLocation";
 import { initUnitType } from "./models/UnitType";
 import { initUnitLocation } from "./models/UnitLocation";
-import { initPropertyUnitLocation } from "./models/PropertyUnitLocation";
+
+
 
 const sequelize = new Sequelize({
   ...options,

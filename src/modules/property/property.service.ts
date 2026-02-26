@@ -66,6 +66,7 @@ export class PropertyService {
             documents: property.documents,
             createdAt: property.createdAt,
             updatedAt: property.updatedAt,
+
         }
 
     }
@@ -114,6 +115,7 @@ export class PropertyService {
             documents: updatedProperty.documents,
             createdAt: updatedProperty.createdAt,
             updatedAt: updatedProperty.updatedAt,
+
         };
     }
 
@@ -140,6 +142,7 @@ export class PropertyService {
             documents: property.documents,
             createdAt: property.createdAt,
             updatedAt: property.updatedAt,
+
         };
     }
 
@@ -166,6 +169,7 @@ export class PropertyService {
             documents: property.documents,
             createdAt: property.createdAt,
             updatedAt: property.updatedAt,
+
         }));
 
         return {
@@ -201,6 +205,7 @@ export class PropertyService {
                 documents: updatedProperty.documents,
                 createdAt: updatedProperty.createdAt,
                 updatedAt: updatedProperty.updatedAt,
+
             };
         } else if (!verifyPropertyType) {
             throw new NotFoundError("The property type does not exist , please check");
@@ -208,12 +213,13 @@ export class PropertyService {
     }
 
     //methode pour supprimer les propriete
-    // async deleteProperty(id: string) {
-    //     const deleted = await this.propertyRepository.deleteProperty(id);
-    //     if (!deleted) {
-    //         throw new Error('Property not found');
-    //     }
-    //     return true;
-    // }
+    async deleteProperty(id: string) {
+        const deleted = await this.propertyRepository.getPropertyById(id);
+        if (!deleted) {
+            throw new Error('Property not found');
+        }
+        deleted.destroy();
+        return true;
+    }
 
 }

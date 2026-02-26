@@ -12,8 +12,8 @@ class PropertyUnitLocation extends Model<PropertyUnitLocationAttributes, Propert
     declare unitLocationId: string;
     declare propertyId: string;
     declare id: string;
-    declare createdAt?: Date;
-    declare updatedAt?: Date;
+    declare readonly createdAt?: Date;
+    declare readonly updatedAt?: Date;
 
 }
 
@@ -35,7 +35,7 @@ const initPropertyUnitLocation = (sequelize: Sequelize) => {
             allowNull: false,
         },
     }, {
-        sequelize, modelName: "PropertyUnitLocation", tableName: 'propertyUnitLocation', timestamps: true, underscored: true
+        sequelize, modelName: "PropertyUnitLocation", tableName: 'propertyUnitLocation', timestamps: true, underscored: true, paranoid: true
     })
 }
 

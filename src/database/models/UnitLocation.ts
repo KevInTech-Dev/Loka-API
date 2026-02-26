@@ -4,7 +4,7 @@ import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { Json } from "sequelize/lib/utils";
 
 export interface UnitLocationAttributes extends BaseModel {
-    unitType: string;
+    unitTypeId: string;
     unitNumber: string;
     unitName: string;
     floor: number;
@@ -25,7 +25,7 @@ export interface UnitLocationAttributes extends BaseModel {
 export interface UnitLocationCreationAttributes extends Optional<UnitLocationAttributes, "id" | "createdAt" | "updatedAt" | "amenities"> { }
 
 class UnitLocation extends Model<UnitLocationAttributes, UnitLocationCreationAttributes> implements UnitLocationAttributes {
-    declare unitType: string;
+    declare unitTypeId: string;
     declare unitNumber: string;
     declare unitName: string;
     declare floor: number;
@@ -42,8 +42,8 @@ class UnitLocation extends Model<UnitLocationAttributes, UnitLocationCreationAtt
     declare unitStatus: UnitStatusEnum;
     declare description: string;
     declare id: string;
-    declare createdAt?: Date;
-    declare updatedAt?: Date;
+    declare readonly createdAt?: Date;
+    declare readonly updatedAt?: Date;
     //Association avec la classe UnitType
     static associate(models: any) {
         UnitLocation.belongsTo(models.unitType, {
@@ -61,7 +61,7 @@ const initUnitLocation = (sequelize: Sequelize) => {
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true
         },
-        unitType: {
+        unitTypeId: {
             type: DataTypes.UUID,
             allowNull: false
         },
@@ -126,7 +126,7 @@ const initUnitLocation = (sequelize: Sequelize) => {
             allowNull: false
         },
     }, {
-        sequelize, modelName: "UnitLocation", tableName: 'unitLocation', timestamps: true, underscored: true
+        sequelize, modelName: "UnitLocation", tableName: 'unitLocation', timestamps: true, underscored: true, paranoid: true
     })
 }
 

@@ -10,7 +10,7 @@ export class PropertyController {
         this.propertyService = new PropertyService();
     }
 
-    getAllProperty = async (req: Request, res: Response) => {
+    getAllProperty = async (req: Request, res: Response): Promise<Response> => {
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
         const { data, total } = await this.propertyService.getAllPropertys(page, limit);
@@ -23,7 +23,7 @@ export class PropertyController {
         );
     }
 
-    getProperty = async (req: Request, res: Response) => {
+    getProperty = async (req: Request, res: Response): Promise<Response> => {
         const id = req.params.id as string;
         const data = await this.propertyService.getPropertyById(id);
         return sendSuccess(
@@ -34,7 +34,7 @@ export class PropertyController {
         );
     }
 
-    updateProperty = async (req: Request, res: Response) => {
+    updateProperty = async (req: Request, res: Response): Promise<Response> => {
         const id = req.params.id as string;
         const dataToModify = req.body as CreatePropertyInput;
         const data = await this.propertyService.updateProperty(id, dataToModify);
@@ -47,7 +47,7 @@ export class PropertyController {
     }
 
 
-    addDocuments = async (req: Request, res: Response) => {
+    addDocuments = async (req: Request, res: Response): Promise<Response> => {
         const id = req.params.id as string;
         const file = req.file;
 
@@ -63,7 +63,7 @@ export class PropertyController {
         );
     };
 
-    createProperty = async (req: Request, res: Response) => {
+    createProperty = async (req: Request, res: Response): Promise<Response> => {
         const dataToCreate: CreatePropertyInput = req.body;
         const data = await this.propertyService.createProperty(dataToCreate);
         return sendCreated(
@@ -73,8 +73,13 @@ export class PropertyController {
         );
     }
 
-    // deleteProperty = async (req: Request, res: Response) => {
-    //     const id = req.params.id as string;
-    //     return 
-    // }
+    deleteProperty = async (req: Request, res: Response): Promise<Response> => {
+        const id = req.params.id as string;
+        const data = await this.propertyService.deleteProperty(id);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful"
+        );
+    }
 }

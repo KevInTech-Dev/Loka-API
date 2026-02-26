@@ -31,13 +31,13 @@ export class PropertyTypeRepository {
         return PropertyType;
     }
 
-    // async deletePropertyType(id: string) {
-    //     const PropertyType = await this.getPropertyTypeById(id);
-    //     if (!PropertyType) return false;
+    async deletePropertyType(id: string) {
+        const PropertyType = await this.getPropertyTypeById(id);
+        if (!PropertyType) { throw new NotFoundError("Property type with id :" + id + "doesn't exist") };
 
-    //     await PropertyType.destroy();
-    //     return true;
-    // }
+        await PropertyType.destroy();
+        return true;
+    }
 
     getPropertyTypeByLabel(label: string) {
         return this.PropertyType.findOne({ where: { label } });

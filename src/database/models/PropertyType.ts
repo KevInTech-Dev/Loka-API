@@ -33,7 +33,7 @@ const initModelPropertyType = (sequelize: Sequelize) => {
                 allowNull: false
             },
         },
-        { sequelize, modelName: "PropertyType", tableName: 'propertyType', timestamps: true, underscored: true },
+        { sequelize, modelName: "PropertyType", tableName: 'propertyType', timestamps: true, underscored: true, paranoid: true },
     )
 
 };

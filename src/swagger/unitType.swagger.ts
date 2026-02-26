@@ -29,12 +29,12 @@ const unitTypeSchema: OpenAPIV3.ComponentsObject['schemas'] = {
             createdAt: {
                 type: "string",
                 format: "date-time",
-                description: "Timestamp when the user was last updated"
+                description: "Timestamp when the unit type was last updated"
             },
             updatedAt: {
                 type: "string",
                 format: "date-time",
-                description: "Timestamp when the user was last updated"
+                description: "Timestamp when the unit type was last updated"
             }
         },
         required: ["id", "code", "label", "isActive", "createdAt", "updatedAt"]
@@ -52,6 +52,11 @@ const unitTypeSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 example: "Studio | T1 | Bureau",
                 description: "label of the unit type"
             },
+            isActive: {
+                type: "boolean",
+                example: true,
+                description: "Value to define if the the type is active or not"
+            }
         },
         required: ["code", "label"]
     },

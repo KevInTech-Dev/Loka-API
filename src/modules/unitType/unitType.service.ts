@@ -18,7 +18,7 @@ export class UnitTypeService {
         if (existingUnitType) {
             throw new DuplicateEntryError("Unit type already exist");
         }
-
+        data.isActive = true;
         const unitType = await this.unitTypeRepository.createUnitType({
             code: data.code,
             label: data.label,
@@ -31,7 +31,8 @@ export class UnitTypeService {
             label: unitType.label,
             isActive: unitType.isActive,
             createdAt: unitType.createdAt,
-            updatedAt: unitType.updatedAt
+            updatedAt: unitType.updatedAt,
+
         };
     }
 
@@ -48,7 +49,8 @@ export class UnitTypeService {
             label: unitType.label,
             isActive: unitType.isActive,
             createdAt: unitType.createdAt,
-            updatedAt: unitType.updatedAt
+            updatedAt: unitType.updatedAt,
+
         };
     }
 
@@ -87,15 +89,17 @@ export class UnitTypeService {
             label: updatedunitType.label,
             isActive: updatedunitType.isActive,
             createdAt: updatedunitType.createdAt,
-            updatedAt: updatedunitType.updatedAt
+            updatedAt: updatedunitType.updatedAt,
+
         };
     }
 
-    // async deleteUnitType(id: string): Promise<boolean> {
-    //     const deleted = await this.unitTypeRepository.deleteUnitType(id);
-    //     if (!deleted) {
-    //         throw new Error("unitType not found");
-    //     }
-    //     return true;
-    // }
+    async deleteUnitType(id: string): Promise<boolean> {
+        const deleted = await this.unitTypeRepository.getUnitTypeById(id);
+        if (!deleted) {
+            throw new Error("unitType not found");
+        }
+        deleted.destroy();
+        return true;
+    }
 }

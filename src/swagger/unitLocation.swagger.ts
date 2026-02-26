@@ -1,12 +1,12 @@
 import { OpenAPIV3 } from "openapi-types";
 import { DataTypes } from "sequelize";
 
-const UnitLocationTags: OpenAPIV3.TagObject = {
+const unitLocationTags: OpenAPIV3.TagObject = {
     name: "UnitLocation",
     description: "Operations related to unit location management"
 }
 
-const UnitLocationSchema: OpenAPIV3.ComponentsObject['schemas'] = {
+const unitLocationSchema: OpenAPIV3.ComponentsObject['schemas'] = {
     UnitLocation: {
         type: "object",
         properties: {
@@ -121,22 +121,27 @@ const UnitLocationSchema: OpenAPIV3.ComponentsObject['schemas'] = {
             },
             unitNumber: {
                 type: "string",
+                example: 0,
                 description: "The number of the unit"
             },
             unitName: {
                 type: "string",
+                example: "string",
                 description: "The name of unit"
             },
             floor: {
-                type: "string",
+                type: "number",
+                example: 0,
                 description: "The number of the floor of the unit"
             },
             surfaceArea: {
-                type: "string",
+                type: "number",
+                example: 0,
                 description: "surface of the unit"
             },
             isFurnished: {
                 type: "string",
+                example: false,
                 description: "this is to specify if the unit is furnished or not"
             },
             amenities: {
@@ -145,39 +150,48 @@ const UnitLocationSchema: OpenAPIV3.ComponentsObject['schemas'] = {
             },
             electricityMeterId: {
                 type: "string",
+                example: "string",
                 description: "electricty meter id"
             },
             waterMeterId: {
                 type: "string",
+                example: "string",
                 description: "water meter id"
             },
             initialElectricityReading: {
-                type: "string",
+                type: "number",
+                example: 0,
                 description: "initial electricity reading"
             },
             initialWaterReading: {
-                type: "string",
+                type: "number",
+                example: 0,
                 description: "initial water reading"
             },
             monthlyRent: {
-                type: "string",
+                type: "number",
+                example: 0,
                 description: "price of the rent"
             },
             electricityIncluded: {
                 type: "string",
+                example: false,
                 description: "this is to specify if electricity fees is included in the monthly rent"
             },
             waterIncluded: {
                 type: "string",
+                example: false,
                 description: "this is to specify if water fees is included in the monthly rent"
             },
             unitStatus: {
                 type: "string",
-                description: ""
+                example: "string",
+                description: "Statu of the unit"
             },
             description: {
                 type: "string",
-                description: ""
+                example: "string",
+                description: "description of the unit"
             },
         },
         required: [
@@ -219,7 +233,7 @@ const UnitLocationSchema: OpenAPIV3.ComponentsObject['schemas'] = {
     }
 }
 
-const UnitLocationPath: OpenAPIV3.PathsObject = {
+const unitLocationPath: OpenAPIV3.PathsObject = {
     "/unitLocation": {
         get: {
             tags: ["UnitLocation"],
@@ -434,7 +448,7 @@ const UnitLocationPath: OpenAPIV3.PathsObject = {
 }
 
 export {
-    UnitLocationTags,
-    UnitLocationSchema,
-    UnitLocationPath
+    unitLocationTags,
+    unitLocationSchema,
+    unitLocationPath
 }

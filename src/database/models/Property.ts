@@ -104,7 +104,7 @@ const initModelProperty = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: true
             }
-        }, { sequelize, modelName: "Property", tableName: 'property', timestamps: true, underscored: true },
+        }, { sequelize, modelName: "Property", tableName: 'property', timestamps: true, underscored: true, paranoid: true },
     )
 };
 

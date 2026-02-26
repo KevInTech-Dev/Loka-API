@@ -61,11 +61,14 @@ export class UnitLocationController {
         );
     }
 
-    // deleteUnitLocation = async (req: Request, res: Response) => {
-    //     const id = req.params.id as string;
-    //     return res.send({
-    //         data: await this.unitLocationService.deleteUnitLocation(id),
-    //     });
-    // }
+    deleteUnitLocation = async (req: Request, res: Response) => {
+        const id = req.params.id as string;
+        const data = await this.unitLocationService.deleteUnitLocation(id);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful"
+        );
+    }
 
 }

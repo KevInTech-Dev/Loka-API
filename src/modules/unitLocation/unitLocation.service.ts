@@ -5,23 +5,31 @@ import { unitLocationResponse } from "./unitLocation.type";
 import { UnitLocationRepository } from "./unitLocation.repository";
 import { CreateUnitLocationInput } from "./unitLocation.schema";
 import { PaginatedResult } from "@/common/paginatedResult";
+import { UnitTypeRepository } from "../unitType/unitType.repository";
 
 export class UnitLocationService {
     private unitLocationRepository: UnitLocationRepository;
+    private unitTypeRespository: UnitTypeRepository;
 
     constructor() {
         this.unitLocationRepository = new UnitLocationRepository();
+        this.unitTypeRespository = new UnitTypeRepository()
     }
 
     async createUnitLocation(data: CreateUnitLocationInput): Promise<unitLocationResponse> {
         const existingunitLocation = await this.unitLocationRepository.getUnitLocationByUnitName(data.unitName);
 
         if (existingunitLocation) {
-            throw new DuplicateEntryError("Email already in use");
+            throw new DuplicateEntryError("An unit already in use with name", data.unitName);
+        }
+
+        const existingUnitType = await this.unitTypeRespository.getUnitTypeById(data.unitTypeId);
+        if (!existingUnitType) {
+            throw new NotFoundError("The specified unit type doesn't exist")
         }
 
         const unitLocation = await this.unitLocationRepository.createUnitLocation({
-            unitType: data.unitType,
+            unitTypeId: data.unitTypeId,
             unitNumber: data.unitNumber,
             unitName: data.unitName,
             floor: data.floor,
@@ -40,7 +48,7 @@ export class UnitLocationService {
 
         return {
             id: unitLocation.id,
-            unitType: unitLocation.unitType,
+            unitTypeId: unitLocation.unitTypeId,
             unitNumber: unitLocation.unitNumber,
             unitName: unitLocation.unitName,
             floor: unitLocation.floor,
@@ -58,6 +66,7 @@ export class UnitLocationService {
             description: unitLocation.description,
             createdAt: unitLocation.createdAt,
             updatedAt: unitLocation.updatedAt,
+
         };
     }
 
@@ -70,7 +79,7 @@ export class UnitLocationService {
 
         return {
             id: unitLocation.id,
-            unitType: unitLocation.unitType,
+            unitTypeId: unitLocation.unitTypeId,
             unitNumber: unitLocation.unitNumber,
             unitName: unitLocation.unitName,
             floor: unitLocation.floor,
@@ -88,6 +97,7 @@ export class UnitLocationService {
             description: unitLocation.description,
             createdAt: unitLocation.createdAt,
             updatedAt: unitLocation.updatedAt,
+
         };
     }
 
@@ -96,7 +106,7 @@ export class UnitLocationService {
 
         const mappedData = rows.map((unitLocation) => ({
             id: unitLocation.id,
-            unitType: unitLocation.unitType,
+            unitTypeId: unitLocation.unitTypeId,
             unitNumber: unitLocation.unitNumber,
             unitName: unitLocation.unitName,
             floor: unitLocation.floor,
@@ -113,7 +123,8 @@ export class UnitLocationService {
             unitStatus: unitLocation.unitStatus,
             description: unitLocation.description,
             createdAt: unitLocation.createdAt,
-            updatedAt: unitLocation.updatedAt
+            updatedAt: unitLocation.updatedAt,
+
         }));
 
         return {
@@ -136,7 +147,7 @@ export class UnitLocationService {
         }
         return {
             id: unitLocation.id,
-            unitType: unitLocation.unitType,
+            unitTypeId: unitLocation.unitTypeId,
             unitNumber: unitLocation.unitNumber,
             unitName: unitLocation.unitName,
             floor: unitLocation.floor,
@@ -153,15 +164,16 @@ export class UnitLocationService {
             unitStatus: unitLocation.unitStatus,
             description: unitLocation.description,
             createdAt: unitLocation.createdAt,
-            updatedAt: unitLocation.updatedAt,
+            updatedAt: unitLocation.updatedAt
         };
     }
 
-    // async deleteUnitLocation(id: string): Promise<boolean> {
-    //     const deleted = await this.unitLocationRepository.deleteUnitLocation(id);
-    //     if (!deleted) {
-    //         throw new Error("unitLocation not found");
-    //     }
-    //     return true;
-    // }
+    async deleteUnitLocation(id: string): Promise<boolean> {
+        const deleted = await this.unitLocationRepository.getUnitLocationById(id);
+        if (!deleted) {
+            throw new Error("unitLocation not found");
+        }
+        deleted.destroy();
+        return true;
+    }
 }

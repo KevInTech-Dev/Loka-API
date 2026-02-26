@@ -14,7 +14,7 @@ router.get('', validate(defaultPaginationQuery, 'query'), unitTypeController.get
 router.post('', validate(createUnitTypeSchema, 'body'), unitTypeController.createUnitType);
 
 // get unitType by id
-router.get('/:id', validate(createUnitTypeSchema, 'params'), unitTypeController.getUnitType);
+router.get('/:id', validate(unitTypeIdShema, 'params'), unitTypeController.getUnitType);
 
 // update unitType by id
 router.patch('/:id', validate({
@@ -23,6 +23,6 @@ router.patch('/:id', validate({
 }), unitTypeController.updateUnitType);
 
 // delete unitType by id
-// router.delete('/:id', validate(unitTypeIdShema, 'params'), unitTypeController.deleteUnitType);
+router.delete('/:id', validate(unitTypeIdShema, 'params'), unitTypeController.deleteUnitType);
 
 export default router;

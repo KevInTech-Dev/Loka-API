@@ -14,7 +14,7 @@ router.get('', validate(defaultPaginationQuery, 'query'), unitLocationController
 router.post('', validate(createUnitLocationSchema, 'body'), unitLocationController.createUnitLocation);
 
 // get unitLocation by id
-router.get('/:id', validate(createUnitLocationSchema, 'params'), unitLocationController.getUnitLocation);
+router.get('/:id', validate(unitLocationIdShema, 'params'), unitLocationController.getUnitLocation);
 
 // update unitLocation by id
 router.patch('/:id', validate({
@@ -23,6 +23,6 @@ router.patch('/:id', validate({
 }), unitLocationController.updateUnitLocation);
 
 // delete unitLocation by id
-// router.delete('/:id', validate(unitLocationIdShema, 'params'), unitLocationController.deleteUnitLocation);
+router.delete('/:id', validate(unitLocationIdShema, 'params'), unitLocationController.deleteUnitLocation);
 
 export default router;
