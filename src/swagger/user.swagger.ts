@@ -65,6 +65,11 @@ const userSchema: OpenAPIV3.ComponentsObject['schemas'] = {
     createUserRequest: {
         type: "object",
         properties: {
+            photo: {
+                type: "string",
+                format: "binary",
+                description: "The profile photo file to upload"
+            },
             email: {
                 type: "string",
                 format: "email",
@@ -79,9 +84,17 @@ const userSchema: OpenAPIV3.ComponentsObject['schemas'] = {
             username: {
                 type: "string",
                 description: "Optional username"
-            }
+            },
+            firstname: {
+                type: "string",
+                description: "Optional first name"
+            },
+            lastname: {
+                type: "string",
+                description: "Optional last name"
+            },
         },
-        required: ["email", "password"]
+        required: ["photo", "email", "password", "username"]
     },
     paginatedUsers: {
         type: "object",
@@ -164,7 +177,7 @@ const userPath: OpenAPIV3.PathsObject = {
             requestBody: {
                 required: true,
                 content: {
-                    "application/json": {
+                    "multipart/form-data": {
                         schema: {
                             $ref: "#/components/schemas/createUserRequest"
                         }
@@ -309,6 +322,66 @@ const userPath: OpenAPIV3.PathsObject = {
                             }
                         }
                     }
+                },
+                "404": {
+                    description: "User not found"
+                }
+            }
+        }
+    },
+    "/users/photo/{id}": {
+        post: {
+            tags: ["User"],
+            summary: "Add profile photo to user",
+            description: "Upload a profile photo for a user by their unique ID",
+            parameters: [
+                {
+                    name: "id",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string",
+                        format: "uuid"
+                    },
+                    description: "The unique identifier of the user"
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "multipart/form-data": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                photo: {
+                                    type: "string",
+                                    format: "binary",
+                                    description: "The profile photo file to upload"
+                                }
+                            },
+                            required: ["photo"]
+                        }
+                    }
+                }
+            },
+            responses: {
+                "200": {
+                    description: "Profile photo added successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/user"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    description: "No file uploaded"
                 },
                 "404": {
                     description: "User not found"

@@ -6,7 +6,7 @@ import userRoute from "@modules/users/user.route";
 import abonnementRoute from "@modules/abonnements/abonnement.route";
 import utilisateur_AbonnementRoute from "@modules/utilisateur_abonnement/utilisateur_abonnement.route";
 import swaggerSpec from "@/swagger";
-
+import tenantRoute from "@/modules/tenant/tenant.routes"
 import landLordRoute from "@/modules/landLord/landLord.route";
 import propertyRoute from "@/modules/property/property.route";
 import propertyTypeRoute from "@/modules/propertyType/propertyType.route";
@@ -17,9 +17,12 @@ import errorHandler, {
 const app: Express = express();
 const API_PREFIX = env.API_PREFIX;
 
-app.use(express.json());
+// Parse JSON bodies
+app.use(express.json({ limit: '10mb' }));
 
-app.use(express.urlencoded({ extended: true }));
+// Parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 
 //cors origin
 app.use(cors());
@@ -55,7 +58,7 @@ app.use(`${API_PREFIX}/property`, propertyRoute);
 app.use(`${API_PREFIX}/property-type`, propertyTypeRoute);
 app.use(`${API_PREFIX}/abonnements`, abonnementRoute);
 app.use(`${API_PREFIX}/landLords`, landLordRoute);
-app.use(`${API_PREFIX}/utilisateur-abonnement`, utilisateur_AbonnementRoute);
+app.use(`${API_PREFIX}/tenants`, tenantRoute)
 
 // 404 handler
 app.use(notFoundHandler);

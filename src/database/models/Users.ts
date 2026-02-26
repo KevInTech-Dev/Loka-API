@@ -47,6 +47,10 @@ class User
             foreignKey: 'userId', 
             as: 'landlord' 
         });
+            User.hasOne(models.Tenant, {
+                foreignKey: 'userId',
+                as: 'tenant'
+            });
     }
 }
 
@@ -61,6 +65,7 @@ const initModelUser = (sequelize: Sequelize) => {
             username: {
                 type: DataTypes.STRING,
                 allowNull: true,
+                unique: true
             }, firstname: {
                 type: DataTypes.STRING,
                 allowNull: true,
