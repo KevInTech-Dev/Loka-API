@@ -20,9 +20,10 @@ router.delete('/:id', validate(propertyIdShema, 'params'), propertyController.de
 // get property by id
 router.get('/:id', validate(propertyIdShema, 'params'), propertyController.getProperty);
 
+// add document
 router.post("/documents/:id", validate(propertyIdShema, 'params'), singleUpload({
-    fieldName: "documents | fichier | photo",
-    fileType: 'document',
+    fieldName: "documents",
+    fileType: 'image',
     subFolder: "property",
 }), propertyController.addDocuments);
 

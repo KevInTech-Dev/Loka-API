@@ -95,7 +95,7 @@ export class PropertyService {
 
 
         if (!updatedProperty) {
-            throw new NotFoundError("Property");
+            throw new NotFoundError("Property not updated");
         }
 
         return {

@@ -74,11 +74,16 @@ const propertyShema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Timestamp when the property was updated"
             }
         },
-        required: ["label", "type", "address", "city", "district", "country", "numberOfUnits", "numberOfFloors", "yearBuilt", "description", "electricityMeterNumber", "waterMeterNumber", "createdAt", "updatedAt"]
+        required: ["label", "type", "address", "city", "district", "country", "numberOfUnits", "numberOfFloors", "yearBuilt", "description", "electricityMeterNumber", "waterMeterNumber", "createdAt", "updatedAt", "documents"]
     },
     createPropertyRequest: {
         type: "object",
         properties: {
+            documents: {
+                type: "string",
+                format: "binary",
+                description: "The document file to upload"
+            },
             label: {
                 type: "string",
                 description: "Label of the property"
@@ -364,7 +369,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
             }
         }
     },
-    "property/documents/{id}": {
+    "/property/documents/{id}": {
         post: {
             tags: ["Property"],
             summary: "Add your property documents",
@@ -388,7 +393,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
                         schema: {
                             type: "object",
                             properties: {
-                                photo: {
+                                documents: {
                                     type: "string",
                                     format: "binary",
                                     description: "The document file to upload"

@@ -1,6 +1,6 @@
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
-import {RoleEnum} from "@/enums/RoleEnum";
-import {BaseModel} from "@common/models/base.model";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { RoleEnum } from "@/enums/RoleEnum";
+import { BaseModel } from "@common/models/base.model";
 
 
 export interface UserAttributes extends BaseModel {
@@ -39,14 +39,14 @@ class User
     declare readonly updatedAt?: Date;
     //J'ai ajouté l'association qui est entre landlord et user avec la méthode associate()
     static associate(models: any) {
-        User.hasOne(models.landLord, { 
-            foreignKey: 'userId', 
-            as: 'landlord' 
+        User.hasOne(models.landLord, {
+            foreignKey: 'userId',
+            as: 'landlord'
         });
-            User.hasOne(models.Tenant, {
-                foreignKey: 'userId',
-                as: 'tenant'
-            });
+        User.hasOne(models.Tenant, {
+            foreignKey: 'userId',
+            as: 'tenant'
+        });
     }
 }
 
@@ -99,8 +99,8 @@ const initModelUser = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true},
+        { sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true },
     );
 };
 
-export {User, initModelUser};
+export { User, initModelUser };

@@ -22,7 +22,9 @@ const propertyIdShema = z.object({
 
 
 type PropertyIdParams = z.infer<typeof propertyIdShema>
-type CreatePropertyInput = z.infer<typeof createPropertySchema>
+type CreatePropertyInput = z.infer<typeof createPropertySchema> & {
+    documents?: string
+}
 
 
 export {
