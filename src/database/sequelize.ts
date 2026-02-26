@@ -59,7 +59,7 @@ const initModels = async () => {
   initModelTenant(sequelize);
 
   // If you have more models, initialize them here and set up associations if needed before syncing the database.
-  Object.values(sequelize).forEach((model) => {
+  Object.values(sequelize.models).forEach((model:any) => {
     if (typeof model.associate === "function") {
       model.associate(sequelize.models);
     }
