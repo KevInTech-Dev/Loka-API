@@ -13,20 +13,20 @@ export class landLordRepository{
     }
 
     async getlandLordById(id: string) {
-        return this.landlord.findByPk(id);
+        return this.landlord.findOne({ where: { id, deletedAt: null } });
     }
 
      async getlandLordByUserId(userId: string) {
-        return this.landlord.findOne({ where: { userId } });
+        return this.landlord.findOne({ where: { userId, deletedAt: null } });
     }
 
     async getAllLandlords(){
-        return this.landlord.findAll();
+        return this.landlord.findAll({ where: { deletedAt: null } });
     }
 
     async getlandLordPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.landlord.findAll({ offset, limit });
+        return this.landlord.findAll({ where: { deletedAt: null }, offset, limit });
 }
 
     async updatelandLord(id: string, data: Partial<landLordCreationAtributes>){
@@ -41,8 +41,9 @@ export class landLordRepository{
         const landlord = await this.getlandLordById(id);
         if(!landlord) return false;
 
-       await landlord.destroy();
-       return true;
+        // Suppression logique 
+        await landlord.update({ deletedAt: new Date() });
+        return true;
     }
 
 }

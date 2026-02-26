@@ -19,6 +19,10 @@ export interface EnvConfig {
   // File upload settings
   MAX_FILE_SIZE: number;
   UPLOAD_DIR: string;
+
+
+  // bcrypt settings
+    BCRYPT_SALT_ROUNDS: number;
 }
 
 const getEnvVar = (key: string, defaultValue?: string): string => {
@@ -68,6 +72,9 @@ export const env: EnvConfig = {
   //File upload
   MAX_FILE_SIZE: getEnvVarNumber("MAX_FILE_SIZE", 5242880), // 5MB default
   UPLOAD_DIR: getEnvVar("UPLOAD_DIR", "uploads"),
+
+  //bcrypt
+  BCRYPT_SALT_ROUNDS: getEnvVarNumber("BCRYPT_SALT_ROUNDS", 10),
 };
 
 export default env;
