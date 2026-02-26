@@ -114,7 +114,7 @@ const initModelandLord = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "landLord", tableName: "landlords", timestamps: true, underscored: true},
+        {sequelize, modelName: "landLord", tableName: "landlords", timestamps: true, underscored: true, paranoid: true,},
     );
 };
 

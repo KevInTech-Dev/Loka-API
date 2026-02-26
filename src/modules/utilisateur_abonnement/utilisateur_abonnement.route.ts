@@ -12,7 +12,10 @@ const controller = new Utilisateur_AbonnementController();
 router.post("/",   validate({body: createAbonnementSchema}), controller.create);
 router.get("/" ,   validate({query:getUtilisateurAbonnementSchema}),controller.getAbonnementPaginated); // 
 router.get("/:id", validate({params: utilisateurAbonnementIdSchema}), controller.getById);
-router.get("/utilisateur/:id", validate({query: getAbonnementByUtilisateur}), controller.getAbonnementByUtilisateurPaginated);
+router.get("/utilisateur/:id", validate
+    ({
+    params: utilisateurAbonnementIdSchema, 
+    query: getAbonnementByUtilisateur}), controller.getAbonnementByUtilisateurPaginated);
 
 //router.put("/:id", controller.update);
 //router.delete("/:id", controller.delete);

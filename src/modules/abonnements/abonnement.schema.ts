@@ -8,7 +8,8 @@ const planAbonnementValues = Object.values(PlanAbonnementEnum) as [string, ...st
 // Schéma pour la création
 const createAbonnementSchema = z.object({
     planAbonnement: z.enum(planAbonnementValues), 
-    duree: z.number().positive(),
+    nombreMaxPropriete: z.number(),
+    nombreMaxUnitLocation: z.number(),
     label: z.string().optional(),
     prix: z.number().positive(),
     detail: z.string().min(5),
@@ -23,6 +24,8 @@ const getAbonnementSchema = z.object({
 //Schéma pour la mise à jour 
 const updateAbonnementSchema = z.object({
     planAbonnement: z.enum(planAbonnementValues).optional(), 
+    nombreMaxPropriete: z.number(),
+    nombreMaxUnitLocation: z.number(),
     label: z.string().optional(),
     prix: z.number().positive().optional(),
     detail: z.string().min(5).optional(),

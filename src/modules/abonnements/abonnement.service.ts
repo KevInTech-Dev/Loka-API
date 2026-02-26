@@ -24,7 +24,9 @@ export class AbonnementService {
         // Créer l'abonnement
         const abonnement = await this.abonnementRepository.createAbonnement({
             planAbonnement: data.planAbonnement as PlanAbonnementEnum,
-            duree: data.duree,
+            nombreMaxProprietes: data.nombreMaxProprietes as number,
+            nombreMaxUnitLocation: data.nombreMaxUnitLocation as number,
+            //duree: data.duree,
             label: data.label || null,
             prix: data.prix,
             detail: data.detail,
@@ -34,7 +36,9 @@ export class AbonnementService {
         return {
             id: abonnement.id,
             planAbonnement: abonnement.planAbonnement,
-            duree: abonnement.duree,
+            //duree: abonnement.duree,
+            nombreMaxPropriete: abonnement.nombreMaxProprietes,
+            nombreMaxUnitLocation: abonnement.nombreMaxUnitLocation,
             label: abonnement.label,
             prix: abonnement.prix,
             detail: abonnement.detail,

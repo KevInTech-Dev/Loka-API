@@ -4,6 +4,8 @@ import { PlanAbonnementEnum } from "@/enums/PlanAbonnementEnum";
 
 export type AbonnementResponse = BaseTypes & {
   planAbonnement: PlanAbonnementEnum;
+  nombreMaxProprietes: number;
+  nombreMaxUnitLocation: number;
   label: string;
   prix: number;
   duree: number; 

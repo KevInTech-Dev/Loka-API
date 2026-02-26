@@ -106,7 +106,7 @@ const initModelUser = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true},
+        {sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true, paranoid: true,},
     );
 };
 

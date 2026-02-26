@@ -31,5 +31,4 @@ export default router;
 
 
 
-//get subscription by label
-//router.get('/label/:label', abonnementController.getAbonnementByLabel);
+/

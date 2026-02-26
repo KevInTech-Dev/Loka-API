@@ -81,8 +81,11 @@ const initModelAbonnement = (sequelize: Sequelize) => {
             },
         },
         {
-        sequelize,modelName: "Abonnement",tableName: 'abonnements',timestamps: true,
-            underscored: true, paranoid: true,
+        sequelize,modelName: "Abonnement",
+        tableName: 'abonnements',
+        timestamps: true,
+        underscored: true, 
+        paranoid: true,
         }
     );
 };
