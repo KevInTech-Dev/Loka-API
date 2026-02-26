@@ -3,6 +3,8 @@ import {TenantRepository} from "./tenant.repository";
 import {CreateTenantInput} from "./tenant.schema";
 import {UserService} from "@modules/users/user.service";
 import {RoleEnum} from "@/enums/RoleEnum";
+import { TenantReponse } from "./tenant.type";
+import { NotFoundError } from "@/common/errors";
 
 export class TenantService {
     private tenantRepository: TenantRepository;
@@ -15,8 +17,7 @@ export class TenantService {
 
     }
 
-    async createTenant(data: CreateTenantInput) {
-
+    async createTenant(data: CreateTenantInput): Promise<TenantReponse | null> {
 
         const {id: userID, ...user} = await this.userService.createUser({
             email: data.email,
@@ -45,7 +46,7 @@ export class TenantService {
             employer_contact: data.employer_contact,
             emergency_contact_name: data.emergency_contact_name,
             emergency_contact_phone: data.emergency_contact_phone,
-            emergenc_contact_relationship: data.emergency_contact_relationship
+            emergency_contact_relationship: data.emergency_contact_relationship
         }));
 
         return {
@@ -66,6 +67,8 @@ export class TenantService {
             emergency_contact_name: tenant.emergency_contact_name,
             emergency_contact_phone: tenant.emergency_contact_phone,
             emergency_contact_relationship: tenant.emergenc_contact_relationship,
+            createdAt: tenant.createdAt,
+            updatedAt: tenant.updatedAt,
             ...user
         }
     }
@@ -73,13 +76,17 @@ export class TenantService {
     async getTenantById(id: string) {
         const tenant = await this.tenantRepository.getTenantById(id);
         if (!tenant) {
-            return null;
+            throw new NotFoundError("Tenant");
         }
-        return tenant;
+        return tenant
     }
 
-    async getAllTenants() {
-        return this.tenantRepository.getAllTenants();
+    async getAllTenants(): Promise<TenantReponse[]> {
+        return (await this.tenantRepository.getAllTenants()).map((tenant) => {
+            return {
+
+            } as TenantReponse
+        });
     }
 
     async getTenantPaginated(page: number, limit: number) {
@@ -96,10 +103,7 @@ export class TenantService {
     }
 
     async deleteTenant(id: string) {
-        const deleteTenant = await this.tenantRepository.deleteTenant(id);
-        if (!deleteTenant) {
-            throw new Error("Tenant not found");
-        }
-        return true;
+        return  await this.tenantRepository.deleteTenant(id);
+       
     }
 }

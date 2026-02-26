@@ -45,7 +45,7 @@ class LandLord
         static associate(models: any) {
             LandLord.belongsTo(models.User, { 
                 foreignKey: 'userId', 
-                as: 'user' 
+                as: 'users' 
             });
         }
     }

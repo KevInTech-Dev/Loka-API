@@ -41,11 +41,11 @@ class User
     static associate(models: any) {
         User.hasOne(models.landLord, { 
             foreignKey: 'userId', 
-            as: 'landlord' 
+            as: 'landlords' 
         });
             User.hasOne(models.Tenant, {
                 foreignKey: 'userId',
-                as: 'tenant'
+                as: 'tenants'
             });
     }
 }
@@ -99,7 +99,7 @@ const initModelUser = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true},
+        {sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true, paranoid:true},
     );
 };
 

@@ -13,4 +13,5 @@ export type landLordResponse = BaseTypes & {
         city?: string;
         country?: string;
         isVerified: boolean;
+        deletesAt?: Date | null;
 }

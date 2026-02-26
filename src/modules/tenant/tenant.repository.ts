@@ -1,4 +1,5 @@
 import { Tenant, TenantCreationAttributes } from "@/database/models/Tenants";
+import { User } from "@/database/models/Users";
 import { ModelStatic } from "sequelize";
 
 
@@ -15,20 +16,23 @@ export class TenantRepository {
     }
 
     async getTenantById(id: string) {
-        return this.tenant.findOne({ where: {id, deletedAt: null}});
+        return this.tenant.findByPk(id, {include:[{
+            model:User,
+            as: 'users'
+        }]});
     }
 
     async getAllTenants() {
-        return this.tenant.findAll({ where: { deletedAt: null}});
+        return this.tenant.findAll({ include: User});
     }
 
     async getTenantByUserId(userId: string) {
-        return this.tenant.findOne({ where: { userId , deletedAt: null} });
+        return this.tenant.findOne({ where: { userId ,} });
     }
 
     async getTenantPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.tenant.findAll({where: {deletedAt: null }, offset, limit});
+        return this.tenant.findAll({ offset, limit});
     }
 
     async updateTenant(id: string, data: Partial<TenantCreationAttributes>) {
@@ -40,10 +44,6 @@ export class TenantRepository {
     }
 
     async deleteTenant(id: string) {
-        const tenant = await this.getTenantById(id);
-        if (!tenant) return false;
-
-        await tenant.update({ deletedAt: new Date()});
-        return true;
+        return await this.tenant.destroy({where: {id}})
     }
 }

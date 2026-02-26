@@ -18,13 +18,12 @@ export interface TenantAttributes extends BaseModel {
     employer_contact?: string;
     emergency_contact_name? : string;
     emergency_contact_phone?: string;
-    emergenc_contact_relationship?: string;
-    deletedAt?: Date | null;
+    emergency_contact_relationship?: string;
 }
 
 export interface TenantCreationAttributes extends Optional<
     TenantAttributes,
-    "id" | "phone_secondary" | "occupation" | "employer_name" | "employer_contact" | "emergency_contact_name" | "emergency_contact_phone" | "emergenc_contact_relationship"
+    "id" | "phone_secondary" | "occupation" | "employer_name" | "employer_contact" | "emergency_contact_name" | "emergency_contact_phone" | "emergency_contact_relationship"
 > {
 }
 
@@ -48,11 +47,12 @@ class Tenant
         declare emergency_contact_name?: string;
         declare emergency_contact_phone?: string;
         declare emergenc_contact_relationship?: string;
-        declare deletedAt?: Date | null;
+        declare readonly createdAt: Date;
+        declare readonly updatedAt: Date;
         static associate(models: any) {
             Tenant.belongsTo(models.User, {
                 foreignKey: 'userId',
-                as: 'user'
+                as: 'users'
             });
         }
     }
@@ -133,17 +133,12 @@ class Tenant
                     type: DataTypes.STRING,
                     allowNull: true
                 },
-                emergenc_contact_relationship: {
+                emergency_contact_relationship: {
                     type: DataTypes.STRING,
                     allowNull: true
-                },
-                    deletedAt: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
-                    defaultValue: null,
-                 }
+                }
             },
-            {sequelize, modelName: "Tenant", tableName: "tenants", timestamps: true, underscored: true},
+            {sequelize, modelName: "Tenant", tableName: "tenants", timestamps: true, underscored: true, paranoid:true},
         );
     };
 

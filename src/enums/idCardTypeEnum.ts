@@ -1,0 +1,6 @@
+export enum idCardTypeEnum {
+     CNI = "CARTE_D_IDENTITE",
+     PASSEPORT = "PASSEPORT",
+     ELECTEUR = "CARTE_ELECTEUR",
+     NATIONALITE = "CERTIFICAT_NATIONALITE",
+}
