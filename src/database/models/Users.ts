@@ -8,6 +8,8 @@ export interface UserAttributes extends BaseModel {
     firstname?: string;
     lastname?: string;
     role: RoleEnum
+    dateDebutSuspension: Boolean;
+    dateFinSuspension: Boolean;
     email: string;
     password: string;
     isActive: boolean;
@@ -32,6 +34,8 @@ class User
     declare firstname?: string;
     declare lastname?: string;
     declare role: RoleEnum
+    declare dateDebutSuspension: Boolean;
+    declare dateFinSuspension: Boolean;
     declare isActive: boolean;
     declare profilePhotoUrl?: string;
     declare isEmailVerified: boolean;
@@ -69,6 +73,14 @@ const initModelUser = (sequelize: Sequelize) => {
                 type: DataTypes.ENUM(...Object.values(RoleEnum)),
                 allowNull: false,
                 defaultValue: RoleEnum.LOCATAIRE,
+            },
+            dateDebutSuspension: {
+                type: DataTypes.DATE(),
+                allowNull: false,
+            },
+            dateFinSuspension: {
+                type: DataTypes.DATE(),
+                allowNull: false,
             },
             email: {
                 type: DataTypes.STRING,

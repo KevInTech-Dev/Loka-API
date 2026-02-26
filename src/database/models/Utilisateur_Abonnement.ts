@@ -1,10 +1,13 @@
 // src/models/Utilisateur_Abonnement.ts
 import { Model, DataTypes, Sequelize } from 'sequelize';
+import {StatusAbonnementEnum} from '@/enums/StatusAbonnement';
 
 export interface UtilisateurAbonnementAttributes {
   id: string;
   utilisateurId: string;
+  status: StatusAbonnementEnum,
   abonnementId: string;
+  autoRenouvellement: Boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -13,7 +16,9 @@ export class Utilisateur_Abonnement extends Model<UtilisateurAbonnementAttribute
   implements UtilisateurAbonnementAttributes {
   declare id: string;
   declare utilisateurId: string;
+  declare status: StatusAbonnementEnum;
   declare abonnementId: string;
+  declare autoRenouvellement: Boolean;
   declare readonly createdAt?: Date;
   declare readonly updatedAt?: Date;
 
@@ -50,12 +55,24 @@ const initModelUtilisateur_Abonnement = (sequelize: Sequelize) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },
+      status: {
+        type: DataTypes.ENUM(...Object.values(StatusAbonnementEnum)),
+        allowNull: false,
+        defaultValue: StatusAbonnementEnum.ACTIVE,
+
+      },
       abonnementId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: { model: 'abonnements', key: 'id' },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
+      },
+
+      autoRenouvellement: {
+        type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false,
       },
     },
     {
@@ -64,6 +81,7 @@ const initModelUtilisateur_Abonnement = (sequelize: Sequelize) => {
       tableName: 'utilisateur_abonnements',
       timestamps: true,
       underscored: true,
+      paranoid: true,
     }
   );
 };

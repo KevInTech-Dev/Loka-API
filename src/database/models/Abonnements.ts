@@ -4,9 +4,9 @@ import { BaseModel } from "@common/models/base.model";
 
 
 export interface AbonnementAttributes extends BaseModel {
-    id: string;
     planAbonnement: PlanAbonnementEnum;
-    duree: number; // Durée en mois
+    nombreMaxProprietes: number;
+    nombreMaxUnitLocation: number;
     label: string;          
     prix: number;
     detail: string;
@@ -25,7 +25,8 @@ extends Model<AbonnementAttributes, AbonnementCreationAttributes>
     
     declare id: string;
     declare planAbonnement: PlanAbonnementEnum;
-    duree: number;
+    declare nombreMaxProprietes: number;
+    declare nombreMaxUnitLocation: number;
     declare label: string;      
     declare prix: number;
     declare detail: string;
@@ -48,22 +49,32 @@ const initModelAbonnement = (sequelize: Sequelize) => {
                 allowNull: false,
                 defaultValue: PlanAbonnementEnum.BASIC,
             },
-            duree: {
-                type: DataTypes.INTEGER,
+
+            nombreMaxProprietes:{
+                type:DataTypes.INTEGER,
                 allowNull: false,
             },
+
+            nombreMaxUnitLocation:{
+                type:DataTypes.INTEGER,
+                allowNull:false,
+            },
+
             label: {
                 type: DataTypes.STRING,
                 allowNull: false,  
             },
+
             prix: {
                 type: DataTypes.FLOAT,
                 allowNull: false,   
             },
+
             detail: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
+
             other: {
                 type: DataTypes.JSON,
                 allowNull: true,
@@ -71,7 +82,7 @@ const initModelAbonnement = (sequelize: Sequelize) => {
         },
         {
         sequelize,modelName: "Abonnement",tableName: 'abonnements',timestamps: true,
-            underscored: true,
+            underscored: true, paranoid: true,
         }
     );
 };

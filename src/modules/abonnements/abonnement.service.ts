@@ -1,6 +1,7 @@
 import { CreateAbonnementInput, UpdateAbonnementInput } from "@modules/abonnements/abonnement.schema";
 import { AbonnementRepository } from "@modules/abonnements/abonnement.repository";
 import { PlanAbonnementEnum } from "@/enums/PlanAbonnementEnum";
+//import { DuplicateEntryError, NotFoundError } from "@/common/errors";
 
 export class AbonnementService {
 
@@ -14,7 +15,7 @@ export class AbonnementService {
     async createAbonnement(data: CreateAbonnementInput) {
         // Vérifier si un abonnement avec ce label existe déjà
         if (data.label) {
-            const existingAbonnement = await this.abonnementRepository.getAbonnementByLabel(data.label);
+            const existingAbonnement = await this.abonnementRepository.getAbonnementById(data.label);
             if (existingAbonnement) {
                 throw new Error('Un abonnement avec ce label existe déjà');
             }
@@ -51,13 +52,6 @@ export class AbonnementService {
         }
         return abonnement;
     }
-async getAbonnementByLabel(label: string) {
-    return this.abonnementRepository.getAbonnementByLabel(label);
-}
-    
-    async getAllAbonnements() {
-        return this.abonnementRepository.getAllAbonnements();
-    }
 
     
     async getAbonnementPaginated(page: number, limit: number) {
@@ -66,7 +60,47 @@ async getAbonnementByLabel(label: string) {
 
    
 
+  
+    async deleteAbonnement(id: string) {
+        const deleted = await this.abonnementRepository.deleteAbonnement(id);
+        if (!deleted) {
+            throw new Error('Abonnement non trouvé');
+        }
+        return { 
+            success: true, 
+            message: 'Abonnement supprimé avec succès' 
+        };
+    }
+}
+   /*
     
+    //Vérifie si un abonnement existe
+    async abonnementExists(id: string): Promise<boolean> {
+        const abonnement = await this.abonnementRepository.getAbonnementById(id);
+        return !!abonnement;
+    }
+
+    //Récupère le nombre total d'abonnements
+    async countAbonnements(): Promise<number> {
+        const result = await this.abonnementRepository.getAbonnementsPaginated(1, 1);
+        return result.total;
+    }
+
+
+     //Récupère les abonnements les plus chers
+     
+    async getMostExpensiveAbonnements(limit: number = 5) {
+        
+        const all = await this.abonnementRepository.getAllAbonnements();
+        return all
+            .sort((a, b) => b.prix - a.prix)
+            .slice(0, limit);
+    }
+}*/
+
+
+
+  /*
     async getAbonnementsByPriceRange(minPrix: number, maxPrix: number) {
         if (minPrix > maxPrix) {
             throw new Error('Le prix minimum ne peut pas être supérieur au prix maximum');
@@ -95,40 +129,4 @@ async getAbonnementByLabel(label: string) {
         return updatedAbonnement;
     }
 
-    
-    async deleteAbonnement(id: string) {
-        const deleted = await this.abonnementRepository.deleteAbonnement(id);
-        if (!deleted) {
-            throw new Error('Abonnement non trouvé');
-        }
-        return { 
-            success: true, 
-            message: 'Abonnement supprimé avec succès' 
-        };
-    }
-
-   
-    
-    //Vérifie si un abonnement existe
-    async abonnementExists(id: string): Promise<boolean> {
-        const abonnement = await this.abonnementRepository.getAbonnementById(id);
-        return !!abonnement;
-    }
-
-    //Récupère le nombre total d'abonnements
-    async countAbonnements(): Promise<number> {
-        const result = await this.abonnementRepository.getAbonnementsPaginated(1, 1);
-        return result.total;
-    }
-
-
-     //Récupère les abonnements les plus chers
-     
-    async getMostExpensiveAbonnements(limit: number = 5) {
-        
-        const all = await this.abonnementRepository.getAllAbonnements();
-        return all
-            .sort((a, b) => b.prix - a.prix)
-            .slice(0, limit);
-    }
-}
+    */

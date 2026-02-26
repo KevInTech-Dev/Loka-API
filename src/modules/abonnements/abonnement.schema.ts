@@ -15,7 +15,12 @@ const createAbonnementSchema = z.object({
     other: z.record(z.string(), z.any()).optional(),
 });
 
-// Schéma pour la mise à jour 
+const getAbonnementSchema = z.object({
+    limit: z.string('Format de la limite  invalide'),
+    page: z.string('Format de la valeur de la page invalide'),
+})
+
+//Schéma pour la mise à jour 
 const updateAbonnementSchema = z.object({
     planAbonnement: z.enum(planAbonnementValues).optional(), 
     label: z.string().optional(),
@@ -26,14 +31,17 @@ const updateAbonnementSchema = z.object({
 
 // Schéma pour l'ID (pour les params)
 export const abonnementIdSchema = z.object({
-    id: z.string().uuid('Format d\'ID d\'abonnement invalide'),
+    id: z.uuid('Format d\'ID d\'abonnement invalide'),
 });
+
 // Types inférés 
 export type CreateAbonnementInput = z.infer<typeof createAbonnementSchema>;
+export type GetAbonnementInput = z.infer<typeof getAbonnementSchema>;
 export type UpdateAbonnementInput = z.infer<typeof updateAbonnementSchema>;
 export type AbonnementIdParams = z.infer<typeof abonnementIdSchema>;
 
 export {
-    createAbonnementSchema,
-    updateAbonnementSchema,
+   createAbonnementSchema,
+   updateAbonnementSchema,
+   getAbonnementSchema,
 };
