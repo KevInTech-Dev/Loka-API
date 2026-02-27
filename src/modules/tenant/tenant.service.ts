@@ -1,10 +1,12 @@
 import {GenderEnum} from "@/enums/GenderEnum";
 import {TenantRepository} from "./tenant.repository";
-import {CreateTenantInput} from "./tenant.schema";
 import {UserService} from "@modules/users/user.service";
 import {RoleEnum} from "@/enums/RoleEnum";
 import { TenantReponse } from "./tenant.type";
 import { NotFoundError } from "@/common/errors";
+import { CreateTenantInput } from "./tenant.schema";
+import { deleteFile, fileExists } from "@/utils/file.utils";
+import {Tenant} from "@database/models/Tenants";
 
 export class TenantService {
     private tenantRepository: TenantRepository;
@@ -37,8 +39,8 @@ export class TenantService {
             nationality: data.nationality,
             phone_primary: data.phone_primary,
             phone_secondary: data.phone_secondary,
-            id_card_type: data.id_card_type,
             id_card_number: data.id_card_number,
+            id_card_type: data.id_card_type,
             id_card_front_url: data.id_card_front_url,
             id_card_back_url: data.id_card_back_url,
             occupation: data.occupation,
@@ -73,20 +75,35 @@ export class TenantService {
         }
     }
 
+    async addCardPhoto(id: string, file: Express.Multer.File, type: 'front' | 'back'){
+        const tenant = await this.getTenantById(id);
+
+        if(!tenant) {
+            throw new NotFoundError("Tenant");
+        }
+
+        const columnToUpdate = type === 'front' ? 'id_card_front_url' : 'id_card_back_url';
+        const oldPath = tenant[columnToUpdate];
+
+        try{
+            if (oldPath && fileExists(oldPath)) {
+                deleteFile(oldPath);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+        const updateData = {[columnToUpdate]: file.path};
+        return await this.tenantRepository.updateTenant(id, updateData);
+
+    }
+
     async getTenantById(id: string) {
         const tenant = await this.tenantRepository.getTenantById(id);
         if (!tenant) {
             throw new NotFoundError("Tenant");
         }
         return tenant
-    }
-
-    async getAllTenants(): Promise<TenantReponse[]> {
-        return (await this.tenantRepository.getAllTenants()).map((tenant) => {
-            return {
-
-            } as TenantReponse
-        });
     }
 
     async getTenantPaginated(page: number, limit: number) {

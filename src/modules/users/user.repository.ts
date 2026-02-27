@@ -49,7 +49,6 @@ export class UserRepository {
 
 
     getUserByMutipleAttributs(attribut: WhereQueryUser) {
-
         return this.user.findOne({
             where: {
                 ...attribut

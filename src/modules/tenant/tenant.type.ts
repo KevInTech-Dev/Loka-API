@@ -10,8 +10,8 @@ export type TenantReponse = BaseTypes & {
         phone_secondary?: string;
         id_card_type: string;
         id_card_number: string;
-        id_card_front_url: string;
-        id_card_back_url: string;
+        id_card_front_url?: string;
+        id_card_back_url?: string;
         occupation?: string;
         employer_name?: string;
         employer_contact?: string;

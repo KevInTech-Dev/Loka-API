@@ -1,6 +1,8 @@
 import { BaseModel } from "@/common/models/base.model";
 import { GenderEnum } from "@/enums/GenderEnum";
+import { idCardTypeEnum } from "@/enums/idCardTypeEnum";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { object } from "zod";
 
 export interface TenantAttributes extends BaseModel {
     userId: string;
@@ -9,10 +11,10 @@ export interface TenantAttributes extends BaseModel {
     nationality: string;
     phone_primary: string;
     phone_secondary?: string;
-    id_card_type: string;
+    id_card_type: idCardTypeEnum;
     id_card_number: string;
-    id_card_front_url: string;
-    id_card_back_url: string;
+    id_card_front_url?: string;
+    id_card_back_url?: string;
     occupation?: string;
     employer_name?: string;
     employer_contact?: string;
@@ -37,10 +39,10 @@ class Tenant
         declare nationality: string;
         declare phone_primary: string;
         declare phone_secondary?: string;
-        declare id_card_type: string;
+        declare id_card_type: idCardTypeEnum;
         declare id_card_number: string;
-        declare id_card_front_url: string
-        declare id_card_back_url: string;
+        declare id_card_front_url?: string
+        declare id_card_back_url?: string;
         declare occupation?: string;
         declare employer_name?: string;
         declare employer_contact?: string;
@@ -98,7 +100,7 @@ class Tenant
                     unique: true,
                 },
                 id_card_type: {
-                    type: DataTypes.STRING,
+                    type: DataTypes.ENUM(...Object.values(idCardTypeEnum)),
                     allowNull: false
                 },
                 id_card_number: {
