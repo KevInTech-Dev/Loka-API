@@ -47,6 +47,10 @@ class User
             foreignKey: 'userId',
             as: 'tenant'
         });
+        User.hasMany(models.RefreshToken, {
+            foreignKey: 'userId',
+            as: 'refreshToken'
+        })
     }
 }
 

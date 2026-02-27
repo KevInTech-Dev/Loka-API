@@ -13,7 +13,6 @@ const createPropertySchema = z.object({
     description: z.string(),
     electricityMeterNumber: z.string(),
     waterMeterNumber: z.string(),
-
 })
 
 const propertyIdShema = z.object({
