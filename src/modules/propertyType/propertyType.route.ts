@@ -3,8 +3,10 @@ import { PropertyTypeController } from "./propertyType.controller";
 import { createPropertyTypeSchema, propertyTypeIdShema } from "./propertyType.schema";
 import validate from "../middleware/validate.middleware";
 import { defaultPaginationQuery } from "@/common/api.schema";
+import authMiddleware from "../middleware/authMiddleware";
 
 const router: Router = Router();
+router.use(authMiddleware);
 const propertyTypeController = new PropertyTypeController();
 
 // create propertyType

@@ -19,9 +19,9 @@ class RefreshToken extends Model<RefreshTokenAttributes, RefreshTokenCreationAtt
     //Association avec la classe user
     static associate(models: any) {
         RefreshToken.belongsTo(
-            models.refreshToken, {
+            models.User, {
             foreignKey: "userId",
-            as: "users"
+            as: "user"
         }
         )
     }
@@ -36,16 +36,17 @@ const initRefreshToken = (sequelize: Sequelize) => {
 
         },
         userId: {
-            type: DataTypes.STRING,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
             allowNull: false,
-            references: {
-                model: "users",
-                key: "id"
-            },
-            onDelete: "CASCADE"
+            // references: {
+            //     model: "users",
+            //     key: "user"
+            // },
+            // onDelete: "CASCADE"
         },
         expiryDate: {
-            type: DataTypes.STRING,
+            type: DataTypes.DATE,
             allowNull: false
         },
         token: {

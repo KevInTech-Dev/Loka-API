@@ -5,7 +5,7 @@ export class RefreshTokenRepository {
     private refreshToken: ModelStatic<RefreshToken>
 
     constructor() {
-        this.refreshToken = this.refreshToken;
+        this.refreshToken = RefreshToken;
     }
 
     async createRefreshToken(data: RefreshTokenCreationAttribute) {

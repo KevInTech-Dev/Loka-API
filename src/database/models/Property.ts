@@ -37,7 +37,7 @@ class Property extends Model<PropertyAttribute, PropertyCreationAttributes> impl
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
     static associate(models: any) {
-        Property.belongsTo(models.propertyTpe, {
+        Property.belongsTo(models.PropertyType, {
             foreignKey: 'propertyTypeId',
             as: 'propertyType'
         });

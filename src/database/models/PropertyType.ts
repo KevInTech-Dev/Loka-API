@@ -13,7 +13,7 @@ class PropertyType extends Model<PropertyTypeAttributes, PropertyTypeCreationAtt
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
     static associate(models: any) {
-        PropertyType.hasMany(models.property, {
+        PropertyType.hasMany(models.Property, {
             foreignKey: 'propertyTypeId',
             as: 'property'
         });

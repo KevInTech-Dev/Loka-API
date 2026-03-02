@@ -10,6 +10,7 @@ import { unitLocationPath, unitLocationSchema } from "./unitLocation.swagger";
 import { unitTypePath, unitTypeSchema } from "./unitType.swagger";
 
 import { tenantPath, tenantSchema, tenantTags } from "./tenant.swagger";
+import { authenticationSchema, AuthentificationPath, RegistrationPath, registrationSchema } from "./login.swagger";
 
 
 
@@ -57,7 +58,9 @@ export const paths: OpenAPIV3.PathsObject = {
     ...propertyShema,
     ...propertyTypeShema,
     ...landlordPath,
-    ...tenantPath
+    ...tenantPath,
+    ...AuthentificationPath,
+    ...RegistrationPath
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
@@ -70,7 +73,10 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...propertyUnitLocationSchema,
     ...unitLocationSchema,
     ...unitTypeSchema,
-    ...tenantSchema
+    ...tenantSchema,
+    ...registrationSchema,
+    ...authenticationSchema
+
 };
 
 
@@ -98,15 +104,21 @@ export const swaggerSpec: OpenAPIV3.Document = {
     ],
     tags,
     components: {
-        // securitySchemes,
+        securitySchemes: {
+            bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+                bearerFormat: "JWT",
+            },
+        },
         schemas,
         // responses,
     },
-    /* security: [
-         {
-             bearerAuth: [],
-         },
-     ],*/
+    security: [
+        {
+            bearerAuth: [],
+        },
+    ],
     paths,
 };
 

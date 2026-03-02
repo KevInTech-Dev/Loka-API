@@ -11,6 +11,8 @@ import { initPropertyUnitLocation } from "./models/PropertyUnitLocation";
 import { initUnitType } from "./models/UnitType";
 import { initUnitLocation } from "./models/UnitLocation";
 import { initModelTenant } from "./models/Tenants";
+import { initRefreshToken } from "./models/RefreshToken";
+
 
 const sequelize = new Sequelize({
   ...options,
@@ -62,6 +64,7 @@ const initModels = async () => {
   initPropertyUnitLocation(sequelize);
   initUnitLocation(sequelize);
   initUnitType(sequelize);
+  initRefreshToken(sequelize);
 
 
   initModelTenant(sequelize);

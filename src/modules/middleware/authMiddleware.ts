@@ -3,6 +3,7 @@ import { Response, NextFunction, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { UserRepository } from '@modules/users/user.repository'
 import { JwtPayload } from 'jsonwebtoken';
+import env from '@/config/env';
 
 // Étend la requête Express pour inclure l'utilisateur authentifié
 interface RequestWithUser extends Request {
@@ -10,7 +11,7 @@ interface RequestWithUser extends Request {
 }
 
 const userRepository = new UserRepository();
-const authMiddleware = async (req: RequestWithUser, res: Response) => {
+const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
         // Récupérer le token de l'en-tête Authorization
         const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -20,7 +21,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response) => {
         }
 
         // Vérifier le token
-        const secretKey: jwt.Secret = process.env.JWT_SECRET || 'votre_secret_jwt'; // Utilisez une variable d'environnement
+        const secretKey: jwt.Secret = env.JWT_SECRET;
         const decoded = jwt.verify(token, secretKey) as JwtPayload;
 
         // Trouver l'utilisateur dans la base de données
@@ -32,6 +33,8 @@ const authMiddleware = async (req: RequestWithUser, res: Response) => {
 
         // Attacher l'utilisateur à l'objet Request pour les prochaines middlewares/routes
         req.user = user;
+
+        next();
     } catch (error) {
         res.status(401).send({ error: 'Veuillez vous authentifier.' });
     }

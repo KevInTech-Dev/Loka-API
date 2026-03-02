@@ -122,6 +122,7 @@ const userPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["User"],
             summary: "Get all users with pagination",
+            security: [],
             description: "Retrieve a paginated list of all users in the system",
             parameters: [
                 {

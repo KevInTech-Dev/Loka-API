@@ -7,6 +7,7 @@ export interface UserAttributes extends BaseModel {
     username: string;
     firstname?: string;
     lastname?: string;
+    phoneNumber: string;
     role: RoleEnum
     email: string;
     password: string;
@@ -31,6 +32,7 @@ class User
     declare password: string;
     declare firstname?: string;
     declare lastname?: string;
+    declare phoneNumber: string;
     declare role: RoleEnum
     declare isActive: boolean;
     declare profilePhotoUrl?: string;
@@ -69,6 +71,10 @@ const initModelUser = (sequelize: Sequelize) => {
             }, firstname: {
                 type: DataTypes.STRING,
                 allowNull: true,
+            },
+            phoneNumber: {
+                type: DataTypes.STRING,
+                allowNull: true
             },
             lastname: {
                 type: DataTypes.STRING,

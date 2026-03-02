@@ -16,12 +16,12 @@ const propertyTypeShema: OpenAPIV3.ComponentsObject['schemas'] = {
             createdAt: {
                 type: "string",
                 format: "data-time",
-                description: "Timestamp when the property type was deleted"
+                description: "Timestamp when the property type was created"
             },
             updatedAt: {
                 type: "string",
                 format: "data-time",
-                description: "Timestamp when the property type was deleted"
+                description: "Timestamp when the property type was updated"
             }
         },
         required: ["label"]

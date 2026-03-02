@@ -1,12 +1,13 @@
 import { BaseTypes } from "@/common/models/base.model";
 import { RoleEnum } from "@/enums/RoleEnum";
-import {UserAttributes} from "@database/models/Users";
+import { UserAttributes } from "@database/models/Users";
 
 export type UserResponse = BaseTypes & {
   username: string;
   firstname?: string;
   lastname?: string;
   role: RoleEnum;
+  phoneNumber: string;
   email: string;
   isActive: boolean;
   profilePhotoUrl?: string;

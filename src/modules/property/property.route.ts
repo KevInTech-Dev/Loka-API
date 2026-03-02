@@ -4,8 +4,10 @@ import { createPropertySchema, propertyIdShema } from "./property.schema";
 import validate from "../middleware/validate.middleware";
 import { defaultPaginationQuery } from "@/common/api.schema";
 import { singleUpload } from "../middleware/upload.middleware";
+import authMiddleware from "../middleware/authMiddleware";
 
 const router: Router = Router();
+router.use(authMiddleware);
 const propertyController = new PropertyController();
 
 // create property

@@ -14,15 +14,16 @@ export class TokenService {
     }
 
     generateSessionToken(user: UserAttributes): string {
-        return jwt.sign({ user }, process.env.JWT_SECRET as string, { expiresIn: env.ACCESS_TOKEN_EXPRIRY_TIME });
+        return jwt.sign(
+            { userId: user.id, role: user.role }, process.env.JWT_SECRET as string, { expiresIn: env.ACCESS_TOKEN_EXPRIRY_TIME });
     }
 
     generateRefreshToken(user: UserAttributes): string {
         const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + 7 * 24 * 60 * 60 * 1000);
+        expiryDate.setDate(expiryDate.getDate() + 7);
         const refreshToken = uuidv4();
-        const tokenHash = crypto.createHash('sha2556').update(refreshToken).digest('hex');
-        jwt.sign({ user }, env.JWT_SECRET as string, { expiresIn: env.REFRESH_TOKEN_EXPRIRY_TIME });
+        const tokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
+        //jwt.sign({ user }, env.JWT_SECRET as string, { expiresIn: env.REFRESH_TOKEN_EXPRIRY_TIME });
         this.refreshTokenRepository.createRefreshToken({
             token: tokenHash,
             userId: user.id,

@@ -1,15 +1,18 @@
-import {Router} from "express";
-import {UserController} from "@modules/users/user.controller";
+import { Router } from "express";
+import { UserController } from "@modules/users/user.controller";
 import validate from "@modules/middleware/validate.middleware";
-import {createUserSchema, userIdShema} from "@modules/users/user.schema";
-import {singleUpload} from "@modules/middleware/upload.middleware";
-import {defaultPaginationQuery} from "@common/api.schema";
+import { createUserSchema, userIdShema } from "@modules/users/user.schema";
+import { singleUpload } from "@modules/middleware/upload.middleware";
+import { defaultPaginationQuery } from "@common/api.schema";
+import authMiddleware from "../middleware/authMiddleware";
 
 const router: Router = Router();
 const userController = new UserController();
 
 // get all users
-router.get("", validate(defaultPaginationQuery, 'query'), userController.getAllUsers);
+router.get("",
+    //authMiddleware,
+    validate(defaultPaginationQuery, 'query'), userController.getAllUsers);
 
 // create user
 router.post("", singleUpload({

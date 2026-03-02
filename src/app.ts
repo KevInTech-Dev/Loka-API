@@ -15,6 +15,7 @@ import errorHandler, {
 import unitTypeRoute from "./modules/unitType/unitType.route";
 import unitLocationRoute from "./modules/unitLocation/unitLocation.route";
 import propertyUnitLocationRoute from "./modules/propertyUnitLocation/propertyUnitLocation.route";
+import authRoute from "./modules/authentification/auth.route";
 
 const app: Express = express();
 const API_PREFIX = env.API_PREFIX;
@@ -63,7 +64,9 @@ app.use(`${API_PREFIX}/landLords`, landLordRoute);
 app.use(`${API_PREFIX}/unitType`, unitTypeRoute);
 app.use(`${API_PREFIX}/unitLocation`, unitLocationRoute);
 app.use(`${API_PREFIX}/propertyUnitLocation`, propertyUnitLocationRoute);
-app.use(`${API_PREFIX}/tenants`, tenantRoute)
+app.use(`${API_PREFIX}/tenants`, tenantRoute);
+app.use(`${API_PREFIX}/auth`, authRoute);
+
 
 // 404 handler
 app.use(notFoundHandler);

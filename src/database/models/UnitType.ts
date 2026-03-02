@@ -17,7 +17,7 @@ class UnitType extends Model<UnitTypeAttributes, UnitTypeCreationAttributes> imp
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
     static associate(models: any) {
-        UnitType.hasMany(models.unitLocation, {
+        UnitType.hasMany(models.UnitLocation, {
             foreignKey: 'unitTypeId',
             as: 'unitLocation'
         });
