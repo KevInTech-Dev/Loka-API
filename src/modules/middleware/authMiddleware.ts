@@ -25,7 +25,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
         const decoded = jwt.verify(token, secretKey) as JwtPayload;
 
         // Trouver l'utilisateur dans la base de données
-        const user = await userRepository.getUserById(decoded.userId); // userId est l'ID stocké dans le payload du token
+        const user = await userRepository.findById(decoded.userId); // userId est l'ID stocké dans le payload du token
 
         if (!user) {
             throw new Error('Authentification échouée: utilisateur non trouvé.');
