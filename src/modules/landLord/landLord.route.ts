@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { LandLordController } from "./landLord.controller";
-import validate from "../middleware/validate.middleware";
-import { createlandLordSchema, landlordIdSchema, landlordPaginationSchema } from "./landlord.schema";
+import { LandLordController } from "@modules/landLord/landLord.controller";
+import validate from "@modules/middleware/validate.middleware";
+import { createlandLordSchema, landlordIdSchema, landlordPaginationSchema } from "@modules/landLord/landlord.schema";
 
 
 const router: Router = Router();

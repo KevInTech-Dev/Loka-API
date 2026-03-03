@@ -28,7 +28,8 @@ export class TenantService {
             role: RoleEnum.LOCATAIRE,
             firstname: data.firstname,
             lastname: data.lastname,
-            photo: data.photo
+            photo: data.photo,
+            phoneNumber: data.phoneNumber,
         })
 
 

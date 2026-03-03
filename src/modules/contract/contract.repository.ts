@@ -1,8 +1,9 @@
 import {ModelStatic} from "sequelize";
-import {Contract, ContractAttributes, ContractCreationAttributes} from "@database/models/Contracts";
+import {Contract, ContractCreationAttributes} from "@database/models/Contracts";
 import { NotFoundError } from "@/common/errors";
 
 export class ContractRepository {
+    
     private contract: ModelStatic<Contract>
 
     constructor() {
@@ -39,5 +40,9 @@ export class ContractRepository {
 
         await contract.destroy();
         return true;
+    }
+
+    countContract():Promise<number> {
+        return this.contract.count({paranoid:false})
     }
 }

@@ -19,7 +19,7 @@ const createContractSchema = z.object({
     water_included: z.boolean(),
     electricity_rate_per_kwh: z.number(),
     water_rate_per_m3: z.number(),
-    other_changes: z.json(),
+    other_changes: z.record(z.string(), z.any()),
     initial_electicity_reading: z.number(),
     initial_water_reading: z.number(),
     auto_renewal: z.boolean(),

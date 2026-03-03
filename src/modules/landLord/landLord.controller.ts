@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import { landLordService } from "./landlord.service"
-import { CreateLandlordInput } from "./landlord.schema";
+import { landLordService } from "@modules/landLord/landlord.service"
+import { CreateLandlordInput } from "@modules/landLord/landlord.schema";
 
 export class LandLordController {
 

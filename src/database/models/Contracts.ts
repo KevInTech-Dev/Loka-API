@@ -182,7 +182,7 @@ const initModelContract = (sequelize: Sequelize) => {
             },
             other_changes: {
                 type: DataTypes.JSON,
-                allowNull: false,
+                allowNull: true,
             },
             initial_electicity_reading: {
                 type: DataTypes.NUMBER,
