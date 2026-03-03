@@ -8,6 +8,7 @@ export interface landLordAtributes extends BaseModel {
     businessType: BusinessTypeEnum
     registrationNumber: string;
     taxId: string;
+    creditBalance: number,
     phonePrimary: string;
     phoneSecondary?: string;
     address: string;
@@ -31,6 +32,7 @@ class LandLord
         declare userId: string;
         declare businessType: BusinessTypeEnum
         declare taxId: string;
+        declare creditBalance: number;
         declare registrationNumber: string;
         declare companyName: string;
         declare phonePrimary: string;
@@ -80,6 +82,10 @@ const initModelandLord = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
+            creditBalance: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
             registrationNumber: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -117,7 +123,7 @@ const initModelandLord = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "landLord", tableName: "landlords", timestamps: true, underscored: true},
+        {sequelize, modelName: "landLord", tableName: "landlords", timestamps: true, underscored: true, paranoid: true,},
     );
 };
 

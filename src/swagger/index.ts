@@ -3,7 +3,7 @@ import { OpenAPIV3 } from "openapi-types";
 import { userPath, userSchema, userTags } from "@/swagger/user.swagger";
 import { propertyPath, propertyShema } from "./property.swagger";
 import { propertyTypePath, propertyTypeShema } from "./propertType.swagger";
-import { abonnementsSchema } from "./abonnement.swagger";
+import { abonnementsSchema, abonnementsTags, abonnementPath } from "./abonnement.swagger";
 import { landlordPath, landlordSchema, landlordTags } from "./landLord.swagger";
 import { propertyUnitLocationPath, propertyUnitLocationSchema } from "./propertyUnitLocation.swagger";
 import { unitLocationPath, unitLocationSchema } from "./unitLocation.swagger";
@@ -12,12 +12,15 @@ import { unitTypePath, unitTypeSchema } from "./unitType.swagger";
 import { tenantPath, tenantSchema, tenantTags } from "./tenant.swagger";
 import { authenticationSchema, AuthentificationPath, RegistrationPath, registrationSchema } from "./login.swagger";
 
+import { utilisateurAbonnementPath, utilisateurAbonnementSchema, utilisateurAbonnementTags } from "./utilisateur_abonnement.swagger";
 
 
 export const tags: OpenAPIV3.TagObject[] = [
     userTags,
     landlordTags,
-    tenantTags
+    tenantTags,
+    abonnementsTags,
+    utilisateurAbonnementTags
 ];
 
 export const paths: OpenAPIV3.PathsObject = {
@@ -48,7 +51,8 @@ export const paths: OpenAPIV3.PathsObject = {
         },
     },
     // Module paths
-    ...userPath,
+
+  ...userPath,
     ...propertyPath,
     ...propertyTypePath,
     ...landlordPath,
@@ -60,16 +64,20 @@ export const paths: OpenAPIV3.PathsObject = {
     ...landlordPath,
     ...tenantPath,
     ...AuthentificationPath,
-    ...RegistrationPath
+    ...RegistrationPath,
+    ...abonnementPath,
+    ...utilisateurAbonnementPath,
+    ...tenantPath,
+    ...abonnementsSchema
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
-    ...userSchema,
-
-    ...abonnementsSchema, //abonnementsSchema,
+  ...userSchema,
     ...propertyShema,
     ...propertyTypeShema,
     ...landlordSchema,
+    ...utilisateurAbonnementSchema,
+    ...tenantSchema,
     ...propertyUnitLocationSchema,
     ...unitLocationSchema,
     ...unitTypeSchema,

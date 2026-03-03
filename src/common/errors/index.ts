@@ -76,6 +76,19 @@ export class NotFoundError extends AppError {
   }
 }
 
+export class CheckExistence extends NotFoundError { 
+  static of<T>(
+    entity: T | null | undefined,
+    resourceName: string,
+    identifier?: string
+  ): T {
+    if (!entity) {
+      throw new NotFoundError(resourceName, identifier);
+    }
+    return entity;
+  }
+} 
+
 /**
  * Conflict Error (409)
  */
@@ -195,6 +208,7 @@ export default {
   NotFoundError,
   ConflictError,
   BadRequestError,
+  CheckExistence,
   InternalServerError,
   ServiceUnavailableError,
   DatabaseError,

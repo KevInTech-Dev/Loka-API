@@ -1,6 +1,6 @@
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import { RoleEnum } from "@/enums/RoleEnum";
-import { BaseModel } from "@common/models/base.model";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
+import {RoleEnum} from "@/enums/RoleEnum";
+import {BaseModel} from "@common/models/base.model";
 
 
 export interface UserAttributes extends BaseModel {
@@ -9,6 +9,8 @@ export interface UserAttributes extends BaseModel {
     lastname?: string;
     phoneNumber: string;
     role: RoleEnum
+    dateDebutSuspension: Date;
+    dateFinSuspension: Date;
     email: string;
     password: string;
     isActive: boolean;
@@ -34,6 +36,8 @@ class User
     declare lastname?: string;
     declare phoneNumber: string;
     declare role: RoleEnum
+    declare dateDebutSuspension: Date;
+    declare dateFinSuspension: Date;
     declare isActive: boolean;
     declare profilePhotoUrl?: string;
     declare isEmailVerified: boolean;
@@ -85,6 +89,14 @@ const initModelUser = (sequelize: Sequelize) => {
                 allowNull: false,
                 defaultValue: RoleEnum.LOCATAIRE,
             },
+            dateDebutSuspension: {
+                type: DataTypes.DATE(),
+                allowNull: false,
+            },
+            dateFinSuspension: {
+                type: DataTypes.DATE(),
+                allowNull: false,
+            },
             email: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -109,7 +121,7 @@ const initModelUser = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        { sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true },
+        {sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true, paranoid: true,},
     );
 };
 
