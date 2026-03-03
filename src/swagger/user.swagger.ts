@@ -122,7 +122,7 @@ const userPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["User"],
             summary: "Get all users with pagination",
-            security: [],
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a paginated list of all users in the system",
             parameters: [
                 {
@@ -174,6 +174,7 @@ const userPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["User"],
             summary: "Create a new user",
+            security: [{ bearerAuth: [] }],
             description: "Create a new user with the provided information",
             requestBody: {
                 required: true,
@@ -211,6 +212,7 @@ const userPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["User"],
             summary: "Get user by ID",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a user by their unique ID",
             parameters: [
                 {
@@ -248,6 +250,7 @@ const userPath: OpenAPIV3.PathsObject = {
         patch: {
             tags: ["User"],
             summary: "Update user by ID",
+            security: [{ bearerAuth: [] }],
             description: "Update the information of a user by their unique ID",
             parameters: [
                 {
@@ -295,6 +298,7 @@ const userPath: OpenAPIV3.PathsObject = {
         delete: {
             tags: ["User"],
             summary: "Delete user by ID",
+            security: [{ bearerAuth: [] }],
             description: "Delete a user by their unique ID",
             parameters: [
                 {

@@ -61,6 +61,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["PropertyType"],
             summary: "Get all property types",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a list of all property types in the system",
             parameters: [
                 {
@@ -112,6 +113,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["PropertyType"],
             summary: "Create a new property type",
+            security: [{ bearerAuth: [] }],
             description: "Create a new property type with the provided information",
             requestBody: {
                 required: true,
@@ -149,6 +151,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["PropertyType"],
             summary: "Get property type by ID",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a property type by their unique ID",
             parameters: [
                 {
@@ -186,6 +189,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
         patch: {
             tags: ["PropertyType"],
             summary: "Update property type by ID",
+            security: [{ bearerAuth: [] }],
             description: "Update the information of a property type by their unique ID",
             parameters: [
                 {
@@ -233,6 +237,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
         delete: {
             tags: ["PropertyType"],
             summary: "Delete property type by ID",
+            security: [{ bearerAuth: [] }],
             description: "Delete a property type by their unique ID",
             parameters: [
                 {

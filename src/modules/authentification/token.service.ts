@@ -15,7 +15,7 @@ export class TokenService {
 
     generateSessionToken(user: UserAttributes): string {
         return jwt.sign(
-            { userId: user.id, role: user.role }, process.env.JWT_SECRET as string, { expiresIn: env.ACCESS_TOKEN_EXPRIRY_TIME });
+            { userId: user.id, role: user.role, phoneNumber: user.phoneNumber, username: user.username }, process.env.JWT_SECRET as string, { expiresIn: env.ACCESS_TOKEN_EXPRIRY_TIME });
     }
 
     generateRefreshToken(user: UserAttributes): string {

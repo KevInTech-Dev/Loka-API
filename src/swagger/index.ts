@@ -115,9 +115,6 @@ export const swaggerSpec: OpenAPIV3.Document = {
         // responses,
     },
     security: [
-        {
-            bearerAuth: [],
-        },
     ],
     paths,
 };

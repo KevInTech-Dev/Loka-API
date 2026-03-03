@@ -86,6 +86,7 @@ const unitTypePath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["UnitType"],
             summary: "Get all unit type with pagination",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a paginated list of all unit type in the system",
             parameters: [
                 {
@@ -137,6 +138,7 @@ const unitTypePath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["UnitType"],
             summary: "Create a new unit type",
+            security: [{ bearerAuth: [] }],
             description: "Create a new unit type with the provided information",
             requestBody: {
                 required: true,
@@ -174,6 +176,7 @@ const unitTypePath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["UnitType"],
             summary: "Get unit type by ID",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a unit type by their unique ID",
             parameters: [
                 {
@@ -211,6 +214,7 @@ const unitTypePath: OpenAPIV3.PathsObject = {
         patch: {
             tags: ["UnitType"],
             summary: "Update unit type by ID",
+            security: [{ bearerAuth: [] }],
             description: "Update the information of a unit type by their unique ID",
             parameters: [
                 {
@@ -258,6 +262,7 @@ const unitTypePath: OpenAPIV3.PathsObject = {
         delete: {
             tags: ["UnitType"],
             summary: "Delete unit type by ID",
+            security: [{ bearerAuth: [] }],
             description: "Delete a unit type by their unique ID",
             parameters: [
                 {

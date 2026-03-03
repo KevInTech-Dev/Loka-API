@@ -79,6 +79,7 @@ const propertyUnitLocationPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["PropertyUnitLocation"],
             summary: "Get all property unit location with pagination",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a paginated list of all property unit location in the system",
             parameters: [
                 {
@@ -130,6 +131,7 @@ const propertyUnitLocationPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["PropertyUnitLocation"],
             summary: "Create a new property unit location",
+            security: [{ bearerAuth: [] }],
             description: "Create a property unit location with the provided information",
             requestBody: {
                 required: true,
@@ -167,6 +169,7 @@ const propertyUnitLocationPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["PropertyUnitLocation"],
             summary: "Get property unit location by ID",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a property unit location by their unique ID",
             parameters: [
                 {
@@ -204,6 +207,7 @@ const propertyUnitLocationPath: OpenAPIV3.PathsObject = {
         patch: {
             tags: ["PropertyUnitLocation"],
             summary: "Update property unit location by ID",
+            security: [{ bearerAuth: [] }],
             description: "Update the information of a property unit location by their unique ID",
             parameters: [
                 {
@@ -251,6 +255,7 @@ const propertyUnitLocationPath: OpenAPIV3.PathsObject = {
         delete: {
             tags: ["PropertyUnitLocation"],
             summary: "Delete property unit location by ID",
+            security: [{ bearerAuth: [] }],
             description: "Delete a property unit location by their unique ID",
             parameters: [
                 {

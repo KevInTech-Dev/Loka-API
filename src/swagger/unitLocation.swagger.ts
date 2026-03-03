@@ -238,6 +238,7 @@ const unitLocationPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["UnitLocation"],
             summary: "Get all unit location with pagination",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a paginated list of all unit location in the system",
             parameters: [
                 {
@@ -289,6 +290,7 @@ const unitLocationPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["UnitLocation"],
             summary: "Create a new unit location",
+            security: [{ bearerAuth: [] }],
             description: "Create a unit location with the provided information",
             requestBody: {
                 required: true,

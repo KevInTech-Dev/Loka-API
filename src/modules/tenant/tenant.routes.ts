@@ -3,14 +3,16 @@ import {TenantController} from "./tenant.controller";
 import validate from "../middleware/validate.middleware";
 import {createTenantSchema, paginatedTenantSchema, tenantIdSchema} from "./tenant.schema";
 import {singleUpload} from "@modules/middleware/upload.middleware";
+import authMiddleware from "../middleware/authMiddleware";
+import { authorize } from "../middleware/authorization.middleware";
 
 
 const router: Router = Router();
 const tenantController = new TenantController();
 
-router.get('', validate(paginatedTenantSchema, 'query'), tenantController.getAllTenants);
+router.get('', authMiddleware, authorize(['proprietaire', 'admin']),validate(paginatedTenantSchema, 'query'), tenantController.getAllTenants);
 
-router.post('', singleUpload({
+router.post('', authMiddleware, authorize(['proprietaire', 'admin']),singleUpload({
     fieldName: "photo",
     fileType: 'image',
     subFolder: "profiles",
@@ -24,13 +26,13 @@ router.post('', singleUpload({
     subFolder: "tenants",
 })*/, validate(createTenantSchema, 'body'), tenantController.createTenant);
 
-router.get('/:id', tenantController.getTenant);
+router.get('/:id', authMiddleware, authorize(['proprietaire', 'admin']),tenantController.getTenant);
 
-router.patch('/:id', validate({
+router.patch('/:id', authMiddleware, authorize(['proprietaire', 'admin']),validate({
     params: tenantIdSchema,
     body: createTenantSchema
 }), tenantController.updateTenant);
 
-router.delete('/:id', validate(tenantIdSchema, 'params'), tenantController.deleteTenant);
+router.delete('/:id', authMiddleware, authorize(['proprietaire', 'admin']),validate(tenantIdSchema, 'params'), tenantController.deleteTenant);
 
 export default router;
