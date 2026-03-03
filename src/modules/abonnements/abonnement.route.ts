@@ -28,7 +28,3 @@ router.post('',  validate({ body: createAbonnementSchema }), abonnementControlle
 router.delete('/:id', validate({ params: abonnementIdSchema }) ,abonnementController.deleteAbonnement);
 
 export default router;
-
-
-
-/
