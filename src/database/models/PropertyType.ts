@@ -8,27 +8,33 @@ export interface PropertyTypeAttributes extends BaseModel {
 export interface PropertyTypeCreationAttributes extends Optional<PropertyTypeAttributes, "id" | "createdAt" | "updatedAt"> { }
 
 class PropertyType extends Model<PropertyTypeAttributes, PropertyTypeCreationAttributes> implements PropertyTypeAttributes {
-    id!: string;
-    label!: string;
+    declare id: string;
+    declare label: string;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
+    static associate(models: any) {
+        PropertyType.hasMany(models.Property, {
+            foreignKey: 'propertyTypeId',
+            as: 'property'
+        });
+    }
 }
 
 const initModelPropertyType = (sequelize: Sequelize) => {
     PropertyType.init(
         {
-            id:{
+            id: {
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
                 primaryKey: true,
             },
-            label:{
+            label: {
                 type: DataTypes.STRING,
                 allowNull: false
             },
         },
-        { sequelize, modelName: "PropertyType", tableName: 'propertyType', timestamps: true, underscored: true },
+        { sequelize, modelName: "PropertyType", tableName: 'propertyType', timestamps: true, underscored: true, paranoid: true },
     )
 
 };
-export {PropertyType, initModelPropertyType};
+export { PropertyType, initModelPropertyType };

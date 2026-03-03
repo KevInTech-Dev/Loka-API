@@ -1,50 +1,85 @@
-import {Request, Response} from "express";
+import { Request, Response } from "express";
 import { PropertyService } from "./property.service";
 import { CreatePropertyInput } from "./property.schema";
+import { sendCreated, sendPaginated, sendSuccess } from "@/common/api.response";
 
-export class PropertyController{
+export class PropertyController {
     private readonly propertyService: PropertyService;
 
-    constructor(){
+    constructor() {
         this.propertyService = new PropertyService();
     }
 
-    getAllProperty = async (req: Request, res: Response) => {
+    getAllProperty = async (req: Request, res: Response): Promise<Response> => {
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
-        return res.send({
-            page: req.query.page,
-            limit: req.query.limit,
-            data: await this.propertyService.getPropertyPaginated(page, limit)
-        });
+        const { data, total } = await this.propertyService.getAllPropertys(page, limit);
+        return sendPaginated(
+            res,
+            data,
+            page,
+            limit,
+            total
+        );
     }
 
-    getProperty = async (req: Request, res: Response) => {
+    getProperty = async (req: Request, res: Response): Promise<Response> => {
         const id = req.params.id as string;
-        return res.send({
-            data: await this.propertyService.getPropertyById(id),
-        });
+        const data = await this.propertyService.getPropertyById(id);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful",
+            201
+        );
     }
 
-    updateProperty = async (req: Request, res: Response) => {
+    updateProperty = async (req: Request, res: Response): Promise<Response> => {
         const id = req.params.id as string;
-        const data = req.body as CreatePropertyInput;
-        return res.send({
-            data: await this.propertyService.updateProperty(id, data),
-        });
+        const dataToModify = req.body as CreatePropertyInput;
+        const data = await this.propertyService.updateProperty(id, dataToModify);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful",
+            201
+        );
     }
 
-    createProperty = async (req: Request, res: Response) => {
-        const data: CreatePropertyInput = req.body;
-        return res.send({
-            data: await this.propertyService.createProperty(data),
-        });
-    }
 
-    deleteProperty = async (req: Request, res: Response) => {
+    addDocuments = async (req: Request, res: Response): Promise<Response> => {
         const id = req.params.id as string;
-        return res.send({
-            data: await this.propertyService.deleteProperty(id),
-        });
+        const file = req.file;
+
+        if (!file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+        const data = await this.propertyService.addDocuments(id, file);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful",
+            201
+        );
+    };
+
+    createProperty = async (req: Request, res: Response): Promise<Response> => {
+        const dataToCreate: CreatePropertyInput = req.body;
+        const data = await this.propertyService.createProperty(dataToCreate);
+        return sendCreated(
+            res,
+            data,
+            "Resource created successfully"
+        );
+    }
+
+    deleteProperty = async (req: Request, res: Response): Promise<Response> => {
+        const id = req.params.id as string;
+        const data = await this.propertyService.deleteProperty(id);
+        return sendSuccess(
+            res,
+            data,
+            "Operation successful"
+        );
     }
 }

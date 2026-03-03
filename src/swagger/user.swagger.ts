@@ -1,4 +1,4 @@
-import {OpenAPIV3} from "openapi-types";
+import { OpenAPIV3 } from "openapi-types";
 
 const userTags: OpenAPIV3.TagObject = {
     name: "User",
@@ -122,6 +122,7 @@ const userPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["User"],
             summary: "Get all users with pagination",
+            security: [],
             description: "Retrieve a paginated list of all users in the system",
             parameters: [
                 {

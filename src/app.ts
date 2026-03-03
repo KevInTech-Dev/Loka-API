@@ -10,8 +10,12 @@ import landLordRoute from "@/modules/landLord/landLord.route";
 import propertyRoute from "@/modules/property/property.route";
 import propertyTypeRoute from "@/modules/propertyType/propertyType.route";
 import errorHandler, {
-  notFoundHandler,
+    notFoundHandler,
 } from "@/modules/middleware/error.middleware";
+import unitTypeRoute from "./modules/unitType/unitType.route";
+import unitLocationRoute from "./modules/unitLocation/unitLocation.route";
+import propertyUnitLocationRoute from "./modules/propertyUnitLocation/propertyUnitLocation.route";
+import authRoute from "./modules/authentification/auth.route";
 
 const app: Express = express();
 const API_PREFIX = env.API_PREFIX;
@@ -28,28 +32,28 @@ app.use(cors());
 
 // Swagger UI setup
 app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, {
-    explorer: true,
-    customCss: ".swagger-ui .topbar { display: none }",
-    customSiteTitle: "Rental Management API Documentation",
-  }),
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+        explorer: true,
+        customCss: ".swagger-ui .topbar { display: none }",
+        customSiteTitle: "Rental Management API Documentation",
+    }),
 );
 
 app.get("/api-docs.json", (req: Request, res: Response) => {
-  res.setHeader("Content-Type", "application/json");
-  res.send(swaggerSpec);
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerSpec);
 });
 
 // Health check
 app.get(`${API_PREFIX}/health`, (req: Request, res: Response) => {
-  res.status(200).json({
-    status: "ok",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: env.NODE_ENV,
-  });
+    res.status(200).json({
+        status: "ok",
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: env.NODE_ENV,
+    });
 });
 
 app.use(`${API_PREFIX}/users`, userRoute);
@@ -57,7 +61,12 @@ app.use(`${API_PREFIX}/property`, propertyRoute);
 app.use(`${API_PREFIX}/property-type`, propertyTypeRoute);
 app.use(`${API_PREFIX}/abonnements`, abonnementRoute);
 app.use(`${API_PREFIX}/landLords`, landLordRoute);
-app.use(`${API_PREFIX}/tenants`, tenantRoute)
+app.use(`${API_PREFIX}/unitType`, unitTypeRoute);
+app.use(`${API_PREFIX}/unitLocation`, unitLocationRoute);
+app.use(`${API_PREFIX}/propertyUnitLocation`, propertyUnitLocationRoute);
+app.use(`${API_PREFIX}/tenants`, tenantRoute);
+app.use(`${API_PREFIX}/auth`, authRoute);
+
 
 // 404 handler
 app.use(notFoundHandler);

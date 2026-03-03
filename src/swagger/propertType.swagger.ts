@@ -1,4 +1,4 @@
-import {OpenAPIV3} from "openapi-types";
+import { OpenAPIV3 } from "openapi-types";
 
 const propertyTypeTags: OpenAPIV3.TagObject = {
     name: "PropertyType",
@@ -11,29 +11,97 @@ const propertyTypeShema: OpenAPIV3.ComponentsObject['schemas'] = {
         properties: {
             label: {
                 type: "string",
-                default: "",
                 description: "Label of the property type"
+            },
+            createdAt: {
+                type: "string",
+                format: "data-time",
+                description: "Timestamp when the property type was created"
+            },
+            updatedAt: {
+                type: "string",
+                format: "data-time",
+                description: "Timestamp when the property type was updated"
             }
         },
         required: ["label"]
+    },
+    createPropertyTypeRequest: {
+        type: "object",
+        properties: {
+            label: {
+                type: "string",
+                description: "MAISON DE LA STAR"
+            }
+        },
+        required: ["label"]
+    },
+    paginatedPropertyType: {
+        type: "object",
+        properties: {
+            page: {
+                type: "integer",
+                description: "Current page number"
+            },
+            limit: {
+                type: "integer",
+                description: "Number of items per page"
+            },
+            data: {
+                type: "array",
+                items: {
+                    $ref: "#/components/schemas/propertyType"
+                }
+            }
+        }
     }
 }
-
 const propertyTypePath: OpenAPIV3.PathsObject = {
     "/property-type": {
         get: {
             tags: ["PropertyType"],
             summary: "Get all property types",
             description: "Retrieve a list of all property types in the system",
+            parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 1
+                    },
+                    description: "Page umber (starting from 1)"
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 10
+                    },
+                    description: "Number of items per page"
+                }
+            ],
             responses: {
                 "200": {
                     description: "A list of property types",
                     content: {
                         "application/json": {
                             schema: {
-                                type: "array",
-                                items: {
-                                    $ref: "#/components/schemas/property-type"
+                                type: "object",
+                                properties: {
+                                    page: {
+                                        type: "integer"
+                                    },
+                                    limit: {
+                                        type: "integer"
+                                    },
+                                    data: {
+                                        type: "array",
+                                        items: {
+                                            $ref: "#/components/schemas/propertyType"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -50,7 +118,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/property-type"
+                            $ref: "#/components/schemas/createPropertyTypeRequest"
                         }
                     }
                 }
@@ -61,10 +129,18 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/property-type"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/propertyType"
+                                    }
+                                }
                             }
                         }
                     }
+                },
+                "400": {
+                    description: "Invalid input"
                 }
             }
         }
@@ -80,7 +156,8 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format: "uuid"
                     },
                     description: "The unique identifier of the property type"
                 }
@@ -91,7 +168,12 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/property-type"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/propertyType"
+                                    }
+                                }
                             }
                         }
                     }
@@ -111,7 +193,8 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format: "uuid"
                     },
                     description: "The unique identifier of the property type"
                 }
@@ -121,7 +204,7 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/property-type"
+                            $ref: "#/components/schemas/createPropertyTypeRequest"
                         }
                     }
                 }
@@ -132,7 +215,12 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/property-type"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/propertyType"
+                                    }
+                                }
                             }
                         }
                     }
@@ -152,14 +240,27 @@ const propertyTypePath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format: "uuid"
                     },
                     description: "The unique identifier of the property type"
                 }
             ],
             responses: {
                 "200": {
-                    description: "property type deleted successfully"
+                    description: "property type deleted successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        type: "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 "404": {
                     description: "property type not found"

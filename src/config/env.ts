@@ -13,6 +13,11 @@ export interface EnvConfig {
   DB_NAME: string;
   DB_DIALECT: "postgres" | "mysql" | "sqlite" | "mariadb" | "mssql";
   DB_LOGGING: boolean;
+  JWT_SECRET: string;
+  REFRESH_TOKEN: string;
+  ACCESS_TOKEN_EXPRIRY_TIME: number;
+  REFRESH_TOKEN_EXPRIRY_TIME: number;
+
 
   API_PREFIX?: string;
 
@@ -22,7 +27,7 @@ export interface EnvConfig {
 
 
   // bcrypt settings
-    BCRYPT_SALT_ROUNDS: number;
+  BCRYPT_SALT_ROUNDS: number;
 }
 
 const getEnvVar = (key: string, defaultValue?: string): string => {
@@ -46,6 +51,7 @@ const getEnvVarNumber = (key: string, defaultValue?: number): number => {
 };
 
 export const env: EnvConfig = {
+
   //General
   NODE_ENV: getEnvVar("NODE_ENV", "development") as
     | "development"
@@ -75,6 +81,18 @@ export const env: EnvConfig = {
 
   //bcrypt
   BCRYPT_SALT_ROUNDS: getEnvVarNumber("BCRYPT_SALT_ROUNDS", 10),
+
+  //JWT
+  JWT_SECRET: getEnvVar("JWT_SECRET"),
+
+  //Refresh token
+  REFRESH_TOKEN: getEnvVar("REFRESH_TOKEN"),
+
+  //Access token expiry time
+  ACCESS_TOKEN_EXPRIRY_TIME: getEnvVarNumber("ACCESS_TOKEN_EXPRIRY_TIME"),
+
+  //Refresh token expriry time
+  REFRESH_TOKEN_EXPRIRY_TIME: getEnvVarNumber("REFRESH_TOKEN_EXPRIRY_TIME"),
 };
 
 export default env;

@@ -1,12 +1,13 @@
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
-import {RoleEnum} from "@/enums/RoleEnum";
-import {BaseModel} from "@common/models/base.model";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { RoleEnum } from "@/enums/RoleEnum";
+import { BaseModel } from "@common/models/base.model";
 
 
 export interface UserAttributes extends BaseModel {
     username: string;
     firstname?: string;
     lastname?: string;
+    phoneNumber: string;
     role: RoleEnum
     email: string;
     password: string;
@@ -31,6 +32,7 @@ class User
     declare password: string;
     declare firstname?: string;
     declare lastname?: string;
+    declare phoneNumber: string;
     declare role: RoleEnum
     declare isActive: boolean;
     declare profilePhotoUrl?: string;
@@ -39,14 +41,18 @@ class User
     declare readonly updatedAt?: Date;
     //J'ai ajouté l'association qui est entre landlord et user avec la méthode associate()
     static associate(models: any) {
-        User.hasOne(models.landLord, { 
-            foreignKey: 'userId', 
-            as: 'landlords' 
+        User.hasOne(models.landLord, {
+            foreignKey: 'userId',
+            as: 'landlord'
         });
-            User.hasOne(models.Tenant, {
-                foreignKey: 'userId',
-                as: 'tenants'
-            });
+        User.hasOne(models.Tenant, {
+            foreignKey: 'userId',
+            as: 'tenant'
+        });
+        User.hasMany(models.RefreshToken, {
+            foreignKey: 'userId',
+            as: 'refreshToken'
+        })
     }
 }
 
@@ -65,6 +71,10 @@ const initModelUser = (sequelize: Sequelize) => {
             }, firstname: {
                 type: DataTypes.STRING,
                 allowNull: true,
+            },
+            phoneNumber: {
+                type: DataTypes.STRING,
+                allowNull: true
             },
             lastname: {
                 type: DataTypes.STRING,
@@ -99,8 +109,8 @@ const initModelUser = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true, paranoid:true},
+        { sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true },
     );
 };
 
-export {User, initModelUser};
+export { User, initModelUser };

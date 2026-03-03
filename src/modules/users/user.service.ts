@@ -1,9 +1,10 @@
 import { CreateUserInput } from "@modules/users/user.schema";
 import { UserRepository } from "@modules/users/user.repository";
-import { UserResponse } from "./user.types";
-import { DuplicateEntryError, NotFoundError } from "@/common/errors";
-import { deleteFile, fileExists } from "@utils/file.utils";
+
 import { hashWord } from "@utils/password.utils";
+import { UserResponse } from "./user.types";
+import { NotFoundError } from "@/common/errors";
+import { deleteFile, fileExists } from "@/utils/file.utils";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -21,6 +22,7 @@ export class UserService {
       username: data.username,
       password: haspass,
       role: data.role,
+      phoneNumber: data.phoneNumber,
       isEmailVerified: false,
       isActive: false,
       firstname: data.firstname,
@@ -35,6 +37,7 @@ export class UserService {
       username: user.username,
       firstname: user.firstname,
       lastname: user.lastname,
+      phoneNumber: user.phoneNumber,
       role: user.role,
       email: user.email,
       isActive: user.isActive,
@@ -44,6 +47,7 @@ export class UserService {
       updatedAt: user.updatedAt,
     };
   }
+
 
   async addPhoto(id: string, file: Express.Multer.File) {
     const user = await this.userRepository.getUserById(id);
@@ -55,16 +59,18 @@ export class UserService {
     try {
       if (user.profilePhotoUrl && user.profilePhotoUrl.length > 0) {
         if (fileExists(user.profilePhotoUrl)) {
-          deleteFile(user.profilePhotoUrl);
+          deleteFile(user.profilePhotoUrl)
         }
       }
     } catch (error) {
       console.error(error);
     }
 
+
     const updatedUser = await this.userRepository.updateUser(id, {
       profilePhotoUrl: file.path,
     });
+
 
     if (!updatedUser) {
       throw new NotFoundError("User");
@@ -89,7 +95,7 @@ export class UserService {
     const user = await this.userRepository.getUserById(id);
 
     if (!user) {
-      throw new NotFoundError("User");
+      throw new NotFoundError("User not found");
     }
 
     return {
@@ -98,6 +104,7 @@ export class UserService {
       firstname: user.firstname,
       lastname: user.lastname,
       role: user.role,
+      phoneNumber: user.phoneNumber,
       email: user.email,
       isActive: user.isActive,
       profilePhotoUrl: user.profilePhotoUrl,
@@ -115,6 +122,7 @@ export class UserService {
           username: user.username,
           firstname: user.firstname,
           lastname: user.lastname,
+          phoneNumber: user.phoneNumber,
           role: user.role,
           email: user.email,
           isActive: user.isActive,
@@ -143,6 +151,7 @@ export class UserService {
       role: updatedUser.role,
       email: updatedUser.email,
       isActive: updatedUser.isActive,
+      phoneNumber: updatedUser.phoneNumber,
       profilePhotoUrl: updatedUser.profilePhotoUrl,
       isEmailVerified: updatedUser.isEmailVerified,
       createdAt: updatedUser.createdAt,
@@ -157,4 +166,6 @@ export class UserService {
     }
     return true;
   }
+
 }
+

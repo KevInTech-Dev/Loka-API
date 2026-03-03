@@ -1,6 +1,6 @@
-import {User, UserAttributes, UserCreationAttributes} from "@database/models/Users";
-import {ModelStatic} from "sequelize";
-import {WhereQueryUser} from "@modules/users/user.types";
+import { User, UserAttributes, UserCreationAttributes } from "@database/models/Users";
+import { ModelStatic } from "sequelize";
+import { WhereQueryUser } from "@modules/users/user.types";
 
 export class UserRepository {
     private user: ModelStatic<User>
@@ -20,7 +20,7 @@ export class UserRepository {
 
     async getUserPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.user.findAll({offset, limit});
+        return this.user.findAll({ offset, limit });
     }
 
     async updateUser(id: string, data: Partial<UserCreationAttributes>) {

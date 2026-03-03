@@ -7,7 +7,12 @@ import { initModelAbonnement } from "./models/Abonnements";
 import { initModelandLord } from "./models/landLord";
 import { initModelProperty } from "./models/Property";
 import { initModelPropertyType } from "./models/PropertyType";
+import { initPropertyUnitLocation } from "./models/PropertyUnitLocation";
+import { initUnitType } from "./models/UnitType";
+import { initUnitLocation } from "./models/UnitLocation";
 import { initModelTenant } from "./models/Tenants";
+import { initRefreshToken } from "./models/RefreshToken";
+
 
 const sequelize = new Sequelize({
   ...options,
@@ -56,10 +61,16 @@ const initModels = async () => {
   initModelandLord(sequelize);
   initModelProperty(sequelize);
   initModelPropertyType(sequelize);
+  initPropertyUnitLocation(sequelize);
+  initUnitLocation(sequelize);
+  initUnitType(sequelize);
+  initRefreshToken(sequelize);
+
+
   initModelTenant(sequelize);
 
   // If you have more models, initialize them here and set up associations if needed before syncing the database.
-  Object.values(sequelize.models).forEach((model:any) => {
+  Object.values(sequelize.models).forEach((model: any) => {
     if (typeof model.associate === "function") {
       model.associate(sequelize.models);
     }

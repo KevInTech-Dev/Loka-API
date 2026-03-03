@@ -1,9 +1,8 @@
 import { BaseModel } from "@/common/models/base.model";
-import { PropertyType } from "./PropertyType";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface PropertyAttribute extends BaseModel {
-    name: string;
+    label: string;
     type: string;
     address: string;
     city: string;
@@ -21,7 +20,7 @@ export interface PropertyAttribute extends BaseModel {
 export interface PropertyCreationAttributes extends Optional<PropertyAttribute, "id" | "createdAt" | "updatedAt"> { }
 
 class Property extends Model<PropertyAttribute, PropertyCreationAttributes> implements PropertyAttribute {
-    declare name: string;
+    declare label: string;
     declare type: string;
     declare address: string;
     declare city: string;
@@ -37,6 +36,12 @@ class Property extends Model<PropertyAttribute, PropertyCreationAttributes> impl
     declare id: string;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
+    static associate(models: any) {
+        Property.belongsTo(models.PropertyType, {
+            foreignKey: 'propertyTypeId',
+            as: 'propertyType'
+        });
+    }
 }
 
 const initModelProperty = (sequelize: Sequelize) => {
@@ -47,7 +52,7 @@ const initModelProperty = (sequelize: Sequelize) => {
                 defaultValue: DataTypes.UUIDV4,
                 primaryKey: true
             },
-            name: {
+            label: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
@@ -97,9 +102,9 @@ const initModelProperty = (sequelize: Sequelize) => {
             },
             documents: {
                 type: DataTypes.STRING,
-                allowNull: false
+                allowNull: true
             }
-        }, { sequelize, modelName: "Property", tableName: 'property', timestamps: true, underscored: true },
+        }, { sequelize, modelName: "Property", tableName: 'property', timestamps: true, underscored: true, paranoid: true },
     )
 };
 

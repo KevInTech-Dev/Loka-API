@@ -2,23 +2,29 @@ import { Router } from "express";
 import { PropertyTypeController } from "./propertyType.controller";
 import { createPropertyTypeSchema, propertyTypeIdShema } from "./propertyType.schema";
 import validate from "../middleware/validate.middleware";
+import { defaultPaginationQuery } from "@/common/api.schema";
+import authMiddleware from "../middleware/authMiddleware";
 
-const router : Router = Router();
+const router: Router = Router();
+router.use(authMiddleware);
 const propertyTypeController = new PropertyTypeController();
 
-// get all propertyTpe
-router.get('', propertyTypeController.getAllpropertyType);
-
-// get propertyType by id
-router.get('/:id', propertyTypeController.getpropertyType);
-
-// update propertyType by id
-router.patch('', propertyTypeController.updatepropertyType);
-
 // create propertyType
-router.post('', validate(createPropertyTypeSchema, 'body'),propertyTypeController.createpropertyType);
+router.post('', validate(createPropertyTypeSchema, 'body'), propertyTypeController.createpropertyType);
+
+// get all propertyTpe
+router.get('', validate(defaultPaginationQuery, 'body'), propertyTypeController.getAllpropertyType);
 
 // delete propertyType by id
-router.delete('/:id', validate(propertyTypeIdShema, 'params'),propertyTypeController.deletepropertyType);
+router.delete('/:id', validate(propertyTypeIdShema, 'params'), propertyTypeController.deletepropertyType);
+
+// get propertyType by id
+router.get('/:id', validate(propertyTypeIdShema, 'params'), propertyTypeController.getpropertyType);
+
+// update propertyType by id
+router.patch('/:id', validate({
+    params: propertyTypeIdShema,
+    body: createPropertyTypeSchema
+}), propertyTypeController.updatepropertyType);
 
 export default router;

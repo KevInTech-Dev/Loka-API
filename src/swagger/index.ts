@@ -1,11 +1,16 @@
 import env from "@config/env";
-import {OpenAPIV3} from "openapi-types";
-import {userPath, userSchema, userTags} from "@/swagger/user.swagger";
-import { propertyShema } from "./property.swagger";
-import { propertyTypeShema } from "./propertType.swagger";
+import { OpenAPIV3 } from "openapi-types";
+import { userPath, userSchema, userTags } from "@/swagger/user.swagger";
+import { propertyPath, propertyShema } from "./property.swagger";
+import { propertyTypePath, propertyTypeShema } from "./propertType.swagger";
 import { abonnementsSchema } from "./abonnement.swagger";
 import { landlordPath, landlordSchema, landlordTags } from "./landLord.swagger";
+import { propertyUnitLocationPath, propertyUnitLocationSchema } from "./propertyUnitLocation.swagger";
+import { unitLocationPath, unitLocationSchema } from "./unitLocation.swagger";
+import { unitTypePath, unitTypeSchema } from "./unitType.swagger";
+
 import { tenantPath, tenantSchema, tenantTags } from "./tenant.swagger";
+import { authenticationSchema, AuthentificationPath, RegistrationPath, registrationSchema } from "./login.swagger";
 
 
 
@@ -31,9 +36,9 @@ export const paths: OpenAPIV3.PathsObject = {
                             schema: {
                                 type: 'object',
                                 properties: {
-                                    success: {type: 'boolean', example: true},
-                                    message: {type: 'string', example: 'API is healthy'},
-                                    timestamp: {type: 'string', format: 'date-time'},
+                                    success: { type: 'boolean', example: true },
+                                    message: { type: 'string', example: 'API is healthy' },
+                                    timestamp: { type: 'string', format: 'date-time' },
                                 },
                             },
                         },
@@ -44,10 +49,18 @@ export const paths: OpenAPIV3.PathsObject = {
     },
     // Module paths
     ...userPath,
+    ...propertyPath,
+    ...propertyTypePath,
+    ...landlordPath,
+    ...propertyUnitLocationPath,
+    ...unitLocationPath,
+    ...unitTypePath,
     ...propertyShema,
     ...propertyTypeShema,
     ...landlordPath,
-    ...tenantPath
+    ...tenantPath,
+    ...AuthentificationPath,
+    ...RegistrationPath
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
@@ -57,7 +70,13 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...propertyShema,
     ...propertyTypeShema,
     ...landlordSchema,
-    ...tenantSchema
+    ...propertyUnitLocationSchema,
+    ...unitLocationSchema,
+    ...unitTypeSchema,
+    ...tenantSchema,
+    ...registrationSchema,
+    ...authenticationSchema
+
 };
 
 
@@ -85,15 +104,21 @@ export const swaggerSpec: OpenAPIV3.Document = {
     ],
     tags,
     components: {
-        // securitySchemes,
+        securitySchemes: {
+            bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+                bearerFormat: "JWT",
+            },
+        },
         schemas,
         // responses,
     },
-   /* security: [
+    security: [
         {
             bearerAuth: [],
         },
-    ],*/
+    ],
     paths,
 };
 

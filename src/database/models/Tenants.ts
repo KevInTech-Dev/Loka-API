@@ -5,7 +5,7 @@ import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface TenantAttributes extends BaseModel {
     userId: string;
-    date_of_birth : Date;
+    date_of_birth: Date;
     gender: GenderEnum;
     nationality: string;
     phone_primary: string;
@@ -17,7 +17,7 @@ export interface TenantAttributes extends BaseModel {
     occupation?: string;
     employer_name?: string;
     employer_contact?: string;
-    emergency_contact_name? : string;
+    emergency_contact_name?: string;
     emergency_contact_phone?: string;
     emergency_contact_relationship?: string;
 }
@@ -28,7 +28,7 @@ export interface TenantCreationAttributes extends Optional<
 > {
 }
 
-class Tenant 
+class Tenant
     extends Model<TenantAttributes, TenantCreationAttributes>
     implements TenantAttributes {
         declare id: string;
@@ -57,38 +57,39 @@ class Tenant
             });
         }
     }
-    
-    const initModelTenant = (sequelize: Sequelize) =>{
-        Tenant.init(
-            {
-                id: {
-                    type: DataTypes.UUID,
-                    defaultValue: DataTypes.UUIDV4,
-                    primaryKey: true,
+
+
+const initModelTenant = (sequelize: Sequelize) => {
+    Tenant.init(
+        {
+            id: {
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4,
+                primaryKey: true,
+            },
+            userId: {
+                type: DataTypes.UUID,
+                allowNull: false,
+                references: {
+                    model: "users",
+                    key: "id"
                 },
-                userId: {
-                    type: DataTypes.UUID,
-                    allowNull: false,
-                    references: {
-                        model: "users",
-                        key: "id"
-                    },
-                    onDelete: "CASCADE"
-                },
-                date_of_birth: {
-                    type: DataTypes.DATEONLY,
-                    allowNull: false,
-                },
-                gender: {
-                    type: DataTypes.ENUM(...Object.values(GenderEnum)),
-                    allowNull: false,
-                    defaultValue: GenderEnum.MASCULIN,
-                },
-                nationality: {
-                    type: DataTypes.STRING,
-                    allowNull: false
-                },
-                phone_primary: {
+                onDelete: "CASCADE"
+            },
+            date_of_birth: {
+                type: DataTypes.DATEONLY,
+                allowNull: false,
+            },
+            gender: {
+                type: DataTypes.ENUM(...Object.values(GenderEnum)),
+                allowNull: false,
+                defaultValue: GenderEnum.MASCULIN,
+            },
+            nationality: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            phone_primary: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true
@@ -143,4 +144,4 @@ class Tenant
         );
     };
 
-    export {Tenant, initModelTenant}
+export { Tenant, initModelTenant }
