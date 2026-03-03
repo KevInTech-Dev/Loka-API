@@ -14,7 +14,6 @@ export interface landLordAtributes extends BaseModel {
     city?: string;
     country?: string;
     isVerified: boolean;
-    deletedAt?: Date | null;
 }
 
 //l'id est optionnel parceque Sequelize génère le UUID automatiquement
@@ -62,7 +61,7 @@ const initModelandLord = (sequelize: Sequelize) => {
                 type: DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: "users",
+                    model: "User",
                     key: "id"
                 },
                 onDelete: "CASCADE"
@@ -88,11 +87,6 @@ const initModelandLord = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true
-            },
-            deletedAt: {
-                type: DataTypes.DATE,
-                allowNull: true,
-                defaultValue: null,
             },
             phoneSecondary: {
                 type: DataTypes.STRING,

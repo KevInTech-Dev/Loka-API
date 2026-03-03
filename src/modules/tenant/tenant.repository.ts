@@ -26,9 +26,9 @@ export class TenantRepository {
         return this.tenant.findAll({ include: User});
     }
 
-    async getTenantByUserId(userId: string) {
-        return this.tenant.findOne({ where: { userId ,} });
-    }
+    // async getTenantByUserId(userId: string) {
+    //     return this.tenant.findOne({ where: { userId ,} });
+    // }
 
     async getTenantPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;

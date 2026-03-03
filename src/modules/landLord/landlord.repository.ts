@@ -1,3 +1,4 @@
+import { NotFoundError } from "@/common/errors";
 import { LandLord, landLordCreationAtributes } from "@/database/models/landLord";
 import { ModelStatic } from "sequelize";
 
@@ -13,21 +14,21 @@ export class landLordRepository{
     }
 
     async getlandLordById(id: string) {
-        return this.landlord.findOne({ where: { id, deletedAt: null } });
+        return this.landlord.findByPk(id);
     }
 
-     async getlandLordByUserId(userId: string) {
-        return this.landlord.findOne({ where: { userId, deletedAt: null } });
+    async getlandLordByUserId(userId: string){
+        return this.landlord.findOne( {where: {userId}} )
     }
 
     async getAllLandlords(){
-        return this.landlord.findAll({ where: { deletedAt: null } });
+        return this.landlord.findAll();
     }
 
     async getlandLordPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.landlord.findAll({ where: { deletedAt: null }, offset, limit });
-}
+        return this.landlord.findAll({ offset, limit });
+    }
 
     async updatelandLord(id: string, data: Partial<landLordCreationAtributes>){
         const landlord = await this.getlandLordById(id);
@@ -39,10 +40,11 @@ export class landLordRepository{
 
     async deletelandLord(id: string) {
         const landlord = await this.getlandLordById(id);
-        if(!landlord) return false;
+        if(!landlord) 
+            throw new NotFoundError("Landlord");
 
         // Suppression logique 
-        await landlord.update({ deletedAt: new Date() });
+        await landlord.destroy();
         return true;
     }
 
