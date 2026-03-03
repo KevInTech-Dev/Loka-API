@@ -7,6 +7,8 @@ import { TokenResponse } from "./auth.type";
 import { CreateUserInput } from "../users/user.schema";
 import { UserResponse } from "../users/user.types";
 import { UserService } from "../users/user.service";
+import { triggerAsyncId } from "node:async_hooks";
+import { trim } from "zod";
 
 export class AuthService {
 
@@ -26,7 +28,7 @@ export class AuthService {
         if (!existingUser) {
             throw new NotFoundError("User not found");
         }
-        const verifyPassword = await compareHash(existingUser.password, param.password);
+        const verifyPassword = await compareHash(existingUser.password.trim(), param.password.trim());
         console.log("value of the verifyPassword:", verifyPassword + existingUser.password + param.password);
         if (!verifyPassword) {
             throw new AuthenticationError("Incorrect password");
@@ -49,14 +51,11 @@ export class AuthService {
             throw new DuplicateEntryError("User already exist with this email");
         }
 
-        const hashPass = await hashWord(userInformations.password);
-        console.log("password", userInformations.password)
-
         const user = await this.userService.createUser({
             email: userInformations.email,
             username: userInformations.username,
             phoneNumber: userInformations.phoneNumber,
-            password: hashPass,
+            password: userInformations.password,
             lastname: userInformations.lastname,
             firstname: userInformations.firstname,
             role: userInformations.role

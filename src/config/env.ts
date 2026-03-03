@@ -16,7 +16,6 @@ export interface EnvConfig {
   JWT_SECRET: string;
   REFRESH_TOKEN: string;
   ACCESS_TOKEN_EXPRIRY_TIME: number;
-  REFRESH_TOKEN_EXPRIRY_TIME: number;
 
 
   API_PREFIX?: string;
@@ -91,8 +90,6 @@ export const env: EnvConfig = {
   //Access token expiry time
   ACCESS_TOKEN_EXPRIRY_TIME: getEnvVarNumber("ACCESS_TOKEN_EXPRIRY_TIME"),
 
-  //Refresh token expriry time
-  REFRESH_TOKEN_EXPRIRY_TIME: getEnvVarNumber("REFRESH_TOKEN_EXPRIRY_TIME"),
 };
 
 export default env;
