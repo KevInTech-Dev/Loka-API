@@ -41,6 +41,10 @@ class Property extends Model<PropertyAttribute, PropertyCreationAttributes> impl
             foreignKey: 'propertyTypeId',
             as: 'propertyType'
         });
+        Property.hasMany(models.Contract, {
+                foreignKey: 'property_id',
+                as: 'contract'
+            });
     }
 }
 

@@ -55,6 +55,10 @@ class Tenant
                 foreignKey: 'userId',
                 as: 'users'
             });
+            Tenant.hasMany(models.Contract, {
+                foreignKey: 'tenant_id',
+                as: 'contract'
+             });
         }
     }
 

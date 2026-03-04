@@ -50,6 +50,10 @@ class UnitLocation extends Model<UnitLocationAttributes, UnitLocationCreationAtt
             foreignKey: 'unitTypeId',
             as: 'unitType'
         });
+        UnitLocation.hasMany(models.Contract, {
+                foreignKey: 'unit_id',
+                as: 'contract'
+            });
     }
 
 }

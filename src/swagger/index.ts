@@ -11,13 +11,15 @@ import { unitTypePath, unitTypeSchema } from "./unitType.swagger";
 
 import { tenantPath, tenantSchema, tenantTags } from "./tenant.swagger";
 import { authenticationSchema, AuthentificationPath, RegistrationPath, registrationSchema } from "./login.swagger";
+import {contractPath, contractSchema, contractTags} from "@/swagger/contract.swagger";
 
 
 
 export const tags: OpenAPIV3.TagObject[] = [
     userTags,
     landlordTags,
-    tenantTags
+    tenantTags,
+    contractTags
 ];
 
 export const paths: OpenAPIV3.PathsObject = {
@@ -60,7 +62,8 @@ export const paths: OpenAPIV3.PathsObject = {
     ...landlordPath,
     ...tenantPath,
     ...AuthentificationPath,
-    ...RegistrationPath
+    ...RegistrationPath,
+    ...contractPath
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
@@ -75,7 +78,8 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...unitTypeSchema,
     ...tenantSchema,
     ...registrationSchema,
-    ...authenticationSchema
+    ...authenticationSchema,
+    ...contractSchema
 
 };
 

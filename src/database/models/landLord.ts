@@ -46,6 +46,10 @@ class LandLord
                 foreignKey: 'userId', 
                 as: 'users' 
             });
+            LandLord.hasMany(models.Contract, {
+                foreignKey: 'landlord_id',
+                as: 'contract'
+            });
         }
     }
 

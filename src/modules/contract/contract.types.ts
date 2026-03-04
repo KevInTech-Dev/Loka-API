@@ -21,7 +21,7 @@ export type contractResponse = BaseTypes & {
         electricity_rate_per_kwh: number;
         water_rate_per_m3: number;
         other_changes: JSON;
-        initial_electicity_reading: number;
+        initial_electricity_reading: number;
         initial_water_reading: number;
         auto_renewal: boolean;
         special_terms: string;

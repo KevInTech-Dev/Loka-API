@@ -6,7 +6,7 @@ import { idCardTypeEnum } from "@/enums/idCardTypeEnum";
 
 const tenantTags: OpenAPIV3.TagObject = {
     name: "Tenant",
-    description: "Operations related to tenant Mangement"
+    description: "Operations related to tenant Managment"
 }
 
 const tenantSchema : OpenAPIV3.ComponentsObject['schemas'] = {

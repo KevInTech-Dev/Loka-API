@@ -22,7 +22,7 @@ export interface ContractAttributes extends BaseModel {
     electricity_rate_per_kwh: number;
     water_rate_per_m3: number;
     other_changes: JSON;
-    initial_electicity_reading: number;
+    initial_electricity_reading: number;
     initial_water_reading: number;
     auto_renewal: boolean;
     special_terms: string;
@@ -57,7 +57,7 @@ class Contract
         declare electricity_rate_per_kwh: number;
         declare water_rate_per_m3: number;
         declare other_changes: JSON;
-        declare initial_electicity_reading: number;
+        declare initial_electricity_reading: number;
         declare initial_water_reading: number;
         declare auto_renewal: boolean;
         declare special_terms: string;
@@ -105,7 +105,8 @@ const initModelContract = (sequelize: Sequelize) => {
                 references:{
                     model: 'landLord',
                     key: 'id',
-                }
+                },
+                onDelete: "CASCADE"
             },
             property_id:{
                 type: DataTypes.UUID,
@@ -113,7 +114,8 @@ const initModelContract = (sequelize: Sequelize) => {
                 references: {
                     model: 'Property',
                     key: 'id'
-                }
+                },
+                onDelete: "CASCADE"
             },  
             unit_id:{
                 type: DataTypes.UUID,
@@ -121,7 +123,8 @@ const initModelContract = (sequelize: Sequelize) => {
                 references: {
                     model: 'Unit',
                     key: 'id'
-                }
+                },
+                 onDelete: "CASCADE"
             },
             tenant_id:{
                 type: DataTypes.UUID,
@@ -129,7 +132,8 @@ const initModelContract = (sequelize: Sequelize) => {
                 references: {
                     model: 'Tenant',
                     key: 'id'
-                }
+                },
+                onDelete: "CASCADE"
             },
             contract_type: {
                 type: DataTypes.ENUM(...Object.values(ContractTypeEnum)),
@@ -184,7 +188,7 @@ const initModelContract = (sequelize: Sequelize) => {
                 type: DataTypes.JSON,
                 allowNull: true,
             },
-            initial_electicity_reading: {
+            initial_electricity_reading: {
                 type: DataTypes.NUMBER,
                 allowNull: false,
             },
