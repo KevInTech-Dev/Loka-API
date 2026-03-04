@@ -15,8 +15,11 @@ const LoginSchema = z.object({
 
 const RegisterSchema = createUserSchema.extend(z.object({
     phoneNumber: z.string().min(6)
+}).shape)
+
+const refreshTokenIdSchema = z.object({
+    id: z.uuid("Invalid refresh token id format")
 })
-    .shape)
 
 
 type LoginInput = z.infer<typeof LoginSchema>
@@ -26,5 +29,6 @@ export {
     LoginSchema,
     RegisterSchema,
     LoginInput,
-    RegisterInput
+    RegisterInput,
+    refreshTokenIdSchema
 }

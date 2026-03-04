@@ -180,7 +180,7 @@ const propertyUnitLocationPath: OpenAPIV3.PathsObject = {
                         type: "string",
                         format: "uuid"
                     },
-                    description: "The unique identifier of the unit type"
+                    description: "The unique identifier of the property unit location"
                 }
             ],
             responses: {
