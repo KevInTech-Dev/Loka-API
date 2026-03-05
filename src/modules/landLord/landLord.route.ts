@@ -2,9 +2,11 @@ import { Router } from "express";
 import { LandLordController } from "@modules/landLord/landLord.controller";
 import validate from "@modules/middleware/validate.middleware";
 import { createlandLordSchema, landlordIdSchema, landlordPaginationSchema } from "@modules/landLord/landlord.schema";
+import authMiddleware from "@modules/middleware/authMiddleware";
 
 
 const router: Router = Router();
+router.use(authMiddleware);
 const landlordController = new LandLordController();
 
 router.get('', validate(landlordPaginationSchema, 'query'), landlordController.getAllLandlords);

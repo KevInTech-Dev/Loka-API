@@ -6,6 +6,7 @@ import { TenantRepository } from "@modules/tenant/tenant.repository";
 import { PropertyRepository } from "@modules/property/property.repository";
 import { UnitLocationRepository } from "@modules/unitLocation/unitLocation.repository";
 import { NotFoundError } from "@/common/errors";
+import { ContractStatusEnum } from "@/enums/ContractStatusEnum";
 
 export class ContractService {
     private contractRepository: ContractRepository;
@@ -57,7 +58,7 @@ export class ContractService {
             contract_end_date: data.contract_end_date,
             monthly_rent: data.monthly_rent,
             security_deposit: data.security_deposit,
-            deposit_paid: data.deposit_paid,
+            deposit_paid: false,
             rent_due_day: data.rent_due_day,
             late_fee_grace_days: data.late_fee_grace_days,
             electricity_included: data.electricity_included,
@@ -69,8 +70,7 @@ export class ContractService {
             initial_water_reading: data.initial_water_reading,
             auto_renewal: false,
             special_terms: data.special_terms,
-            contract_document_url: data.contract_document_url,
-            contract_status: data.contract_status,
+            contract_status: ContractStatusEnum.DRAFT,
             is_signed_by_landlord: false,
             is_signed_by_tenant: false
         })
@@ -98,7 +98,6 @@ export class ContractService {
             initial_water_reading: contract.initial_water_reading,
             auto_renewal: contract.auto_renewal,
             special_terms: contract.special_terms,
-            contract_document_url: contract.contract_document_url,
             contract_status: contract.contract_status,
             is_signed_by_landlord: contract.is_signed_by_landlord,
             is_signed_by_tenant: contract.is_signed_by_tenant,
@@ -136,7 +135,6 @@ export class ContractService {
             initial_water_reading: contract.initial_water_reading,
             auto_renewal: contract.auto_renewal,
             special_terms: contract.special_terms,
-            contract_document_url: contract.contract_document_url,
             contract_status: contract.contract_status,
             is_signed_by_landlord: contract.is_signed_by_landlord,
             is_signed_by_tenant: contract.is_signed_by_tenant,
@@ -171,7 +169,6 @@ export class ContractService {
                 initial_water_reading: contract.initial_water_reading,
                 auto_renewal: contract.auto_renewal,
                 special_terms: contract.special_terms,
-                contract_document_url: contract.contract_document_url,
                 contract_status: contract.contract_status,
                 is_signed_by_landlord: contract.is_signed_by_landlord,
                 is_signed_by_tenant: contract.is_signed_by_tenant,
@@ -209,7 +206,6 @@ export class ContractService {
                     initial_water_reading: contract.initial_water_reading,
                     auto_renewal: contract.auto_renewal,
                     special_terms: contract.special_terms,
-                    contract_document_url: contract.contract_document_url,
                     contract_status: contract.contract_status,
                     is_signed_by_landlord: contract.is_signed_by_landlord,
                     is_signed_by_tenant: contract.is_signed_by_tenant,
@@ -251,7 +247,6 @@ export class ContractService {
                 initial_water_reading: updateContract.initial_water_reading,
                 auto_renewal: updateContract.auto_renewal,
                 special_terms: updateContract.special_terms,
-                contract_document_url: updateContract.contract_document_url,
                 contract_status: updateContract.contract_status,
                 is_signed_by_landlord: updateContract.is_signed_by_landlord,
                 is_signed_by_tenant: updateContract.is_signed_by_tenant,

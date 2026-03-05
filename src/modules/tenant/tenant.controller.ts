@@ -38,28 +38,28 @@ export class TenantController {
 
     addCardPhoto = async (req: Request, res: Response) => {
         const id = req.params.id as string;
-        const file = req.file;
-        const {type} = req.body;
+        const files = req.files as {[fieldName: string]: Express.Multer.File[]};
 
-        if(!file){
-            throw  new BadRequestError("File is required");
+        const frontFile = files?.['id_card_front_url']?.[0];
+        const backFile = files?.['id_card_back_url']?.[0];
+        
+        if(!frontFile && !backFile){
+            throw  new BadRequestError("At least one file (front or back) is required");
         }
 
-        if (type !== 'front' && type !== 'back') {
-            throw new BadRequestError("Type must be 'front' or 'back'");
-        }
-
-        const data = await this.tenantService.addCardPhoto(id, file, type);
+        const data = await this.tenantService.addCardPhoto(id, {
+            front: frontFile,
+            back: backFile
+        });
 
         return res.send({
-            message: `Photo ${type} uploaded successfully`,
+            message: "Photo uploaded successfully",
             data,
         });
     };
     createTenant = async (req: Request, res: Response) => {
         const data: CreateTenantInput = req.body;
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-        console.log(files);
         return res.send({
             data: await this.tenantService.createTenant({
                 ...data,

@@ -12,7 +12,6 @@ const createContractSchema = z.object({
     contract_end_date: z.coerce.date(),
     monthly_rent: z.number(),
     security_deposit: z.number(),
-    deposit_paid: z.boolean(),
     rent_due_day: z.number(),
     late_fee_grace_days: z.number(),
     electricity_included: z.boolean(),
@@ -24,10 +23,6 @@ const createContractSchema = z.object({
     initial_water_reading: z.number(),
     auto_renewal: z.boolean(),
     special_terms: z.string(),
-    contract_document_url: z.string(),
-    contract_status: z.enum(ContractStatusEnum),
-    is_signed_by_landlord: z.boolean(),
-    is_signed_by_tenant: z.boolean(),
 });
 
 const contractIdSchema = z.object({

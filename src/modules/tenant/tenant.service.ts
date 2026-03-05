@@ -75,26 +75,30 @@ export class TenantService {
         }
     }
 
-    async addCardPhoto(id: string, file: Express.Multer.File, type: 'front' | 'back'){
+    async addCardPhoto(id: string, files: { front?: Express.Multer.File, back?: Express.Multer.File }){
         const tenant = await this.getTenantById(id);
 
         if(!tenant) {
             throw new NotFoundError("Tenant");
         }
 
-        const columnToUpdate = type === 'front' ? 'id_card_front_url' : 'id_card_back_url';
-        const oldPath = tenant[columnToUpdate];
+        const updateData: any = {};
 
-        try{
-            if (oldPath && fileExists(oldPath)) {
-                deleteFile(oldPath);
+        if (files.front) {
+            if (tenant.id_card_front_url && fileExists(tenant.id_card_front_url)) {
+                deleteFile(tenant.id_card_front_url);
             }
-        } catch (error) {
-            console.error(error);
+            updateData.id_card_front_url = files.front.path;
         }
 
-        const updateData = {[columnToUpdate]: file.path};
-        return await this.tenantRepository.updateTenant(id, updateData);
+        if (files.back) {
+        if (tenant.id_card_back_url && fileExists(tenant.id_card_back_url)) {
+            deleteFile(tenant.id_card_back_url);
+        }
+            updateData.id_card_back_url = files.back.path;
+        }
+
+            return await this.tenantRepository.updateTenant(id, updateData);
 
     }
 
