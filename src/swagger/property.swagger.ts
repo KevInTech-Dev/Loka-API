@@ -162,6 +162,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["Property"],
             summary: "Get all propertys",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a list of all propertys in the system",
             parameters: [
                 {
@@ -213,6 +214,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["Property"],
             summary: "Create a new property",
+            security: [{ bearerAuth: [] }],
             description: "Create a new property with the provided information",
             requestBody: {
                 required: true,
@@ -250,6 +252,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["Property"],
             summary: "Get property by ID",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a property by their unique ID",
             parameters: [
                 {
@@ -287,6 +290,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
         patch: {
             tags: ["Property"],
             summary: "Update property by ID",
+            security: [{ bearerAuth: [] }],
             description: "Update the information of a property by their unique ID",
             parameters: [
                 {
@@ -334,6 +338,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
         delete: {
             tags: ["Property"],
             summary: "Delete property by ID",
+            security: [{ bearerAuth: [] }],
             description: "Delete a property by their unique ID",
             parameters: [
                 {
@@ -373,6 +378,7 @@ const propertyPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["Property"],
             summary: "Add your property documents",
+            security: [{ bearerAuth: [] }],
             description: "Upload a document for a property by their unique ID",
             parameters: [
                 {

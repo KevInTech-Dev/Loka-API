@@ -2,13 +2,13 @@ import { AuthenticationError, DuplicateEntryError, NotFoundError } from "@/commo
 import { notFoundHandler } from "../middleware/error.middleware";
 import { LoginInput } from "./auth.schema";
 import { UserRepository } from "@/modules/users/user.repository";
-import { compareHash, hashWord } from "@/utils/password.utils";
+import { compareHash } from "@/utils/password.utils";
 import { TokenService } from "./token.service";
 import { TokenResponse } from "./auth.type";
 import { CreateUserInput } from "../users/user.schema";
-import { UserCreationAttributes } from "@/database/models/Users";
 import { UserResponse } from "../users/user.types";
 import { UserService } from "../users/user.service";
+
 
 export class AuthService {
 
@@ -48,8 +48,6 @@ export class AuthService {
         if (existingUserEmail) {
             throw new DuplicateEntryError("User already exist with this email");
         }
-
-        //const hashPass = await hashWord(userInformations.password);
 
         const user = await this.userService.createUser({
             email: userInformations.email,
