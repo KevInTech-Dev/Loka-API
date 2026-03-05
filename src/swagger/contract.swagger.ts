@@ -130,12 +130,10 @@ const contractSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Number of items per page"
             },
             data: {
-
                 type: "array",
                 items: {
                     $ref: "#/components/schemas/contract"
                 }
-
             }
         }
     }
@@ -146,6 +144,7 @@ const contractPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["Contract"],
             summary: "Get all contracts with pagination",
+            security: [],
             description: "Retrieve a paginated list of all contracts in the system",
             parameters: [
                 {
@@ -203,7 +202,7 @@ const contractPath: OpenAPIV3.PathsObject = {
                 content: {
                     "multipart/form-data": {
                         schema: {
-                            $ref: "#/components/schemas/contractSchema"
+                            $ref: "#/components/schemas/contract"
                         }
                     }
                 }
@@ -217,7 +216,7 @@ const contractPath: OpenAPIV3.PathsObject = {
                                 type: "object",
                                 properties: {
                                     data: {
-                                        $ref: "#/components/schemas/contractSchema"
+                                        $ref: "#/components/schemas/contract"
                                     }
                                 }
                             }
@@ -230,7 +229,7 @@ const contractPath: OpenAPIV3.PathsObject = {
             }
         }
     },
-    "/contract/{id}": {
+    "/contracts/{id}": {
         get: {
             tags: ["Contract"],
             summary: "Get contract by ID",
@@ -256,7 +255,7 @@ const contractPath: OpenAPIV3.PathsObject = {
                                 type: "object",
                                 properties: {
                                     data: {
-                                        $ref: "#/components/schemas/contractSchema"
+                                        $ref: "#/components/schemas/contract"
                                     }
                                 }
                             }
@@ -289,7 +288,7 @@ const contractPath: OpenAPIV3.PathsObject = {
                 content: {
                     "multipart/form-data": {
                         schema: {
-                            $ref: "#/components/schemas/contractSchema"
+                            $ref: "#/components/schemas/contract"
                         }
                     }
                 }
@@ -303,7 +302,7 @@ const contractPath: OpenAPIV3.PathsObject = {
                                 type: "object",
                                 properties: {
                                     data: {
-                                        $ref: "#/components/schemas/contractSchema"
+                                        $ref: "#/components/schemas/contract"
                                     }
                                 }
                             }
@@ -340,7 +339,7 @@ const contractPath: OpenAPIV3.PathsObject = {
                                 type: "object",
                                 properties: {
                                     data: {
-                                        type: "object"
+                                        $ref: "#/components/schemas/contract"
                                     }
                                 }
                             }

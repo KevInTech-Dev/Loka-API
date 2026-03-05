@@ -44,11 +44,11 @@ class LandLord
         static associate(models: any) {
             LandLord.belongsTo(models.User, { 
                 foreignKey: 'userId', 
-                as: 'users' 
+                as: 'landlordUser',
             });
             LandLord.hasMany(models.Contract, {
                 foreignKey: 'landlord_id',
-                as: 'contract'
+                as: 'landlordContract'
             });
         }
     }
@@ -65,7 +65,7 @@ const initModelandLord = (sequelize: Sequelize) => {
                 type: DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: "User",
+                    model: "users",
                     key: "id"
                 },
                 onDelete: "CASCADE"
@@ -115,7 +115,7 @@ const initModelandLord = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "landLord", tableName: "landlords", timestamps: true, underscored: true},
+        {sequelize, modelName: "LandLord", tableName: "landlords", timestamps: true, underscored: true},
     );
 };
 

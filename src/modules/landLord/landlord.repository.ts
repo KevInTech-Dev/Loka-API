@@ -1,5 +1,6 @@
 import { NotFoundError } from "@/common/errors";
 import { LandLord, landLordCreationAtributes } from "@/database/models/landLord";
+import { User } from "@/database/models/Users";
 import { ModelStatic } from "sequelize";
 
 export class landLordRepository{
@@ -9,12 +10,15 @@ export class landLordRepository{
         this.landlord = LandLord;
     }
 
-    async createlandLord(data: landLordCreationAtributes) {
+    async addLandlordInfo(data: landLordCreationAtributes) {
         return this.landlord.create(data);
     }
 
     async getlandLordById(id: string) {
-        return this.landlord.findByPk(id);
+        return this.landlord.findByPk(id, {include: [{
+            model: User,
+            as : 'landlordUser'
+        }]});
     }
 
     async getlandLordByUserId(userId: string){
@@ -22,7 +26,7 @@ export class landLordRepository{
     }
 
     async getAllLandlords(){
-        return this.landlord.findAll();
+        return this.landlord.findAll({include: User});
     }
 
     async getlandLordPaginated(page: number, limit: number) {

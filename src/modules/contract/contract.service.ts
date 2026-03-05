@@ -183,7 +183,7 @@ export class ContractService {
     }
 
     async getPaginatedContract(page: number, limit: number): Promise<contractResponse []> {
-        return (await this.contractRepository.getlandLordPaginated(page, limit)).map(
+        return (await this.contractRepository.getContractPaginated(page, limit)).map(
             (contract) => {
                  return {
                     id: contract.id,

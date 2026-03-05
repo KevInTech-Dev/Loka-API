@@ -16,7 +16,7 @@ router.patch('/:id', validate({
     body: createlandLordSchema
 }), landlordController.updatelandLord);
 
-router.post('', validate(createlandLordSchema, 'body'),landlordController.createlandLord);
+router.post('', validate(createlandLordSchema, 'body'),landlordController.addLandlordInfo);
 
 router.delete('/:id', validate(landlordIdSchema, 'params'),landlordController.deletelandLord);
 

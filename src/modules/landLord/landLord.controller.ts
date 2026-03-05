@@ -37,10 +37,10 @@ export class LandLordController {
         })
     }
     
-    createlandLord = async (req: Request, res: Response) => {
+    addLandlordInfo = async (req: Request, res: Response) => {
         const data: CreateLandlordInput = req.body;
         return res.send({
-            data: await this.landlordService.createlandLord(data),
+            data: await this.landlordService.addLandlordInfo(data),
         });
     }
 

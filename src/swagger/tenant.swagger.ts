@@ -50,10 +50,17 @@ const tenantSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 default: "",
                 description: "Numero de la carte"
             },
-            id_card_photo: {
-                type: "array",
+            id_card_front_url: {
+                type: "string",
+                nullable: true,
                 format: "binary",
-                description: "Photo de la carte"
+                description: "Photo recto de la carte"
+            },
+            id_card_back_url: {
+                type: "string",
+                nullable: true,
+                format: "binary",
+                description: "Photo verso de la carte"
             },
             occupation: {
                 type: "string",
@@ -166,7 +173,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["Tenant"],
             summary: "Create a new tenant",
-            description: "Create a new landlord with the provide informations",
+            description: "Create a new tenant with the provide informations",
             requestBody: {
                 required: true,
                 content: {
@@ -328,8 +335,13 @@ const tenantPath: OpenAPIV3.PathsObject = {
                         schema: {
                             type: "object",
                             properties: {
-                                id_card_photo: {
-                                    type: "array",
+                                id_card_front_url: {
+                                    type: "string",
+                                    format: "binary",
+                                    description: "The id front card photo file to upload"
+                                },
+                                id_card_back_url: {
+                                    type: "string",
                                     format: "binary",
                                     description: "The id front card photo file to upload"
                                 }

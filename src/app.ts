@@ -16,6 +16,7 @@ import unitTypeRoute from "./modules/unitType/unitType.route";
 import unitLocationRoute from "./modules/unitLocation/unitLocation.route";
 import propertyUnitLocationRoute from "./modules/propertyUnitLocation/propertyUnitLocation.route";
 import authRoute from "./modules/authentification/auth.route";
+import contractRoute from "@modules/contract/contract.routes";
 
 const app: Express = express();
 const API_PREFIX = env.API_PREFIX;
@@ -66,6 +67,7 @@ app.use(`${API_PREFIX}/unitLocation`, unitLocationRoute);
 app.use(`${API_PREFIX}/propertyUnitLocation`, propertyUnitLocationRoute);
 app.use(`${API_PREFIX}/tenants`, tenantRoute);
 app.use(`${API_PREFIX}/auth`, authRoute);
+app.use(`${API_PREFIX}/contracts`, contractRoute);
 
 
 // 404 handler

@@ -49,13 +49,13 @@ export class AuthService {
             throw new DuplicateEntryError("User already exist with this email");
         }
 
-        const hashPass = await hashWord(userInformations.password);
+        //const hashPass = await hashWord(userInformations.password);
 
         const user = await this.userService.createUser({
             email: userInformations.email,
             username: userInformations.username,
             phoneNumber: userInformations.phoneNumber,
-            password: hashPass,
+            password: userInformations.password,
             lastname: userInformations.lastname,
             firstname: userInformations.firstname,
             role: userInformations.role

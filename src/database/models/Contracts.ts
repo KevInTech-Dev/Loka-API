@@ -68,21 +68,21 @@ class Contract
         declare readonly createdAt?: Date;
         declare readonly updatedAt?: Date;
         static associate(models: any) {
-            Contract.belongsTo(models.lanLord, {
+            Contract.belongsTo(models.LandLord, {
                 foreignKey: 'landlord_id',
-                as: 'landlords'
+                as: 'contractLandlord'
             });
             Contract.belongsTo(models.Tenant, {
                 foreignKey: 'tenant_id',
-                as: 'tenants'
+                as: 'contractTenant'
             });
             Contract.belongsTo(models.Property, {
                 foreignKey: 'property_id',
-                as: 'property'
+                as: 'contractProperty'
             });
-            Contract.belongsTo(models.Unit, {
+            Contract.belongsTo(models.UnitLocation, {
                 foreignKey: 'unit_id',
-                as: 'unit'
+                as: 'contractUnit'
             });
         }
     }
@@ -103,7 +103,7 @@ const initModelContract = (sequelize: Sequelize) => {
                 type: DataTypes.UUID,
                 allowNull: false,
                 references:{
-                    model: 'landLord',
+                    model: 'landlords',
                     key: 'id',
                 },
                 onDelete: "CASCADE"
@@ -112,7 +112,7 @@ const initModelContract = (sequelize: Sequelize) => {
                 type: DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'Property',
+                    model: 'property',
                     key: 'id'
                 },
                 onDelete: "CASCADE"
@@ -121,7 +121,7 @@ const initModelContract = (sequelize: Sequelize) => {
                 type: DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'Unit',
+                    model: 'unitLocation',
                     key: 'id'
                 },
                  onDelete: "CASCADE"
@@ -130,7 +130,7 @@ const initModelContract = (sequelize: Sequelize) => {
                 type: DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'Tenant',
+                    model: 'tenants',
                     key: 'id'
                 },
                 onDelete: "CASCADE"
@@ -148,11 +148,11 @@ const initModelContract = (sequelize: Sequelize) => {
                 allowNull: false,
             },
             monthly_rent: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             security_deposit: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             deposit_paid: {
@@ -161,11 +161,11 @@ const initModelContract = (sequelize: Sequelize) => {
                 defaultValue: false,
             },
             rent_due_day: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false
             },
             late_fee_grace_days:{
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             electricity_included: {
@@ -177,11 +177,11 @@ const initModelContract = (sequelize: Sequelize) => {
                 allowNull: false,
             },
             electricity_rate_per_kwh: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             water_rate_per_m3: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             other_changes: {
@@ -189,11 +189,11 @@ const initModelContract = (sequelize: Sequelize) => {
                 allowNull: true,
             },
             initial_electricity_reading: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             initial_water_reading: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             auto_renewal: {
@@ -223,7 +223,7 @@ const initModelContract = (sequelize: Sequelize) => {
                 allowNull: false
             },
         },
-        {sequelize, modelName: "Contract", tableName: "contract", timestamps: true, underscored: true, paranoid: true},
+        {sequelize, modelName: "Contract", tableName: "contracts", timestamps: true, underscored: true, paranoid: true},
     );
 };
 

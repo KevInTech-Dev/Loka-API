@@ -17,8 +17,8 @@ export class TenantRepository {
 
     async getTenantById(id: string) {
         return this.tenant.findByPk(id, {include:[{
-            model:User,
-            as: 'users'
+            model: User,
+            as: 'tenantUser',
         }]});
     }
 
@@ -32,7 +32,12 @@ export class TenantRepository {
 
     async getTenantPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.tenant.findAll({ offset, limit});
+        return this.tenant.findAll({ offset, limit, include:[
+            {
+                model: User,
+                as: 'tenantUser'
+            }
+        ]});
     }
 
     async updateTenant(id: string, data: Partial<TenantCreationAttributes>) {

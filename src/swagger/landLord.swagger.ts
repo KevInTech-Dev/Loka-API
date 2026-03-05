@@ -134,7 +134,41 @@ const landlordPath: OpenAPIV3.PathsObject = {
                 }
             }
         },
-        // Route POST supprimée du swagger pour centralisation dans users
+        post: {
+            tags: ["landLord"],
+            summary: "Complete landlord information",
+            description: "Complete landlord information with the provide informations",
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            $ref: "#/components/schemas/landlord"
+                        }
+                    }
+                }
+            },
+            responses: {
+                "201": {
+                    description: "Landlord informations completed successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/landlord"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    description: "Invalid input"
+                }
+            }
+        }
     },
     "/landlords/{id}": {
         get: {

@@ -6,7 +6,6 @@ import { TenantReponse } from "./tenant.type";
 import { NotFoundError } from "@/common/errors";
 import { CreateTenantInput } from "./tenant.schema";
 import { deleteFile, fileExists } from "@/utils/file.utils";
-import {Tenant} from "@database/models/Tenants";
 
 export class TenantService {
     private tenantRepository: TenantRepository;

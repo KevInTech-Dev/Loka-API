@@ -24,7 +24,7 @@ export interface TenantAttributes extends BaseModel {
 
 export interface TenantCreationAttributes extends Optional<
     TenantAttributes,
-    "id" | "phone_secondary" | "occupation" | "employer_name" | "employer_contact" | "emergency_contact_name" | "emergency_contact_phone" | "emergency_contact_relationship"
+    "id" | "phone_secondary" | "occupation" | "employer_name" | "employer_contact" | "emergency_contact_name" | "emergency_contact_phone" | "emergency_contact_relationship" | "id_card_front_url" | "id_card_back_url"
 > {
 }
 
@@ -53,11 +53,11 @@ class Tenant
         static associate(models: any) {
             Tenant.belongsTo(models.User, {
                 foreignKey: 'userId',
-                as: 'users'
+                as: 'tenantUser'
             });
             Tenant.hasMany(models.Contract, {
                 foreignKey: 'tenant_id',
-                as: 'contract'
+                as: 'tenantContract'
              });
         }
     }

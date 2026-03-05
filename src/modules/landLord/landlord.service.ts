@@ -15,7 +15,7 @@ export  class landLordService {
         this.userRepository = new UserRepository();
     }
 
-    async createlandLord(data: CreateLandlordInput): Promise<landLordResponse | null> {
+    async addLandlordInfo(data: CreateLandlordInput): Promise<landLordResponse | null> {
         
         //J'ai généré le numero d'enrégistrement du propriétaire
         const registrationNumber = `REG-${data.userId.substring(0,8)}-${Date.now()}`;
@@ -32,7 +32,7 @@ export  class landLordService {
             throw new DuplicateEntryError("The user already has a landlord profile");
         }
 
-        const landlord = await this.landlordRepository.createlandLord({
+        const landlord = await this.landlordRepository.addLandlordInfo({
             userId: data.userId,
             companyName: data.companyName,
             businessType: data.businessType ?? BusinessTypeEnum.PARTICULIER,

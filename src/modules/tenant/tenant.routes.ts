@@ -2,7 +2,7 @@ import {Router} from "express";
 import {TenantController} from "./tenant.controller";
 import validate from "../middleware/validate.middleware";
 import {createTenantSchema, paginatedTenantSchema, tenantIdSchema} from "./tenant.schema";
-import {multipleUpload, singleUpload} from "@modules/middleware/upload.middleware";
+import {singleUpload} from "@modules/middleware/upload.middleware";
 
 
 const router: Router = Router();
@@ -10,18 +10,25 @@ const tenantController = new TenantController();
 
 router.get('', validate(paginatedTenantSchema, 'query'), tenantController.getAllTenants);
 
-router.post('',multipleUpload({
-    fieldName: 'id_card_photo',
+router.post('',singleUpload({
+    fieldName: 'id_card_front_url',
     subFolder: 'Tenant_card',
     fileType: 'image',
-    maxFileSize: 2,
-}), validate(createTenantSchema, 'body'), tenantController.createTenant);
+}), 
+singleUpload({
+    fieldName: 'id_card_back_url',
+    subFolder: 'Tenant_card',
+    fileType: 'image',
+}),  validate(createTenantSchema, 'body'), tenantController.createTenant);
 
-router.patch("/id_card_photo/:id", multipleUpload({
-    fieldName: 'id_card_photo',
+router.patch("/id_card_photo/:id", singleUpload({
+    fieldName: 'id_card_front_url',
     subFolder: 'Tenant_card',
     fileType: 'image',
-    maxFileSize: 2,
+}) ,singleUpload({
+    fieldName: 'id_card_back_url',
+    subFolder: 'Tenant_card',
+    fileType: 'image',
 }) , validate({
     params: tenantIdSchema,
 }), tenantController.addCardPhoto);
