@@ -93,7 +93,7 @@ const tenantSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Relatioin avec la personne à prévenir"
             }
         },
-         required: ["userId", "date_of_birth", "gender", "nationality", "phone_primary", "id_card_type", "id_card_number", ...userSchema["createUserRequest"]["required"]]
+         required: ["date_of_birth", "gender", "nationality", "phone_primary", "id_card_type", "id_card_number", ...userSchema["createUserRequest"]["required"]]
     },
 
     paginatedTenant: {
@@ -190,7 +190,12 @@ const tenantPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/tenant"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/tenant"
+                                    }
+                                }
                             }
                         }
                     }
@@ -346,7 +351,6 @@ const tenantPath: OpenAPIV3.PathsObject = {
                                     description: "The id front card photo file to upload"
                                 }
                             },
-                            required: ["id_card_front", "id_card_back"]
                         }
                     }
                 }

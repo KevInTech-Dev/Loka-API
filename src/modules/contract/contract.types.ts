@@ -25,7 +25,6 @@ export type contractResponse = BaseTypes & {
         initial_water_reading: number;
         auto_renewal: boolean;
         special_terms: string;
-        contract_document_url: string;
         contract_status: ContractStatusEnum;
         is_signed_by_landlord: boolean;
         is_signed_by_tenant: boolean;

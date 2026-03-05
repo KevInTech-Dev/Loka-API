@@ -86,8 +86,7 @@ const contractSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "The water rate per m3",
             },
             other_changes: {
-                type: "string",
-                default: "",
+                type: "object",
                 description: "The changes",
             },
             initial_electricity_reading: {
@@ -110,13 +109,8 @@ const contractSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 default: "",
                 description: "Special terms",
             },
-            contract_document_url: {
-                type: "string",
-                default: "",
-                description: "The document URL",
-            },
         },
-        required: ["landlord_id", "tenant_id","property_id", "unit_id", "contract_type" ,"contract_start_date", "contract_end_date", "monthly_rent", "security_deposit",  "rent_due_day","late_fee_grace_days", "electricity_included", "water_included", "other_changes", "initial_electricity_reading", "initial_water_reading", "auto_renewal", "special_terms", "contract_document_url"]
+        required: ["landlord_id", "tenant_id","property_id", "unit_id", "contract_type" ,"contract_start_date", "contract_end_date", "monthly_rent", "security_deposit",  "rent_due_day","late_fee_grace_days", "electricity_included", "water_included",  "initial_electricity_reading", "initial_water_reading", "auto_renewal", "special_terms", ]
     },
     paginatedContract: {
         type: "object",
@@ -200,7 +194,7 @@ const contractPath: OpenAPIV3.PathsObject = {
             requestBody: {
                 required: true,
                 content: {
-                    "multipart/form-data": {
+                    "application/json": {
                         schema: {
                             $ref: "#/components/schemas/contract"
                         }
@@ -286,7 +280,7 @@ const contractPath: OpenAPIV3.PathsObject = {
             requestBody: {
                 required: true,
                 content: {
-                    "multipart/form-data": {
+                    "application/json": {
                         schema: {
                             $ref: "#/components/schemas/contract"
                         }

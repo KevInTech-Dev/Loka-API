@@ -105,7 +105,8 @@ const initModelTenant = (sequelize: Sequelize) => {
                 },
                 id_card_type: {
                     type: DataTypes.ENUM(...Object.values(idCardTypeEnum)),
-                    allowNull: false
+                    allowNull: false,
+                    defaultValue: idCardTypeEnum.CNI,
                 },
                 id_card_number: {
                     type: DataTypes.STRING,

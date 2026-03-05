@@ -2,37 +2,49 @@ import {Router} from "express";
 import {TenantController} from "./tenant.controller";
 import validate from "../middleware/validate.middleware";
 import {createTenantSchema, paginatedTenantSchema, tenantIdSchema} from "./tenant.schema";
-import {singleUpload} from "@modules/middleware/upload.middleware";
-import authMiddleware from "../middleware/authMiddleware";
-import { authorize } from "../middleware/authorization.middleware";
+import {fieldsUpload} from "@modules/middleware/upload.middleware";
+import authMiddleware from "@modules/middleware/authMiddleware";
 
 
 const router: Router = Router();
+router.use(authMiddleware);
 const tenantController = new TenantController();
 
-router.get('', authMiddleware, authorize(['proprietaire', 'admin']),validate(paginatedTenantSchema, 'query'), tenantController.getAllTenants);
+router.get('', validate(paginatedTenantSchema, 'query'), tenantController.getAllTenants);
 
-router.post('', authMiddleware, authorize(['proprietaire', 'admin']),singleUpload({
-    fieldName: "photo",
+router.post('', fieldsUpload({
+    fields: [
+        {name: 'photo', maxCount: 1},
+        {name: 'id_card_back_url', maxCount: 1},
+        {name: 'id_card_front_url', maxCount: 1},
+    ],
+    subFolder: 'Tenant_card',
     fileType: 'image',
-    subFolder: "profiles",
-}) /*,singleUpload({
-    fieldName: "id_card_front_url ",
-    fileType: 'image',
-    subFolder: "tenants",
-}), singleUpload({
-    fieldName: "id_card_back_url ",
-    fileType: 'image',
-    subFolder: "tenants",
-})*/, validate(createTenantSchema, 'body'), tenantController.createTenant);
+}), validate(createTenantSchema, 'body'), tenantController.createTenant);
 
-router.get('/:id', authMiddleware, authorize(['proprietaire', 'admin']),tenantController.getTenant);
 
-router.patch('/:id', authMiddleware, authorize(['proprietaire', 'admin']),validate({
+router.patch("/photo/:id",
+    fieldsUpload({
+        fields: [
+            {name: 'id_card_front_url', maxCount: 1},
+            {name: 'id_card_back_url', maxCount: 1},
+        ],
+        subFolder: 'Tenant_card',
+        fileType: 'image',
+    }),
+    validate({
+        params: tenantIdSchema,
+    }),
+    tenantController.addCardPhoto
+);
+
+router.get('/:id', tenantController.getTenant);
+
+router.patch('/:id', validate({
     params: tenantIdSchema,
     body: createTenantSchema
 }), tenantController.updateTenant);
 
-router.delete('/:id', authMiddleware, authorize(['proprietaire', 'admin']),validate(tenantIdSchema, 'params'), tenantController.deleteTenant);
+router.delete('/:id', validate(tenantIdSchema, 'params'), tenantController.deleteTenant);
 
 export default router;

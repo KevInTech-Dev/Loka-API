@@ -1,9 +1,11 @@
+import authMiddleware from "../middleware/authMiddleware";
 import { contractController } from "./contract.controller";
 import { contractIdSchema, contractPaginationSchema, createContractSchema } from "./contract.schemas";
 import validate from "@modules/middleware/validate.middleware";
 import {Router} from "express";
 
 const router: Router = Router();
+router.use(authMiddleware);
 const ContractController = new contractController();
 
 router.get('', validate(contractPaginationSchema, 'query'), ContractController.getAllContract);
