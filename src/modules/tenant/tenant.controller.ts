@@ -37,6 +37,7 @@ export class TenantController {
 
     createTenant = async (req: Request, res: Response) => {
         const data: CreateTenantInput = req.body;
+        const files = req.files as { [fieldname: string]: Express.Multer.File[] };
         return res.send({
             data: await this.tenantService.createTenant(data),
         });
