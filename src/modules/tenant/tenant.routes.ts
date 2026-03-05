@@ -15,8 +15,26 @@ router.post('', fieldsUpload({
         {name: 'photo', maxCount: 1},
         {name: 'id_card_back_url', maxCount: 1},
         {name: 'id_card_front_url', maxCount: 1},
-    ]
+    ],
+    subFolder: 'Tenant_card',
+    fileType: 'image',
 }), validate(createTenantSchema, 'body'), tenantController.createTenant);
+
+
+router.patch("/id_card_photo/:id",
+    fieldsUpload({
+        fields: [
+            {name: 'id_card_back_url', maxCount: 1},
+            {name: 'id_card_front_url', maxCount: 1},
+        ],
+        subFolder: 'Tenant_card',
+        fileType: 'image',
+    }),
+    validate({
+        params: tenantIdSchema,
+    }),
+    tenantController.addCardPhoto
+);
 
 router.get('/:id', tenantController.getTenant);
 

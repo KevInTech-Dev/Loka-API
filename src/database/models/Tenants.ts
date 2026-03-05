@@ -1,5 +1,6 @@
 import { BaseModel } from "@/common/models/base.model";
 import { GenderEnum } from "@/enums/GenderEnum";
+import { idCardTypeEnum } from "@/enums/idCardTypeEnum";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface TenantAttributes extends BaseModel {
@@ -9,53 +10,58 @@ export interface TenantAttributes extends BaseModel {
     nationality: string;
     phone_primary: string;
     phone_secondary?: string;
-    id_card_type: string;
+    id_card_type: idCardTypeEnum;
     id_card_number: string;
-    id_card_front_url: string;
-    id_card_back_url: string;
+    id_card_front_url?: string;
+    id_card_back_url?: string;
     occupation?: string;
     employer_name?: string;
     employer_contact?: string;
     emergency_contact_name?: string;
     emergency_contact_phone?: string;
-    emergenc_contact_relationship?: string;
-    deletedAt?: Date | null;
+    emergency_contact_relationship?: string;
 }
 
 export interface TenantCreationAttributes extends Optional<
     TenantAttributes,
-    "id" | "phone_secondary" | "occupation" | "employer_name" | "employer_contact" | "emergency_contact_name" | "emergency_contact_phone" | "emergenc_contact_relationship"
+    "id" | "phone_secondary" | "occupation" | "employer_name" | "employer_contact" | "emergency_contact_name" | "emergency_contact_phone" | "emergency_contact_relationship" | "id_card_front_url" | "id_card_back_url"
 > {
 }
 
 class Tenant
     extends Model<TenantAttributes, TenantCreationAttributes>
     implements TenantAttributes {
-    declare id: string;
-    declare userId: string;
-    declare date_of_birth: Date;
-    declare gender: GenderEnum;
-    declare nationality: string;
-    declare phone_primary: string;
-    declare phone_secondary?: string;
-    declare id_card_type: string;
-    declare id_card_number: string;
-    declare id_card_front_url: string
-    declare id_card_back_url: string;
-    declare occupation?: string;
-    declare employer_name?: string;
-    declare employer_contact?: string;
-    declare emergency_contact_name?: string;
-    declare emergency_contact_phone?: string;
-    declare emergenc_contact_relationship?: string;
-    declare deletedAt?: Date | null;
-    static associate(models: any) {
-        Tenant.belongsTo(models.User, {
-            foreignKey: 'userId',
-            as: 'user'
-        });
+        declare id: string;
+        declare userId: string;
+        declare date_of_birth: Date;
+        declare gender: GenderEnum;
+        declare nationality: string;
+        declare phone_primary: string;
+        declare phone_secondary?: string;
+        declare id_card_type: idCardTypeEnum;
+        declare id_card_number: string;
+        declare id_card_front_url?: string
+        declare id_card_back_url?: string;
+        declare occupation?: string;
+        declare employer_name?: string;
+        declare employer_contact?: string;
+        declare emergency_contact_name?: string;
+        declare emergency_contact_phone?: string;
+        declare emergenc_contact_relationship?: string;
+        declare readonly createdAt: Date;
+        declare readonly updatedAt: Date;
+        static associate(models: any) {
+            Tenant.belongsTo(models.User, {
+                foreignKey: 'userId',
+                as: 'tenantUser'
+            });
+            Tenant.hasMany(models.Contract, {
+                foreignKey: 'tenant_id',
+                as: 'tenantContract'
+             });
+        }
     }
-}
+
 
 const initModelTenant = (sequelize: Sequelize) => {
     Tenant.init(
@@ -91,60 +97,55 @@ const initModelTenant = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true
+                },
+                phone_secondary: {
+                    type: DataTypes.STRING,
+                    allowNull: true,
+                    unique: true,
+                },
+                id_card_type: {
+                    type: DataTypes.ENUM(...Object.values(idCardTypeEnum)),
+                    allowNull: false
+                },
+                id_card_number: {
+                    type: DataTypes.STRING,
+                    allowNull: false
+                },
+                id_card_front_url: {
+                    type: DataTypes.STRING,
+                    allowNull: true
+                },
+                id_card_back_url: {
+                    type: DataTypes.STRING,
+                    allowNull: true
+                },
+                occupation: {
+                    type: DataTypes.STRING,
+                    allowNull: true
+                },
+                employer_name: {
+                    type: DataTypes.STRING,
+                    allowNull: true
+                },
+                employer_contact: {
+                    type: DataTypes.STRING,
+                    allowNull: true
+                },
+                emergency_contact_name: {
+                    type: DataTypes.STRING,
+                    allowNull: true
+                },
+                emergency_contact_phone: {
+                    type: DataTypes.STRING,
+                    allowNull: true
+                },
+                emergency_contact_relationship: {
+                    type: DataTypes.STRING,
+                    allowNull: true
+                }
             },
-            phone_secondary: {
-                type: DataTypes.STRING,
-                allowNull: true,
-                unique: true,
-            },
-            id_card_type: {
-                type: DataTypes.STRING,
-                allowNull: false
-            },
-            id_card_number: {
-                type: DataTypes.STRING,
-                allowNull: false
-            },
-            id_card_front_url: {
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            id_card_back_url: {
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            occupation: {
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            employer_name: {
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            employer_contact: {
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            emergency_contact_name: {
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            emergency_contact_phone: {
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            emergenc_contact_relationship: {
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            deletedAt: {
-                type: DataTypes.DATE,
-                allowNull: true,
-                defaultValue: null,
-            }
-        },
-        { sequelize, modelName: "Tenant", tableName: "tenants", timestamps: true, underscored: true },
-    );
-};
+            {sequelize, modelName: "Tenant", tableName: "tenants", timestamps: true, underscored: true, paranoid:true},
+        );
+    };
 
 export { Tenant, initModelTenant }

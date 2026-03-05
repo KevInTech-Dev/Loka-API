@@ -1,0 +1,32 @@
+import { BaseTypes } from "@/common/models/base.model";
+import { ContractStatusEnum } from "@/enums/ContractStatusEnum";
+import { ContractTypeEnum } from "@/enums/ContractTypeEnum";
+
+export type contractResponse = BaseTypes & {
+        contract_number: string;
+        landlord_id: string;
+        property_id: string;
+        unit_id: string;
+        tenant_id: string;
+        contract_type: ContractTypeEnum;
+        contract_start_date: Date;
+        contract_end_date: Date;
+        monthly_rent: number;
+        security_deposit: number;
+        deposit_paid: boolean;
+        rent_due_day: number;
+        late_fee_grace_days: number;
+        electricity_included: boolean;
+        water_included: boolean;
+        electricity_rate_per_kwh: number;
+        water_rate_per_m3: number;
+        other_changes: JSON;
+        initial_electricity_reading: number;
+        initial_water_reading: number;
+        auto_renewal: boolean;
+        special_terms: string;
+        contract_document_url: string;
+        contract_status: ContractStatusEnum;
+        is_signed_by_landlord: boolean;
+        is_signed_by_tenant: boolean;
+}

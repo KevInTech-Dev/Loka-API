@@ -12,6 +12,7 @@ import { initUnitType } from "./models/UnitType";
 import { initUnitLocation } from "./models/UnitLocation";
 import { initModelTenant } from "./models/Tenants";
 import { initRefreshToken } from "./models/RefreshToken";
+import { initModelContract } from "./models/Contracts";
 
 
 const sequelize = new Sequelize({
@@ -65,6 +66,7 @@ const initModels = async () => {
   initUnitLocation(sequelize);
   initUnitType(sequelize);
   initRefreshToken(sequelize);
+  initModelContract(sequelize);
 
 
   initModelTenant(sequelize);

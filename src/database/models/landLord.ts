@@ -15,13 +15,12 @@ export interface landLordAtributes extends BaseModel {
     city?: string;
     country?: string;
     isVerified: boolean;
-    deletedAt?: Date | null;
 }
 
 //l'id est optionnel parceque Sequelize génère le UUID automatiquement
 export interface landLordCreationAtributes extends Optional<
     landLordAtributes,
-    "id" | "companyName" | "phoneSecondary" | "city" | "country"
+    "id" | "companyName" | "phoneSecondary" | "city" | "country"|'creditBalance'
 > {
 }
 
@@ -43,11 +42,14 @@ class LandLord
         declare isVerified: boolean;
         declare readonly createdAt: Date;
         declare readonly updatedAt?: Date;
-        declare deletedAt: Date | null;
         static associate(models: any) {
             LandLord.belongsTo(models.User, { 
                 foreignKey: 'userId', 
-                as: 'user' 
+                as: 'landlordUser',
+            });
+            LandLord.hasMany(models.Contract, {
+                foreignKey: 'landlord_id',
+                as: 'landlordContract'
             });
         }
     }
@@ -95,11 +97,6 @@ const initModelandLord = (sequelize: Sequelize) => {
                 allowNull: false,
                 unique: true
             },
-            deletedAt: {
-                type: DataTypes.DATE,
-                allowNull: true,
-                defaultValue: null,
-            },
             phoneSecondary: {
                 type: DataTypes.STRING,
                 allowNull: true,
@@ -123,7 +120,7 @@ const initModelandLord = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "landLord", tableName: "landlords", timestamps: true, underscored: true, paranoid: true,},
+        {sequelize, modelName: "LandLord", tableName: "landlords", timestamps: true, underscored: true, paranoid: true,},
     );
 };
 
