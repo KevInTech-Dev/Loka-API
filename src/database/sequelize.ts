@@ -12,6 +12,9 @@ import { initUnitType } from "./models/UnitType";
 import { initUnitLocation } from "./models/UnitLocation";
 import { initModelTenant } from "./models/Tenants";
 import { initRefreshToken } from "./models/RefreshToken";
+import { initmodelPermissions } from "./models/Permissions";
+import { initModelPermissionsAbonnement } from "./models/PermissionsAbonnement";
+import { initModelUtilisateur_Abonnement } from "./models/Utilisateur_Abonnement";
 
 
 const sequelize = new Sequelize({
@@ -65,6 +68,9 @@ const initModels = async () => {
   initUnitLocation(sequelize);
   initUnitType(sequelize);
   initRefreshToken(sequelize);
+  initmodelPermissions(sequelize);
+  initModelPermissionsAbonnement(sequelize);
+  initModelUtilisateur_Abonnement(sequelize)
 
 
   initModelTenant(sequelize);

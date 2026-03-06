@@ -4,8 +4,9 @@ import { BaseModel } from "@common/models/base.model";
 
 
 export interface AbonnementAttributes extends BaseModel {
-
     planAbonnement: PlanAbonnementEnum;
+    nombreMaxProprietes: number;
+    nombreMaxUnitLocation: number;
     label: string;
     prix: number;
     detail: string;
@@ -15,26 +16,28 @@ export interface AbonnementAttributes extends BaseModel {
 
 
 export interface AbonnementCreationAttributes
-    extends Optional<AbonnementAttributes, "id" | "createdAt" | "updatedAt"> { }
+    extends Optional<AbonnementAttributes, "id" | "createdAt" | "updatedAt" | "other"> { }
 
 
-class abonnements
+class Abonnements
     extends Model<AbonnementAttributes, AbonnementCreationAttributes>
     implements AbonnementAttributes {
 
     declare id: string;
     declare planAbonnement: PlanAbonnementEnum;
+    declare nombreMaxProprietes: number;
+    declare nombreMaxUnitLocation: number;
     declare label: string;
     declare prix: number;
     declare detail: string;
     declare other: JSON;
-    declare createdAt: Date;
-    declare updatedAt: Date;
+    declare readonly createdAt: Date;
+    declare readonly updatedAt: Date;
 }
 
 
 const initModelAbonnement = (sequelize: Sequelize) => {
-    abonnements.init(
+    Abonnements.init(
         {
             id: {
                 type: DataTypes.UUID,
@@ -46,30 +49,46 @@ const initModelAbonnement = (sequelize: Sequelize) => {
                 allowNull: false,
                 defaultValue: PlanAbonnementEnum.BASIC,
             },
+
+            nombreMaxProprietes: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+
+            nombreMaxUnitLocation: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+
             label: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
+
             prix: {
                 type: DataTypes.FLOAT,
                 allowNull: false,
             },
+
             detail: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
+
             other: {
                 type: DataTypes.JSON,
                 allowNull: true,
             },
         },
         {
-            sequelize, modelName: "Abonnement", tableName: 'abonnements', timestamps: true,
+            sequelize, modelName: "Abonnement",
+            tableName: 'abonnements',
+            timestamps: true,
             underscored: true,
+            paranoid: true,
         }
     );
 };
 
 
-export { abonnements, initModelAbonnement };
-//export type { AbonnementAttributes, AbonnementCreationAttributes };
+export { Abonnements, initModelAbonnement };

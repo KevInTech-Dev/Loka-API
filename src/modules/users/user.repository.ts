@@ -1,46 +1,34 @@
 import { User, UserAttributes, UserCreationAttributes } from "@database/models/Users";
-import { ModelStatic } from "sequelize";
+import { CreationAttributes, ModelStatic } from "sequelize";
 import { WhereQueryUser } from "@modules/users/user.types";
+import { BaseRepositoryImpl } from "@common/base.repository";
 
-export class UserRepository {
-    private user: ModelStatic<User>
+export class UserRepository extends BaseRepositoryImpl<User> {
+
 
     constructor() {
-        this.user = User;
+        super(User);
+
     }
 
-    async createUser(data: UserCreationAttributes) {
-        return await this.user.create(data);
+
+
+    create(data: CreationAttributes<User>): Promise<User> {
+        return this.model.create(data);
     }
 
-    async getUserById(id: string) {
-        return this.user.findByPk(id);
+    async findById(id: string) {
+        return this.model.findByPk(id);
     }
 
 
     async getUserPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.user.findAll({ offset, limit });
-    }
-
-    async updateUser(id: string, data: Partial<UserCreationAttributes>) {
-        const user = await this.getUserById(id);
-        if (!user) return null;
-
-        await user.update(data);
-        return user;
-    }
-
-    async deleteUser(id: string) {
-        const user = await this.getUserById(id);
-        if (!user) return false;
-
-        await user.destroy();
-        return true;
+        return this.model.findAll({ offset, limit });
     }
 
     getUserByAttribut(attribut: keyof UserAttributes, value: string) {
-        return this.user.findOne({
+        return this.model.findOne({
             where: {
                 [attribut]: value
             }
@@ -49,11 +37,11 @@ export class UserRepository {
 
 
     getUserByMutipleAttributs(attribut: WhereQueryUser) {
-
-        return this.user.findOne({
+        return this.model.findOne({
             where: {
                 ...attribut
             }
         })
     }
+
 }

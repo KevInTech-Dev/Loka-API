@@ -12,8 +12,12 @@ const userController = new UserController();
 
 // get all users
 router.get("",
-    authMiddleware, authorize(["admin"]),
+    authMiddleware,
+    authorize(["admin", "proprietaire"]),
     validate(defaultPaginationQuery, 'query'), userController.getAllUsers);
+
+// router.get("", userController.getAllUsers);
+
 
 // create user
 router.post("", authMiddleware, authorize(["admin"]), singleUpload({

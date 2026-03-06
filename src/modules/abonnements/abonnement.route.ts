@@ -1,24 +1,30 @@
 import {Router} from "express";
 import {AbonnementController} from "@/modules/abonnements/abonnement.controller";
+import validate from "../middleware/validate.middleware";
+import { createAbonnementSchema, updateAbonnementSchema, abonnementIdSchema, getAbonnementSchema } from "./abonnement.schema";
 
 
 const router: Router = Router();
 const abonnementController = new AbonnementController();
 
-// get all subscriptions
-router.get('', abonnementController.getAllAbonnements);
+// get all subscriptions paginated
 
+router.get('/',    validate({query: getAbonnementSchema}), abonnementController.getAbonnementPaginated);//validate({body: abonnementsSchema}),
 
 // get subscription by id
-router.get('/:id', abonnementController.getAbonnement);
+router.get('/:id', validate({ params: abonnementIdSchema }), abonnementController.getAbonnementByid);
+
 
 // update subscription by id
-router.patch('', abonnementController.updateAbonnement);
+router.patch('/:id', validate({
+    params: abonnementIdSchema,
+    body: updateAbonnementSchema,
+}), abonnementController.createAbonnement);
 
 // create subscription
-router.post('', abonnementController.createAbonnement);
+router.post('',  validate({ body: createAbonnementSchema }), abonnementController.createAbonnement);
 
 // delete subscription by id
-router.delete('/:id', abonnementController.deleteAbonnement);
+router.delete('/:id', validate({ params: abonnementIdSchema }) ,abonnementController.deleteAbonnement);
 
 export default router;

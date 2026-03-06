@@ -29,14 +29,14 @@ export class AuthService {
             throw new NotFoundError("User not found");
         }
         const verifyPassword = await compareHash(existingUser.password.trim(), param.password.trim());
-        console.log("value of the verifyPassword:", verifyPassword + existingUser.password + param.password);
+        //console.log("value of the verifyPassword:", verifyPassword + existingUser.password + param.password);
         if (!verifyPassword) {
             throw new AuthenticationError("Incorrect password");
         }
 
         return {
-            accessToken: this.tokenService.generateSessionToken(existingUser),
-            refreshToken: this.tokenService.generateRefreshToken(existingUser)
+            accessToken: await this.tokenService.generateSessionToken(existingUser),
+            refreshToken: await this.tokenService.generateRefreshToken(existingUser)
         }
 
     }

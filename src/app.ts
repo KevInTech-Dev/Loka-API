@@ -4,6 +4,7 @@ import swaggerUi from "swagger-ui-express";
 import env from "@config/env";
 import userRoute from "@modules/users/user.route";
 import abonnementRoute from "@modules/abonnements/abonnement.route";
+import utilisateur_AbonnementRoute from "@modules/utilisateur_abonnement/utilisateur_abonnement.route";
 import swaggerSpec from "@/swagger";
 import tenantRoute from "@/modules/tenant/tenant.routes"
 import landLordRoute from "@/modules/landLord/landLord.route";
@@ -66,6 +67,8 @@ app.use(`${API_PREFIX}/unitLocation`, unitLocationRoute);
 app.use(`${API_PREFIX}/propertyUnitLocation`, propertyUnitLocationRoute);
 app.use(`${API_PREFIX}/tenants`, tenantRoute);
 app.use(`${API_PREFIX}/auth`, authRoute);
+app.use(`${API_PREFIX}/utilisateur-abonnements`, utilisateur_AbonnementRoute);
+
 
 
 // 404 handler

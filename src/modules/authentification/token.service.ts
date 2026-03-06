@@ -6,26 +6,50 @@ import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto'
 import { NotFoundError } from "@/common/errors";
 import { UserRepository } from "../users/user.repository";
-import { TokenResponse } from "./auth.type";
+import { PayLoadToken, TokenResponse } from "./auth.type";
 import { RefreshTokenAttributes } from "@/database/models/RefreshToken";
 import { PaginatedResult } from "@/common/paginatedResult";
+// import { PermissionsAbonnementRepository } from "../PermissionsAbonnement/permissionsAbonnement.repository";
+// import { Utilisateur_AbonnementService } from "../utilisateur_abonnement/utilisateur_abonnement.service";
+// import { Utilisateur_AbonnementRepository } from "../utilisateur_abonnement/utilisateur_abonnement.repository";
 
 export class TokenService {
 
     private readonly refreshTokenRepository: RefreshTokenRepository;
     private readonly userRepository: UserRepository;
+    // private readonly permissionAbonnementRepository: PermissionsAbonnementRepository
+    // private readonly userAbonnementRepository: Utilisateur_AbonnementRepository
 
     constructor() {
         this.refreshTokenRepository = new RefreshTokenRepository();
         this.userRepository = new UserRepository()
+        // this.permissionAbonnementRepository = new PermissionsAbonnementRepository()
+        // this.userAbonnementRepository = new Utilisateur_AbonnementRepository()
     }
 
-    generateSessionToken(user: UserAttributes): string {
+    async generateSessionToken(user: UserAttributes,): Promise<string> {
+        // // console.log("USER_ID-->", user.id);
+        // //Récuperer l'abonnment actif
+        // const userAbonnementActif = await this.userAbonnementRepository.getUserAbonnementByUserId(user.id);
+        // // console.log("USER:->", userAbonnementActif);
+        // // console.log("ABONNEMENT_ID:->", userAbonnementActif.abonnementId)
+        // //Récuperer les permissions associé à l'abonnement actif
+        // const allowPermisison = await this.permissionAbonnementRepository.getAbonnementPermisson(userAbonnementActif.abonnementId);
+
+        // console.log("PERMISSIONS : ---> ", allowPermisison);
+
+        let permission: string[] = [];
+        const payload: PayLoadToken = {
+            userId: user.id,
+            role: user.role,
+            phoneNumber: user.phoneNumber,
+            username: user.username
+        }
         return jwt.sign(
-            { userId: user.id, role: user.role, phoneNumber: user.phoneNumber, username: user.username }, process.env.JWT_SECRET as string, { expiresIn: env.ACCESS_TOKEN_EXPRIRY_TIME });
+            payload, process.env.JWT_SECRET as string, { expiresIn: env.ACCESS_TOKEN_EXPRIRY_TIME });
     }
 
-    generateRefreshToken(user: UserAttributes): string {
+    async generateRefreshToken(user: UserAttributes): Promise<string> {
         const expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + 7);
         const refreshToken = uuidv4();
@@ -73,7 +97,7 @@ export class TokenService {
             throw new Error("Token expired")
         }
 
-        const userToAssociate = await this.userRepository.getUserById(isTokenExisting.userId);
+        const userToAssociate = await this.userRepository.findById(isTokenExisting.userId);
         if (!userToAssociate) {
             throw new NotFoundError("This user was")
         }
@@ -81,8 +105,8 @@ export class TokenService {
         await this.refreshTokenRepository.destroyRefreshToken(id);
 
         return {
-            accessToken: this.generateSessionToken(userToAssociate),
-            refreshToken: this.generateRefreshToken(userToAssociate)
+            accessToken: await this.generateSessionToken(userToAssociate),
+            refreshToken: await this.generateRefreshToken(userToAssociate)
         }
     }
 }

@@ -21,7 +21,7 @@ export  class landLordService {
         const registrationNumber = `REG-${data.userId.substring(0,8)}-${Date.now()}`;
 
         //  Vérifier que l'utilisateur existe ou pas
-        const user = await this.userRepository.getUserById(data.userId);
+        const user = await this.userRepository.findById(data.userId);
         if (!user) {
            throw new NotFoundError("User ");
         }
@@ -33,6 +33,7 @@ export  class landLordService {
         }
 
         const landlord = await this.landlordRepository.createlandLord({
+             id: "",
             userId: data.userId,
             companyName: data.companyName,
             businessType: data.businessType ?? BusinessTypeEnum.PARTICULIER,
@@ -43,7 +44,8 @@ export  class landLordService {
             address: data.address,
             city: data.city,
             country: data.country,
-            isVerified: false
+            isVerified: false,
+            creditBalance: 0,
         });
 
         return {

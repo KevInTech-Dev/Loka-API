@@ -17,7 +17,7 @@ export class UserService {
 
     const haspass = await hashWord(data.password);
 
-    const user = await this.userRepository.createUser({
+    const user = await this.userRepository.create({
       email: data.email,
       username: data.username,
       password: haspass,
@@ -50,7 +50,7 @@ export class UserService {
 
 
   async addPhoto(id: string, file: Express.Multer.File) {
-    const user = await this.userRepository.getUserById(id);
+    const user = await this.userRepository.findById(id);
 
     if (!user) {
       throw new NotFoundError("User");
@@ -67,7 +67,7 @@ export class UserService {
     }
 
 
-    const updatedUser = await this.userRepository.updateUser(id, {
+    const updatedUser = await this.userRepository.update(id, {
       profilePhotoUrl: file.path,
     });
 
@@ -92,7 +92,7 @@ export class UserService {
   }
 
   async getUserById(id: string): Promise<UserResponse | null> {
-    const user = await this.userRepository.getUserById(id);
+    const user = await this.userRepository.findById(id);
 
     if (!user) {
       throw new NotFoundError("User not found");
@@ -139,7 +139,7 @@ export class UserService {
     id: string,
     data: Partial<CreateUserInput>,
   ): Promise<UserResponse | null> {
-    const updatedUser = await this.userRepository.updateUser(id, data);
+    const updatedUser = await this.userRepository.update(id, data);
     if (!updatedUser) {
       return null;
     }
@@ -160,7 +160,7 @@ export class UserService {
   }
 
   async deleteUser(id: string): Promise<boolean> {
-    const deleted = await this.userRepository.deleteUser(id);
+    const deleted = await this.userRepository.softDelete(id);
     if (!deleted) {
       throw new Error("User not found");
     }

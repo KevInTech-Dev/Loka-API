@@ -34,6 +34,14 @@ export abstract class BaseRepositoryImpl<T extends Model> implements BaseReposit
         const record = await this.findById(id);
         if (!record) return false;
 
+        await record.destroy({ ...options, force: true });
+        return true;
+    }
+
+    async softDelete(id: string, options?: UpdateOptions): Promise<boolean> {
+        const record = await this.findById(id);
+        if (!record) return false;
+
         await record.destroy({ ...options, force: false });
         return true;
     }
