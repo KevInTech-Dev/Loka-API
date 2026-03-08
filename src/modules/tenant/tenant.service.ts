@@ -92,9 +92,9 @@ export class TenantService {
         }
 
         if (files.back) {
-        if (tenant.id_card_back_url && fileExists(tenant.id_card_back_url)) {
-            deleteFile(tenant.id_card_back_url);
-        }
+            if (tenant.id_card_back_url && fileExists(tenant.id_card_back_url)) {
+                deleteFile(tenant.id_card_back_url);
+            }
             updateData.id_card_back_url = files.back.path;
         }
 
@@ -102,7 +102,7 @@ export class TenantService {
 
     }
 
-    async getTenantById(id: string) {
+    async getTenantById(id: string): Promise<TenantReponse | null>{
         const tenant = await this.tenantRepository.getTenantById(id);
         if (!tenant) {
             throw new NotFoundError("Tenant");

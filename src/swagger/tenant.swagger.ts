@@ -122,6 +122,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["Tenant"],
             summary: "Get all tenants with pagination",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a paginated list of all tenants in the system",
             parameters: [
                 {
@@ -173,6 +174,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["Tenant"],
             summary: "Create a new tenant",
+            security: [{ bearerAuth: [] }],
             description: "Create a new tenant with the provide informations",
             requestBody: {
                 required: true,
@@ -210,6 +212,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["Tenant"],
             summary: "Get tenant by ID",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a tenant by their unique ID",
             parameters: [
                 {
@@ -247,6 +250,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
         patch: {
             tags: ["Tenant"],
             summary: "Update tenant by ID",
+            security: [{ bearerAuth: [] }],
             description: "Update the information of the tenant by their unique ID",
             parameters: [
                 {
@@ -294,6 +298,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
         delete: {
             tags: ["Tenant"],
             summary: "Delete tenant by ID",
+            security: [{ bearerAuth: [] }],
             description: "Delete a tenant by their unique ID",
             parameters: [
                 {
@@ -319,6 +324,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
      "/tenants/photo/{id}": {
         patch: {
             tags: ["Tenant"],
+            security: [{ bearerAuth: [] }],
             summary: "Update tenant id card photo",
             description: "Upload id card photo for a tenant by their unique ID",
             parameters: [
