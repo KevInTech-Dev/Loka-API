@@ -5,6 +5,7 @@ import { StatusFactures } from "@/enums/StatusFacturesEnum";
 
 
 export interface FactureAttributes extends BaseModel {
+
     numeroFacture: string;
     dateEmission: Date;
     invoiceType: InvoiceType;

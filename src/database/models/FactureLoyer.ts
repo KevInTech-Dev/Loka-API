@@ -1,8 +1,10 @@
 import { BaseModel } from "@/common/models/base.model";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import {FactureAttributes} from "@database/models/Facture";
+import { InvoiceType } from "@/enums/InvoiceTypeEnume";
+import { StatusFactures } from "@/enums/StatusFacturesEnum";
 
-export interface FactureLoyerAttributes extends BaseModel {
-    
+export interface FactureLoyerAttributes extends FactureAttributes {
     unitLocation: string;
     idTenant: string;
     prixLoyer: number;
@@ -11,16 +13,22 @@ export interface FactureLoyerAttributes extends BaseModel {
 export interface FactureLoyerCreationAttributes extends Optional<
     FactureLoyerAttributes,
     "id" | "createdAt" | "updatedAt"
-> { }
+> {
+}
 
 class FactureLoyer extends Model<FactureLoyerAttributes, FactureLoyerCreationAttributes>
     implements FactureLoyerAttributes {
-
+    declare numeroFacture: string;
+    declare dateEmission: Date;
+    declare invoiceType: InvoiceType;
+    declare dateEcheance: Date;
+    declare status: StatusFactures;
+    declare notes?: string;
+    declare isTva: boolean;
     declare id: string;
     declare unitLocation: string;
     declare idTenant: string;
     declare prixLoyer: number;
-
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
 }
@@ -52,7 +60,7 @@ const initModelFactureLoyer = (sequelize: Sequelize) => {
         },
         {
             sequelize,
-            tableName: "factures_loyer",
+            tableName: "facturesloyer",
             modelName: "FactureLoyer",
             timestamps: true,
             underscored: true
