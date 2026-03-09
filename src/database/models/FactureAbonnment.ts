@@ -1,17 +1,16 @@
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
-import {FactureAttributes} from "@database/models/Facture";
-import {InvoiceType} from "@/enums/InvoiceTypeEnume";
-import {StatusFactures} from "@/enums/StatusFacturesEnum";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { FactureAttributes } from "@database/models/Facture";
+import { InvoiceType } from "@/enums/InvoiceTypeEnume";
+import { StatusFactures } from "@/enums/StatusFacturesEnum";
 
 export interface FactureAbonnementAttributes extends FactureAttributes {
     landlordId: string;
     utilisateurAbonnement: string;
-    totalAPayer: number;
 }
 
-export interface FactureAbonnementCreationAttributes extends Optional<FactureAbonnementAttributes,"id"|"createdAt"|"updatedAt">{}
+export interface FactureAbonnementCreationAttributes extends Optional<FactureAbonnementAttributes, "id" | "createdAt" | "updatedAt"> { }
 
-class FactureAbonnement extends Model<FactureAbonnementAttributes,FactureAbonnementCreationAttributes> implements FactureAbonnementAttributes{
+class FactureAbonnement extends Model<FactureAbonnementAttributes, FactureAbonnementCreationAttributes> implements FactureAbonnementAttributes {
 
     declare landlordId: string;
     declare totalAPayer: number;
@@ -27,7 +26,7 @@ class FactureAbonnement extends Model<FactureAbonnementAttributes,FactureAbonnem
     declare readonly updatedAt?: Date;
 }
 
-const initModelFactureAbonnement = (sequelize:Sequelize) => {
+const initModelFactureAbonnement = (sequelize: Sequelize) => {
     FactureAbonnement.init(
         {
             id: {
@@ -39,14 +38,42 @@ const initModelFactureAbonnement = (sequelize:Sequelize) => {
                 type: DataTypes.UUID,
                 allowNull: false
             },
-            totalAPayer: {},
-            utilisateurAbonnement: {},
-            dateEcheance: {},
-            dateEmission: {},
-            invoiceType: {},
-            isTva: {},
-            numeroFacture: {},
-            status: {}
+            totalAPayer: {
+                type: DataTypes.NUMBER,
+                allowNull: false
+            },
+            utilisateurAbonnement: {
+                type: DataTypes.UUID,
+                allowNull: false
+            },
+            dateEcheance: {
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            dateEmission: {
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            invoiceType: {
+                type: DataTypes.ENUM(...Object.values(InvoiceType)),
+                allowNull: false
+            },
+            isTva: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false
+            },
+            numeroFacture: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            status: {
+                type: DataTypes.ENUM(...Object.values(StatusFactures)),
+                allowNull: false
+            },
+            notes: {
+                type: DataTypes.STRING,
+                allowNull: false
+            }
         },
         {
             sequelize,
@@ -59,5 +86,5 @@ const initModelFactureAbonnement = (sequelize:Sequelize) => {
     );
 };
 
-export{FactureAbonnement,initModelFactureAbonnement}
+export { FactureAbonnement, initModelFactureAbonnement }
 

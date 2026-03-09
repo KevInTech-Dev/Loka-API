@@ -1,19 +1,19 @@
-import {FactureAttributes} from "@database/models/Facture";
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
-import {InvoiceType} from "@/enums/InvoiceTypeEnume";
-import {StatusFactures} from "@/enums/StatusFacturesEnum";
+import { FactureAttributes } from "@database/models/Facture";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { InvoiceType } from "@/enums/InvoiceTypeEnume";
+import { StatusFactures } from "@/enums/StatusFacturesEnum";
+import fa from "zod/v4/locales/fa.js";
 
 export interface FactureEauAttributes extends FactureAttributes {
-    
+
     unitLocation: string;
     idTenant: string;
     idReleveCompteur: string;
-    totalAPayer: number;
 }
 
-export interface FactureEauCreationAttributes extends Optional<FactureEauAttributes,"id"|"createdAt"|"updatedAt">{}
+export interface FactureEauCreationAttributes extends Optional<FactureEauAttributes, "id" | "createdAt" | "updatedAt"> { }
 
-class FactureEau extends Model<FactureEauAttributes,FactureEauCreationAttributes> implements FactureEauAttributes{
+class FactureEau extends Model<FactureEauAttributes, FactureEauCreationAttributes> implements FactureEauAttributes {
 
     declare dateEcheance: Date;
     declare dateEmission: Date;
@@ -32,56 +32,67 @@ class FactureEau extends Model<FactureEauAttributes,FactureEauCreationAttributes
 
 }
 
-const initModelFactureEau = (sequelize:Sequelize)=>{
+const initModelFactureEau = (sequelize: Sequelize) => {
     FactureEau.init(
         {
-            id:{
+            id: {
                 type: DataTypes.UUID,
                 primaryKey: true,
                 defaultValue: DataTypes.UUIDV4
             },
-            dateEcheance:{
-
+            dateEcheance: {
+                type: DataTypes.DATE,
+                allowNull: false
             },
-            dateEmission:{
-
+            dateEmission: {
+                type: DataTypes.DATE,
+                allowNull: false
             },
-            idReleveCompteur:{
-
+            idReleveCompteur: {
+                type: DataTypes.UUID,
+                allowNull: false
             },
-            idTenant:{
-
+            idTenant: {
+                type: DataTypes.UUID,
+                allowNull: false
             },
-            invoiceType:{
-
+            invoiceType: {
+                type: DataTypes.ENUM(...Object.values(InvoiceType)),
+                allowNull: false
             },
-            idTva:{
-
+            isTva: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false
             },
-            notes:{
-
+            notes: {
+                type: DataTypes.STRING,
+                allowNull: false
             },
-            numeroFacture:{
-
+            numeroFacture: {
+                type: DataTypes.STRING,
+                allowNull: false
             },
-            status:{
-
+            status: {
+                type: DataTypes.ENUM(...Object.values(StatusFactures)),
+                allowNull: false
             },
-            totalAPayer:{
-
+            totalAPayer: {
+                type: DataTypes.NUMBER,
+                allowNull: false
             },
-            unitLocation:{
-
+            unitLocation: {
+                type: DataTypes.UUID,
+                allowNull: false
             }
-        },{
-            sequelize,
-            modelName: "FactureEau",
-            tableName: "facturesEau",
-            timestamps: true,
-            underscored: true,
-            paranoid: true
-        }
+        }, {
+        sequelize,
+        modelName: "FactureEau",
+        tableName: "facturesEau",
+        timestamps: true,
+        underscored: true,
+        paranoid: true
+    }
     );
 }
 
-export{FactureEau,initModelFactureEau}
+export { FactureEau, initModelFactureEau }

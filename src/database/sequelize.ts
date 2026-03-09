@@ -15,6 +15,11 @@ import { initRefreshToken } from "./models/RefreshToken";
 import { initmodelPermissions } from "./models/Permissions";
 import { initModelPermissionsAbonnement } from "./models/PermissionsAbonnement";
 import { initModelUtilisateur_Abonnement } from "./models/Utilisateur_Abonnement";
+import { initModelFactureMiantenance } from "./models/FacturesMaintenance";
+import { initModelFactureLoyer } from "./models/FactureLoyer";
+import { initModelFactureElectricite } from "./models/FactureElectricite";
+import { initModelFactureEau } from "./models/FactureEau";
+import { initModelFactureAbonnement } from "./models/FactureAbonnment";
 
 
 const sequelize = new Sequelize({
@@ -70,9 +75,12 @@ const initModels = async () => {
   initRefreshToken(sequelize);
   initmodelPermissions(sequelize);
   initModelPermissionsAbonnement(sequelize);
-  initModelUtilisateur_Abonnement(sequelize)
-
-
+  initModelUtilisateur_Abonnement(sequelize);
+  initModelFactureMiantenance(sequelize);
+  initModelFactureLoyer(sequelize);
+  initModelFactureElectricite(sequelize);
+  initModelFactureEau(sequelize);
+  initModelFactureAbonnement(sequelize);
   initModelTenant(sequelize);
 
   // If you have more models, initialize them here and set up associations if needed before syncing the database.

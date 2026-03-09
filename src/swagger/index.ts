@@ -13,6 +13,11 @@ import { tenantPath, tenantSchema, tenantTags } from "./tenant.swagger";
 import { authenticationSchema, AuthentificationPath, refreshTokenObjectPath, refreshTokenObjectSchema, RefreshTokenPath, refreshTokenSchema, RegistrationPath, registrationSchema } from "./login.swagger";
 
 import { utilisateurAbonnementPath, utilisateurAbonnementSchema, utilisateurAbonnementTags } from "./utilisateur_abonnement.swagger";
+import { factureAbonnementPath, factureAbonnementSchema } from "./FactureAbonnement.swagger";
+import { factureLoyerPath, factureLoyerSchema } from "./FactureLoyer.swagger";
+import { factureElectricitePath, factureElectriciteSchema } from "./FactureElectricite.swagger";
+import { factureMaintenancePath, factureMaintenanceSchema } from "./FactureMaintenance.swagger";
+import { factureEauPath, factureEauSchema } from "./FactureEau.swagger";
 
 
 export const tags: OpenAPIV3.TagObject[] = [
@@ -70,6 +75,11 @@ export const paths: OpenAPIV3.PathsObject = {
     ...abonnementPath,
     ...utilisateurAbonnementPath,
     ...tenantPath,
+    ...factureAbonnementPath,
+    ...factureLoyerPath,
+    ...factureElectricitePath,
+    ...factureMaintenancePath,
+    ...factureEauPath,
 
 };
 
@@ -88,7 +98,12 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...authenticationSchema,
     ...refreshTokenSchema,
     ...refreshTokenObjectSchema,
-    ...abonnementsSchema
+    ...abonnementsSchema,
+    ...factureAbonnementSchema,
+    ...factureLoyerSchema,
+    ...factureElectriciteSchema,
+    ...factureMaintenanceSchema,
+    ...factureEauSchema,
 
 };
 

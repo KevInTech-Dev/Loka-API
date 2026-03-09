@@ -102,9 +102,9 @@ export class Utilisateur_AbonnementRepository extends BaseRepositoryImpl<Utilisa
         return this.model.findOne({
             where: {
                 utilisateurId: userId,
-                // endDate: {
-                //     [this.Op.lt]: new Date(Date.now())
-                // }
+                endDate: {
+                    [this.Op.lt]: new Date(Date.now())
+                }
             }
         })
     }

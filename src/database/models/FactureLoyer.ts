@@ -1,13 +1,12 @@
 import { BaseModel } from "@/common/models/base.model";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import {FactureAttributes} from "@database/models/Facture";
+import { FactureAttributes } from "@database/models/Facture";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
 import { StatusFactures } from "@/enums/StatusFacturesEnum";
 
 export interface FactureLoyerAttributes extends FactureAttributes {
     unitLocation: string;
     idTenant: string;
-    prixLoyer: number;
 }
 
 export interface FactureLoyerCreationAttributes extends Optional<
@@ -28,7 +27,7 @@ class FactureLoyer extends Model<FactureLoyerAttributes, FactureLoyerCreationAtt
     declare id: string;
     declare unitLocation: string;
     declare idTenant: string;
-    declare prixLoyer: number;
+    declare totalAPayer: number;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
 }
@@ -52,8 +51,37 @@ const initModelFactureLoyer = (sequelize: Sequelize) => {
                 allowNull: false
             },
 
-            prixLoyer: {
+            totalAPayer: {
                 type: DataTypes.DECIMAL,
+                allowNull: false
+            },
+            numeroFacture: {
+                type: DataTypes.STRING,
+                allowNull: false
+
+            },
+            dateEcheance: {
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            dateEmission: {
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            invoiceType: {
+                type: DataTypes.ENUM(...Object.values(InvoiceType)),
+                allowNull: false
+            },
+            isTva: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false
+            },
+            status: {
+                type: DataTypes.ENUM(...Object.values(StatusFactures)),
+                allowNull: false
+            },
+            notes: {
+                type: DataTypes.STRING,
                 allowNull: false
             }
 

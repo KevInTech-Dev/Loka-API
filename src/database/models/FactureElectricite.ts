@@ -1,20 +1,17 @@
-import {FactureAttributes} from "@database/models/Facture";
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
-import {InvoiceType} from "@/enums/InvoiceTypeEnume";
-import {StatusFactures} from "@/enums/StatusFacturesEnum";
-import {FactureEau} from "@database/models/FactureEau";
+import { FactureAttributes } from "@database/models/Facture";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { InvoiceType } from "@/enums/InvoiceTypeEnume";
+import { StatusFactures } from "@/enums/StatusFacturesEnum";
 
 export interface FactureElectriciteAttributes extends FactureAttributes {
-    
     unitLocation: string;
     idTenant: string;
     idReleveCompteur: string;
-    totalAPayer: number;
 }
 
-export interface FactureElectriciteCreationAttributes extends Optional<FactureElectriciteAttributes,"id"|"createdAt"|"updatedAt">{}
+export interface FactureElectriciteCreationAttributes extends Optional<FactureElectriciteAttributes, "id" | "createdAt" | "updatedAt"> { }
 
-class FactureElectricite extends Model<FactureElectriciteAttributes,FactureElectriciteCreationAttributes> implements FactureElectriciteAttributes{
+class FactureElectricite extends Model<FactureElectriciteAttributes, FactureElectriciteCreationAttributes> implements FactureElectriciteAttributes {
     declare readonly createdAt?: Date;
     declare dateEcheance: Date;
     declare dateEmission: Date;
@@ -32,55 +29,67 @@ class FactureElectricite extends Model<FactureElectriciteAttributes,FactureElect
 
 }
 
-const initModelFactureElectricite=(sequelize:Sequelize)=>{
-    FactureEau.init(
+const initModelFactureElectricite = (sequelize: Sequelize) => {
+    FactureElectricite.init(
         {
-            id:{
+            id: {
                 type: DataTypes.UUID,
                 primaryKey: true,
                 defaultValue: DataTypes.UUIDV4
             },
-            dateEcheance:{
+            dateEcheance: {
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            dateEmission: {
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            idReleveCompteur: {
+                type: DataTypes.UUID,
+                allowNull: false
+            },
+            idTenant: {
+                type: DataTypes.UUID,
+                allowNull: false
+            },
+            invoiceType: {
+                type: DataTypes.UUID,
+                allowNull: false
+            },
+            isTva: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false
+            },
+            notes: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            numeroFacture: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            status: {
+                type: DataTypes.ENUM(...Object.values(StatusFactures)),
+                allowNull: false
 
             },
-            dateEmission:{
-
+            totalAPayer: {
+                type: DataTypes.NUMBER,
+                allowNull: false
             },
-            idReleveCompteur:{
-
-            },
-            idTenant:{
-
-            },
-            invoiceType:{
-
-            },
-            isTva:{
-
-            },
-            notes:{
-
-            },
-            numeroFacture:{
-
-            },
-            status:{
-
-            },
-            totalAPayer:{
-
-            },
-            unitLocation:{
-
+            unitLocation: {
+                type: DataTypes.NUMBER,
+                allowNull: false
             }
-        },{
+        }, {
         sequelize,
-        tableName:'FactureElectricite',
-        modelName:'factureElectricite',
+        tableName: 'FactureElectricite',
+        modelName: 'factureElectricite',
         paranoid: true,
-        timestamps:true,
+        timestamps: true,
         underscored: true,
     })
 }
 
-export{FactureEau,initModelFactureElectricite};
+export { FactureElectricite, initModelFactureElectricite };

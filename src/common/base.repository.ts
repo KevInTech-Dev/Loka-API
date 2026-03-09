@@ -1,5 +1,5 @@
-import {Attributes, CreationAttributes, FindOptions, Model, ModelStatic, Op, UpdateOptions} from "sequelize";
-import {sequelize} from "@database/sequelize";
+import { Attributes, CreationAttributes, FindOptions, Model, ModelStatic, Op, UpdateOptions } from "sequelize";
+import { sequelize } from "@database/sequelize";
 
 
 export interface BaseRepository<T extends Model> {

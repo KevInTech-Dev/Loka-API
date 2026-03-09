@@ -6,9 +6,9 @@ const landlordTags: OpenAPIV3.TagObject = {
     description: "Operations related to lanLord Mangement"
 }
 
-const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
+const landlordSchema: OpenAPIV3.ComponentsObject['schemas'] = {
     landlord: {
-        type:"object",
+        type: "object",
         properties: {
             userId: {
                 type: "string",
@@ -70,12 +70,12 @@ const landlordSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Number of items per page"
             },
             data: {
-                
-                    type: "array",
-                    items: {
-                        $ref: "#/components/schemas/landlord"
-                    }
-                
+
+                type: "array",
+                items: {
+                    $ref: "#/components/schemas/landlord"
+                }
+
             }
         }
     }
@@ -155,7 +155,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
                 "200": {
                     description: "Landlord found",
                     content: {
-                        "application/json" : {
+                        "application/json": {
                             schema: {
                                 $ref: "#/components/schemas/landlord"
                             }
@@ -196,7 +196,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
                 "200": {
                     description: "Landlord updated successfully",
                     content: {
-                        "application/json" :{
+                        "application/json": {
                             schema: {
                                 $ref: "#/components/schemas/landlord"
                             }

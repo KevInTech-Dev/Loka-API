@@ -1,8 +1,8 @@
 import { BaseModel } from "@/common/models/base.model";
-import {Facture, FactureAttributes} from "./Facture";
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
-import {InvoiceType} from "@/enums/InvoiceTypeEnume";
-import {StatusFactures} from "@/enums/StatusFacturesEnum";
+import { Facture, FactureAttributes } from "./Facture";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { InvoiceType } from "@/enums/InvoiceTypeEnume";
+import { StatusFactures } from "@/enums/StatusFacturesEnum";
 
 export interface FactureMaintenanceAttributes extends FactureAttributes {
     unitLocation: string;
@@ -10,9 +10,9 @@ export interface FactureMaintenanceAttributes extends FactureAttributes {
     maintenanceId: string;
 }
 
-export interface FactureMaintenanceCreationAttributes extends Optional<FactureMaintenanceAttributes, "id"|"createdAt"|"updatedAt">{}
+export interface FactureMaintenanceCreationAttributes extends Optional<FactureMaintenanceAttributes, "id" | "createdAt" | "updatedAt"> { }
 
-class FactureMaintenance extends Model<FactureMaintenanceAttributes,FactureMaintenanceCreationAttributes> implements FactureMaintenanceAttributes {
+class FactureMaintenance extends Model<FactureMaintenanceAttributes, FactureMaintenanceCreationAttributes> implements FactureMaintenanceAttributes {
     declare readonly createdAt?: Date;
     declare dateEcheance: Date;
     declare dateEmission: Date;
@@ -23,55 +23,72 @@ class FactureMaintenance extends Model<FactureMaintenanceAttributes,FactureMaint
     declare maintenanceId: string;
     declare notes: string;
     declare numeroFacture: string;
+    declare totalAPayer: number;
     declare status: StatusFactures;
     declare unitLocation: string;
     declare readonly updatedAt?: Date;
 
 }
 
-const initModelFactureMiantenance = (sequelize:Sequelize)=>{
+const initModelFactureMiantenance = (sequelize: Sequelize) => {
     FactureMaintenance.init({
-        id:{
+        id: {
             type: DataTypes.UUID,
             primaryKey: true,
             defaultValue: DataTypes.UUIDV4
         },
-        dateEcheance:{
-
+        dateEcheance: {
+            type: DataTypes.DATE,
+            allowNull: false
         },
-        dateEmission:{
-
+        dateEmission: {
+            type: DataTypes.DATE,
+            allowNull: false
         },
-        idTenant:{
-
+        idTenant: {
+            type: DataTypes.UUID,
+            allowNull: false
         },
-        invoiceType:{
-
+        invoiceType: {
+            type: DataTypes.ENUM(...Object.values(InvoiceType)),
+            allowNull: false
         },
-        isTva:{
-
+        isTva: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         },
-        maintenanceId:{
-
+        maintenanceId: {
+            type: DataTypes.UUID,
+            allowNull: false
         },
-        notes:{
-
+        notes: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        numeroFacture:{
-
+        numeroFacture: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        status:{
-
+        status: {
+            type: DataTypes.ENUM(...Object.values(StatusFactures)),
+            allowNull: false
         },
-        unitLocation:{
-
+        unitLocation: {
+            type: DataTypes.UUID,
+            allowNull: false
+        },
+        totalAPayer: {
+            type: DataTypes.NUMBER,
+            allowNull: false
         }
-    },{
+    }, {
         sequelize,
-        tableName:'factureMaintenance',
-        modelName:'FactureMaintenance',
-        timestamps:true,
+        tableName: 'factureMaintenance',
+        modelName: 'FactureMaintenance',
+        timestamps: true,
         underscored: true,
         paranoid: true
     });
 }
+
+export { FactureMaintenance, initModelFactureMiantenance }

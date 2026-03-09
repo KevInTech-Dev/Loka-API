@@ -11,6 +11,7 @@ export interface FactureAttributes extends BaseModel {
     invoiceType: InvoiceType;
     dateEcheance: Date;
     status: StatusFactures;
+    totalAPayer: number;
     notes?: string;
     isTva: boolean;
 }
@@ -32,7 +33,7 @@ class Facture
     declare status: StatusFactures;
     declare notes?: string;
     declare isTva: boolean;
-
+    declare totalAPayer: number;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
 }
@@ -51,7 +52,10 @@ const initModelFacture = (sequelize: Sequelize) => {
                 allowNull: false,
                 unique: true
             },
-
+            totalAPayer: {
+                type: DataTypes.NUMBER,
+                allowNull: false
+            },
             dateEmission: {
                 type: DataTypes.DATE,
                 allowNull: false
