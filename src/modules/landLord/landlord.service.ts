@@ -5,15 +5,19 @@ import { UserRepository } from "../users/user.repository";
 import { landLordResponse } from "./landlord.types";
 import { DuplicateEntryError, NotFoundError } from "@/common/errors";
 import { UserResponse } from "../users/user.types";
+import {UserMapper} from "@modules/users/user.mapper";
 
 
 export  class landLordService {
     private landlordRepository: landLordRepository;
     private userRepository: UserRepository;
+    private userMapper: UserMapper;
+
 
     constructor() {
         this.landlordRepository = new landLordRepository();
         this.userRepository = new UserRepository();
+        this.userMapper = new UserMapper();
     }
 
     async addLandlordInfo(data: CreateLandlordInput): Promise<landLordResponse | null> {
@@ -112,7 +116,7 @@ export  class landLordService {
                     isVerified: landlord.isVerified,
                     createdAt: landlord.createdAt,
                     updatedAt: landlord.updatedAt,
-                    landlordUser:(landlord as any).landlordUser as UserResponse
+                    landlordUser: this.userMapper.toResponse((landlord as any).landlordUser)
                 };
             },
         );

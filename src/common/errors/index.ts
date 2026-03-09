@@ -76,7 +76,7 @@ export class NotFoundError extends AppError {
   }
 }
 
-export class CheckExistence extends NotFoundError { 
+export class CheckExistence extends NotFoundError {
   static of<T>(
     entity: T | null | undefined,
     resourceName: string,
@@ -87,7 +87,7 @@ export class CheckExistence extends NotFoundError {
     }
     return entity;
   }
-} 
+}
 
 /**
  * Conflict Error (409)

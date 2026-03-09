@@ -9,11 +9,6 @@ const propertyUnitLocationSchema: OpenAPIV3.ComponentsObject['schemas'] = {
     propertyUnitLocation: {
         type: "object",
         properties: {
-            id: {
-                type: "string",
-                format: "uuid",
-                description: "id of property_unit_location"
-            },
             unitLocationId: {
                 type: "string",
                 format: "uuid",
@@ -35,7 +30,7 @@ const propertyUnitLocationSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Timestamp when the user was last updated"
             }
         },
-        required: ["id", "unitLocationId", "propertyId", "createdAt", "updatedAt"]
+        required: ["unitLocationId", "propertyId", "createdAt", "updatedAt"]
     },
     createPropertyUnitLocationRequest: {
         type: "object",

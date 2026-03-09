@@ -33,8 +33,8 @@ export class AuthService {
         }
 
         return {
-            accessToken: this.tokenService.generateSessionToken(existingUser),
-            refreshToken: this.tokenService.generateRefreshToken(existingUser)
+            accessToken: await this.tokenService.generateSessionToken(existingUser),
+            refreshToken: await this.tokenService.generateRefreshToken(existingUser)
         }
 
     }

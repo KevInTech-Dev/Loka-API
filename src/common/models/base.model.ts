@@ -6,6 +6,6 @@ export interface BaseModel {
 
 export type BaseTypes = {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 };

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { AbonnementService } from "./abonnement.service";
 import { asyncHandler } from "../middleware/error.middleware";
 import { NotFoundError } from "../../common/errors"; // Chemin à adapter
+import { sendPaginated } from "@/common/api.response";
 
 export class AbonnementController {
     private abonnementService: AbonnementService;
@@ -14,13 +15,19 @@ export class AbonnementController {
      * Récupérer les abonnements paginés
      */
 
-    getAbonnementPaginated = asyncHandler(async (req: Request, res: Response) => {
+    getAbonnementPaginated = async (req: Request, res: Response): Promise<Response> => {
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
 
-        const result = await this.abonnementService.getAbonnementPaginated(page, limit);
-        return res.json(result);
-    });
+        const { data, total } = await this.abonnementService.getAbonnementPaginated(page, limit);
+        return sendPaginated(
+            res,
+            data,
+            page,
+            limit,
+            total,
+        );
+    };
 
 
     /**
@@ -45,7 +52,7 @@ export class AbonnementController {
     createAbonnement = asyncHandler(async (req: Request, res: Response) => {
         const created = await this.abonnementService.createAbonnement(req.body);
         return res.status(201).json(created);
-        
+
     });
 
     /**
@@ -54,8 +61,8 @@ export class AbonnementController {
     deleteAbonnement = asyncHandler(async (req: Request, res: Response) => {
         const { id } = req.params as { id: string };
         const result = await this.abonnementService.deleteAbonnement(id);
-        
-        
+
+
         return res.json(result);
     });
 }

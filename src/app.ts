@@ -68,6 +68,7 @@ app.use(`${API_PREFIX}/unitLocation`, unitLocationRoute);
 app.use(`${API_PREFIX}/propertyUnitLocation`, propertyUnitLocationRoute);
 app.use(`${API_PREFIX}/tenants`, tenantRoute);
 app.use(`${API_PREFIX}/auth`, authRoute);
+app.use(`${API_PREFIX}/utilisateur-abonnements`, utilisateur_AbonnementRoute);
 app.use(`${API_PREFIX}/contracts`, contractRoute);
 
 

@@ -1,4 +1,5 @@
 import { BaseTypes } from "@/common/models/base.model";
+import { AbonnementAttributes } from "@/database/models/Abonnements";
 import { PlanAbonnementEnum } from "@/enums/PlanAbonnementEnum";
 
 
@@ -8,8 +9,11 @@ export type AbonnementResponse = BaseTypes & {
   nombreMaxUnitLocation: number;
   label: string;
   prix: number;
-  duree: number; 
-  detais: string;
-  other: string;
-  
+  details: string;
+  other: JSON;
+
+};
+
+export type WhereQueryAbonnements = {
+  [key in keyof AbonnementAttributes]?: string | number | boolean;
 };

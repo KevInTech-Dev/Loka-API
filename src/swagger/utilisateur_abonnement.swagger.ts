@@ -38,7 +38,7 @@ const utilisateurAbonnementSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Date de début de l'abonnement",
                 example: "2026-01-15T10:30:00Z"
             },
-            dateFin: {
+            endDate: {
                 type: "string",
                 format: "date-time",
                 description: "Date de fin de l'abonnement",
@@ -71,7 +71,7 @@ const utilisateurAbonnementSchema: OpenAPIV3.ComponentsObject['schemas'] = {
         },
         required: ["utilisateurId", "abonnementId", "dateDebut", "statut"]
     },
-    
+
     UtilisateurAbonnementCreate: {
         type: "object",
         properties: {
@@ -93,7 +93,7 @@ const utilisateurAbonnementSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Date de début de l'abonnement (défaut: maintenant)",
                 example: "2026-01-15T10:30:00Z"
             },
-            dateFin: {
+            endDate: {
                 type: "string",
                 format: "date-time",
                 description: "Date de fin de l'abonnement",
@@ -114,7 +114,7 @@ const utilisateurAbonnementSchema: OpenAPIV3.ComponentsObject['schemas'] = {
         },
         required: ["utilisateurId", "abonnementId"]
     },
-    
+
     UtilisateurAbonnementUpdate: {
         type: "object",
         properties: {
@@ -196,7 +196,7 @@ const utilisateurAbonnementPath: OpenAPIV3.PathsObject = {
             }
         }
     },
-    
+
     "/utilisateur-abonnements/{id}": {
         get: {
             tags: ["Utilisateur Abonnement"],
@@ -301,7 +301,7 @@ const utilisateurAbonnementPath: OpenAPIV3.PathsObject = {
             }
         }
     },
-    
+
     "/utilisateur-abonnements/utilisateur/{utilisateurId}": {
         get: {
             tags: ["Utilisateur Abonnement"],
@@ -336,7 +336,7 @@ const utilisateurAbonnementPath: OpenAPIV3.PathsObject = {
             }
         }
     },
-    
+
     "/utilisateur-abonnements/abonnement/{abonnementId}": {
         get: {
             tags: ["Utilisateur Abonnement"],
@@ -371,7 +371,7 @@ const utilisateurAbonnementPath: OpenAPIV3.PathsObject = {
             }
         }
     },
-    
+
     "/utilisateur-abonnements/actifs": {
         get: {
             tags: ["Utilisateur Abonnement"],

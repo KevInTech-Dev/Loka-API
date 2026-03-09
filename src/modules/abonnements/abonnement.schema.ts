@@ -7,7 +7,7 @@ const planAbonnementValues = Object.values(PlanAbonnementEnum) as [string, ...st
 
 // Schéma pour la création
 const createAbonnementSchema = z.object({
-    planAbonnement: z.enum(planAbonnementValues), 
+    planAbonnement: z.enum(planAbonnementValues),
     nombreMaxPropriete: z.number(),
     nombreMaxUnitLocation: z.number(),
     label: z.string().optional(),
@@ -23,7 +23,7 @@ const getAbonnementSchema = z.object({
 
 //Schéma pour la mise à jour 
 const updateAbonnementSchema = z.object({
-    planAbonnement: z.enum(planAbonnementValues).optional(), 
+    planAbonnement: z.enum(planAbonnementValues).optional(),
     nombreMaxPropriete: z.number(),
     nombreMaxUnitLocation: z.number(),
     label: z.string().optional(),
@@ -44,7 +44,7 @@ export type UpdateAbonnementInput = z.infer<typeof updateAbonnementSchema>;
 export type AbonnementIdParams = z.infer<typeof abonnementIdSchema>;
 
 export {
-   createAbonnementSchema,
-   updateAbonnementSchema,
-   getAbonnementSchema,
+    createAbonnementSchema,
+    updateAbonnementSchema,
+    getAbonnementSchema,
 };
