@@ -4,8 +4,8 @@ import { z } from 'zod';
 // SCHÉMA POUR LA CRÉATION
 
 const createUtilisateurAbonnementSchema = z.object({
-    utilisateurId: z.uuid('Format d\'ID utilisateur invalide'),
-    abonnementId: z.uuid('Format d\'ID abonnement invalide'),
+    utilisateurId: z.uuid(),
+    abonnementId: z.uuid(),
     autoRenouvellement: z.boolean().optional().default(false),
     startDate: z.iso.datetime().optional().default(() => new Date().toISOString()),
     endDate: z.iso.datetime().optional().nullable(),
@@ -20,12 +20,12 @@ const getAbonnementByUtilisateur = z.object({
     limit: z.string('Format de la limite invalide'),
 });
 
-/*
+
 const getUtilisateurAbonnementSchema = z.object({
     page: z.string('Format de la valeur de la page invalide'),
     limit: z.string('Format de la limite invalide'),
 });
-*/
+
 const utilisateurAbonnementIdSchema = z.object({
     id: z.uuid('Format d\'ID de relation invalide')//(user et sub existent d'abord donc oublie validation de id .)
 })

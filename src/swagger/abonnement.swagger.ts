@@ -1,4 +1,4 @@
-import {OpenAPIV3} from "openapi-types";
+import { OpenAPIV3 } from "openapi-types";
 
 const abonnementsTags: OpenAPIV3.TagObject = {
     name: "Abonnement",
@@ -6,17 +6,27 @@ const abonnementsTags: OpenAPIV3.TagObject = {
 }
 
 const abonnementsSchema: OpenAPIV3.ComponentsObject['schemas'] = {
-    Abonnement: {  
+    Abonnement: {
         type: "object",
         properties: {
-            
             planAbonnement: {
                 type: "string",
-                enum: ["BASIC", "PREMIUM", "ENTERPRISE"], 
+                enum: ["BASIC", "PREMIUM", "ENTERPRISE"],
                 description: "Type de plan d'abonnement",
                 example: "PREMIUM"
             },
-        
+            nombreMaxPropriete: {
+                type: "number",
+                description: "Max number of property to add"
+            },
+            nombreMaxUnitLocation: {
+                type: "number",
+                description: "Max number of unit locations to add"
+            },
+            label: {
+                type: "string",
+                description: "label of the subscription"
+            },
             prix: {
                 type: "number",
                 format: "float",
@@ -28,10 +38,71 @@ const abonnementsSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Description détaillée de l'abonnement",
                 example: "Accès à toutes les fonctionnalités premium, support prioritaire"
             },
-            
-            
+            other: {
+                type: "string",
+                description: "field for other things to add"
+            },
+            createdAt: {
+                type: "string",
+                format: "date-time",
+                description: "Timestamp when the user was last created"
+            },
+            updatedAt: {
+                type: "string",
+                format: "date-time",
+                description: "Timestamp when the user was last updated"
+            }
         },
-        required: ["planAbonnement", "prix", "detail"] 
+        required: ["planAbonnement", "nombreMaxProperties", "nombreMaxUnitLocation", "label", "prix", "detail"]
+    },
+    createAbonnementRequest: {
+        type: "object",
+        properties: {
+            planAbonnement: {
+                type: "string",
+                enum: ['BASIC', 'ENTREPRISE']
+            },
+            nombreMaxPropriete: {
+                type: "number",
+                description: "Max number of property to add"
+            },
+            nombreMaxUnitLocation: {
+                type: "number",
+                description: "Max number of unit location to add"
+            },
+            label: {
+                type: "string",
+                description: "label of the subscription"
+            },
+            prix: {
+                type: "number",
+                description: "price of the subscription"
+            },
+            detail: {
+                type: "string",
+                description: "details of the subscription"
+            }
+        },
+        required: ["planAbonnement", "nombreMaxProprietes", "nombreMaxUnitLocation", "label", "prix", "detail"]
+    },
+    paginatedAbonnement: {
+        type: "object",
+        properties: {
+            page: {
+                type: "integer",
+                description: "Current page number"
+            },
+            limit: {
+                type: "integer",
+                description: "Number of items per page"
+            },
+            data: {
+                type: "array",
+                items: {
+                    $ref: "#/components/schemas/Abonnement"
+                }
+            }
+        }
     }
 };
 const abonnementPath: OpenAPIV3.PathsObject = {
@@ -40,15 +111,46 @@ const abonnementPath: OpenAPIV3.PathsObject = {
             tags: ["Abonnement"],
             summary: "Get all subscriptions",
             description: "Retrieve a list of all subscriptions in the system",
+            parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 1
+                    },
+                    description: "Page umber (starting from 1)"
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 10
+                    },
+                    description: "Number of items per page"
+                }
+            ],
             responses: {
                 "200": {
                     description: "A list of subscriptions",
                     content: {
                         "application/json": {
                             schema: {
-                                type: "array",
-                                items: {
-                                    $ref: "#/components/schemas/abonnementsTags"
+                                type: "object",
+                                properties: {
+                                    page: {
+                                        type: "integer"
+                                    },
+                                    limit: {
+                                        type: "integer"
+                                    },
+                                    data: {
+                                        type: "array",
+                                        items: {
+                                            $ref: "#/components/schemas/Abonnement"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -65,7 +167,7 @@ const abonnementPath: OpenAPIV3.PathsObject = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/abonnement"
+                            $ref: "#/components/schemas/createAbonnementRequest"
                         }
                     }
                 }
@@ -76,10 +178,19 @@ const abonnementPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/abonnement"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/Abonnement"
+                                    }
+                                }
+
                             }
                         }
                     }
+                },
+                "400": {
+                    description: "Invalid input"
                 }
             }
         }
@@ -106,7 +217,7 @@ const abonnementPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/abonnement"
+                                $ref: "#/components/schemas/Abonnement"
                             }
                         }
                     }
@@ -136,7 +247,7 @@ const abonnementPath: OpenAPIV3.PathsObject = {
                 content: {
                     "application/json": {
                         schema: {
-                            $ref: "#/components/schemas/abonnement"
+                            $ref: "#/components/schemas/createAbonnementRequest"
                         }
                     }
                 }

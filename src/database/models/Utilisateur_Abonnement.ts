@@ -1,20 +1,20 @@
 // src/models/Utilisateur_Abonnement.ts
-import { Model, DataTypes, Sequelize, DATE } from 'sequelize';
-import {StatusAbonnementEnum} from '@/enums/StatusAbonnement';
+import { Model, DataTypes, Sequelize, DATE, Optional } from 'sequelize';
+import { StatusAbonnementEnum } from '@/enums/StatusAbonnement';
+import { BaseModel } from '@/common/models/base.model';
 
-export interface UtilisateurAbonnementAttributes {
-  id: string;
+export interface UtilisateurAbonnementAttributes extends BaseModel {
   utilisateurId: string;
   status: StatusAbonnementEnum,
   abonnementId: string;
   autoRenouvellement: Boolean;
   startDate: Date,
   endDate: Date,
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
-export class Utilisateur_Abonnement extends Model<UtilisateurAbonnementAttributes>
+export interface UtilisateurAbonnementCreationAttributes extends Optional<UtilisateurAbonnementAttributes, "id" | "createdAt" | "updatedAt"> { }
+
+export class Utilisateur_Abonnement extends Model<UtilisateurAbonnementAttributes, UtilisateurAbonnementCreationAttributes>
   implements UtilisateurAbonnementAttributes {
   declare id: string;
   declare utilisateurId: string;
@@ -35,6 +35,12 @@ export class Utilisateur_Abonnement extends Model<UtilisateurAbonnementAttribute
       onUpdate: 'CASCADE',
     });
 
+    Utilisateur_Abonnement.hasMany(models.permissionsAbonnement, {
+      foreignKey: "idAbonnement",
+      as: "idAbonnement"
+    })
+
+
     Utilisateur_Abonnement.belongsTo(models.Abonnement, {
       foreignKey: 'abonnementId',
       as: 'abonnement',
@@ -49,7 +55,7 @@ const initModelUtilisateur_Abonnement = (sequelize: Sequelize) => {
     {
       id: {
         type: DataTypes.UUID,
-        defaultValue: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
       utilisateurId: {
@@ -67,6 +73,7 @@ const initModelUtilisateur_Abonnement = (sequelize: Sequelize) => {
       },
       abonnementId: {
         type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         references: { model: 'abonnements', key: 'id' },
         onDelete: 'CASCADE',
@@ -75,16 +82,16 @@ const initModelUtilisateur_Abonnement = (sequelize: Sequelize) => {
 
       autoRenouvellement: {
         type: DataTypes.BOOLEAN,
-                allowNull: false,
-                defaultValue: false,
+        allowNull: false,
+        defaultValue: false,
       },
 
       startDate: {
-        type: DataTypes. DATE,
+        type: DataTypes.DATE,
         allowNull: false,
       },
 
-      endDate:{
+      endDate: {
         type: DataTypes.DATE,
         allowNull: false,
       },

@@ -12,6 +12,7 @@ export class UserRepository extends BaseRepositoryImpl<User> {
     }
 
 
+
     create(data: CreationAttributes<User>): Promise<User> {
         return this.model.create(data);
     }
@@ -19,6 +20,7 @@ export class UserRepository extends BaseRepositoryImpl<User> {
     async findById(id: string) {
         return this.model.findByPk(id);
     }
+
 
     async getUserPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
@@ -41,4 +43,5 @@ export class UserRepository extends BaseRepositoryImpl<User> {
             }
         })
     }
+
 }

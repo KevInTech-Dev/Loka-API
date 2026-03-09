@@ -22,7 +22,9 @@ export const tags: OpenAPIV3.TagObject[] = [
     tenantTags,
     abonnementsTags,
     utilisateurAbonnementTags,
-    contractTags
+    contractTags,
+    abonnementsTags,
+    utilisateurAbonnementTags
 ];
 
 export const paths: OpenAPIV3.PathsObject = {
@@ -73,13 +75,15 @@ export const paths: OpenAPIV3.PathsObject = {
     ...RegistrationPath,
     ...contractPath,
     ...RefreshTokenPath,
-    ...refreshTokenObjectPath
+    ...refreshTokenObjectPath,
+    ...abonnementPath,
+    ...utilisateurAbonnementPath,
+    ...tenantPath,
+
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...userSchema,
-
-    ...abonnementsSchema, //abonnementsSchema,
     ...propertyShema,
     ...propertyTypeShema,
     ...landlordSchema,
@@ -93,7 +97,8 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...authenticationSchema,
     ...contractSchema,
     ...refreshTokenSchema,
-    ...refreshTokenObjectSchema
+    ...refreshTokenObjectSchema,
+    ...abonnementsSchema
 
 };
 

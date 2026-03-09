@@ -1,6 +1,6 @@
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
-import {RoleEnum} from "@/enums/RoleEnum";
-import {BaseModel} from "@common/models/base.model";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { RoleEnum } from "@/enums/RoleEnum";
+import { BaseModel } from "@common/models/base.model";
 
 
 export interface UserAttributes extends BaseModel {
@@ -9,8 +9,8 @@ export interface UserAttributes extends BaseModel {
     lastname?: string;
     phoneNumber: string;
     role: RoleEnum
-    dateDebutSuspension: Date;
-    dateFinSuspension: Date;
+    dateDebutSuspension?: Date;
+    dateFinSuspension?: Date;
     email: string;
     password: string;
     isActive: boolean;
@@ -121,7 +121,7 @@ const initModelUser = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true, paranoid: true,},
+        { sequelize, modelName: "User", tableName: 'users', timestamps: true, underscored: true, paranoid: true, },
     );
 };
 

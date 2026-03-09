@@ -1,55 +1,94 @@
-import { abonnements, AbonnementCreationAttributes } from "@database/models/Abonnements";
-import { ModelStatic, Op } from "sequelize";
+import { BaseRepositoryImpl } from "@/common/base.repository";
+import { AbonnementAttributes, Abonnements } from "@/database/models/Abonnements";
+import { CreationAttributes } from "sequelize";
+import { AbonnementResponse, WhereQueryAbonnements } from "./abonnement.types";
 
-export class AbonnementRepository {
-    private abonnementModel: ModelStatic<abonnements>;
+
+export class AbonnementRepository extends BaseRepositoryImpl<Abonnements> {
 
     constructor() {
-        this.abonnementModel = abonnements;
+        super(Abonnements);
     }
 
-    async createAbonnement(data: AbonnementCreationAttributes): Promise<abonnements> {
-       
-        return await this.abonnementModel.create(data);
+    create(data: CreationAttributes<Abonnements>): Promise<Abonnements> {
+        return this.model.create(data);
     }
 
-    async getAbonnementById(id: string): Promise<abonnements | null> {
-        return await this.abonnementModel.findByPk(id);
+    async findById(id: string) {
+        return this.model.findByPk(id);
     }
 
-    async getAbonnementsPaginated(page: number, limit: number): Promise<{
-        data: abonnements[];
-        total: number;
-        page: number;
-        limit: number;
-        totalPages: number;
-    }> {
+
+    async getAbonnementPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        
-        const { count, rows } = await this.abonnementModel.findAndCountAll({
-            offset,
-            limit,
-            order: [['createdAt', 'DESC']]
+        return this.model.findAndCountAll({ offset, limit });
+    }
+
+    getAbonnementByAttribut(attribut: keyof AbonnementAttributes, value: string) {
+        return this.model.findOne({
+            where: {
+                [attribut]: value
+            }
         });
-
-        return {
-            data: rows,
-            total: count,
-            page,
-            limit,
-            totalPages: Math.ceil(count / limit)
-        };
     }
 
-    async deleteAbonnement(id: string): Promise<boolean> {
-        const abonnement = await this.getAbonnementById(id);
-        if (!abonnement) return false;
 
-        await abonnement.destroy();
-        return true;
+    getAbonnementByMutipleAttributs(attribut: WhereQueryAbonnements) {
+        return this.model.findOne({
+            where: {
+                ...attribut
+            }
+        })
     }
-
 }
+// private abonnementModel: ModelStatic<Abonnements>;
+
+// constructor() {
+//     this.abonnementModel = abonnements;
+// }
+
+// async createAbonnement(data: AbonnementCreationAttributes): Promise<abonnements> {
+
+//     return await this.abonnementModel.create(data);
+// }
+
+// async getAbonnementById(id: string): Promise<abonnements | null> {
+//     return await this.abonnementModel.findByPk(id);
+// }
+
+// async getAbonnementsPaginated(page: number, limit: number): Promise<{
+//     data: abonnements[];
+//     total: number;
+//     page: number;
+//     limit: number;
+//     totalPages: number;
+// }> {
+//     const offset = (page - 1) * limit;
+
+//     const { count, rows } = await this.abonnementModel.findAndCountAll({
+//         offset,
+//         limit,
+//         order: [['createdAt', 'DESC']]
+//     });
+
+//     return {
+//         data: rows,
+//         total: count,
+//         page,
+//         limit,
+//         totalPages: Math.ceil(count / limit)
+//     };
+// }
+
+// async deleteAbonnement(id: string): Promise<boolean> {
+//     const abonnement = await this.getAbonnementById(id);
+//     if (!abonnement) return false;
+
+//     await abonnement.destroy();
+//     return true;
+// }
+
+
 
 
 

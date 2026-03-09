@@ -1,6 +1,6 @@
-import {Request, Response} from "express";
-import {UserService} from "@modules/users/user.service";
-import {CreateUserInput} from "@modules/users/user.schema";
+import { Request, Response } from "express";
+import { UserService } from "@modules/users/user.service";
+import { CreateUserInput } from "@modules/users/user.schema";
 
 export class UserController {
     private readonly userService: UserService;
@@ -42,7 +42,7 @@ export class UserController {
         const file = req.file;
 
         if (!file) {
-            return res.status(400).json({error: "No file uploaded"});
+            return res.status(400).json({ error: "No file uploaded" });
         }
 
         return res.send({
@@ -51,7 +51,7 @@ export class UserController {
     };
 
     createUser = async (req: Request, res: Response) => {
-        const data: CreateUserInput = {...req.body, photo: req?.file?.path ?? null, role: "admin"};
+        const data: CreateUserInput = { ...req.body, photo: req?.file?.path ?? null, role: "admin" };
         return res.send({
             data: await this.userService.createUser(data),
         });
