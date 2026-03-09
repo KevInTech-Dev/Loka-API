@@ -138,7 +138,7 @@ const contractPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["Contract"],
             summary: "Get all contracts with pagination",
-            security: [],
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a paginated list of all contracts in the system",
             parameters: [
                 {
@@ -190,6 +190,7 @@ const contractPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["Contract"],
             summary: "Create a new contract",
+            security: [{ bearerAuth: [] }],
             description: "Create a new contract with the provided information",
             requestBody: {
                 required: true,
@@ -227,6 +228,7 @@ const contractPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["Contract"],
             summary: "Get contract by ID",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a contract by their unique ID",
             parameters: [
                 {
@@ -264,6 +266,7 @@ const contractPath: OpenAPIV3.PathsObject = {
         patch: {
             tags: ["Contract"],
             summary: "Update contract by ID",
+            security: [{ bearerAuth: [] }],
             description: "Update the information of a contract by their unique ID",
             parameters: [
                 {
@@ -311,6 +314,7 @@ const contractPath: OpenAPIV3.PathsObject = {
         delete: {
             tags: ["Contract"],
             summary: "Delete contract by ID",
+            security: [{ bearerAuth: [] }],
             description: "Delete a contract by their unique ID",
             parameters: [
                 {
@@ -339,6 +343,71 @@ const contractPath: OpenAPIV3.PathsObject = {
                             }
                         }
                     }
+                },
+                "404": {
+                    description: "Contract not found"
+                }
+            }
+        }
+    },
+    '/contracts/contractDoc_url/:id':{
+        patch: {
+            tags: ["Contract"],
+            summary: "Upload a signed contract document",
+            // security: [{ bearerAuth: [] }],
+            description: "Uploade contract document signed by landlord or tenant",
+            parameters: [
+                {
+                    name: "id",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string",
+                        format: "uuid"
+                    },
+                    description: "The unique identifier of the contract"
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "multipart/form-data": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                tenant_signature_url: {
+                                    type: "string",
+                                    format: "binary",
+                                    description: "The signed contract document signed by tenant"
+                                },
+                                landlord_signature_url: {
+                                    type: "string",
+                                    format: "binary",
+                                    description: "The signed contract document signed by landlord"
+                                }
+                            },
+                        }
+                    }
+                }
+            },
+            responses:{
+                "200" : {
+                    description: "Signed contract uploaded successfully",
+                    content: {
+                        "application/json": {
+                            schema:{
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/contract"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400" : {
+                    description: "No file uploaded"
                 },
                 "404": {
                     description: "Contract not found"

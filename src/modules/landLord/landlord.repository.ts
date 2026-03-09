@@ -17,10 +17,12 @@ export class landLordRepository extends BaseRepositoryImpl<LandLord>{
     }
 
     async getlandLordById(id: string) {
-        return this.landlord.findByPk(id, {include: [{
+        return this.landlord.findByPk(id, {include:
+           {
             model: User,
-            as : 'landlordUser'
-        }]});
+            as :'landlordUser'
+           }
+            });
     }
 
     async getlandLordByUserId(userId: string){
@@ -33,7 +35,10 @@ export class landLordRepository extends BaseRepositoryImpl<LandLord>{
 
     async getlandLordPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.landlord.findAll({ offset, limit });
+        return this.landlord.findAll({ offset, limit , include: [{
+            model: User,
+            as : 'landlordUser'
+        }]});
     }
 
     async updatelandLord(id: string, data: Partial<landLordCreationAtributes>){

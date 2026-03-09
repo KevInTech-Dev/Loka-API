@@ -86,6 +86,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["landLord"],
             summary: "Get all landlords with pagination",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a paginated list of all landlords in the system",
             parameters: [
                 {
@@ -137,6 +138,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["landLord"],
             summary: "Complete landlord information",
+            security: [{ bearerAuth: [] }],
             description: "Complete landlord information with the provide informations",
             requestBody: {
                 required: true,
@@ -174,6 +176,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["landLord"],
             summary: "Get landlord by ID",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a landlord by their unique ID",
             parameters: [
                 {
@@ -204,6 +207,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
         patch: {
             tags: ["landLord"],
             summary: "Update landlord by ID",
+            security: [{ bearerAuth: [] }],
             description: "Update the information of the landlord by their unique ID",
             parameters: [
                 {
@@ -245,6 +249,7 @@ const landlordPath: OpenAPIV3.PathsObject = {
         delete: {
             tags: ["landLord"],
             summary: "Delete landlord by ID",
+            security: [{ bearerAuth: [] }],
             description: "Delete a landlord by their unique ID",
             parameters: [
                 {

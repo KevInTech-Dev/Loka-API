@@ -1,6 +1,7 @@
 import { ContractService } from "@modules/contract/contract.service";
 import {Request, Response} from "express";
 import { createContractInput } from "@modules/contract/contract.schemas";
+import { BadRequestError } from "@/common/errors";
 
 export class contractController {
     private readonly contractService : ContractService;
@@ -47,5 +48,27 @@ export class contractController {
         return res.send({
           data: await this.contractService.deleteContract(id),
         });
-      }
+    }
+    
+    uploadContractDocUrl = async(req:Request, res: Response) => {
+        const id = req.params.id as string;
+        const files = req.files as {[fieldName: string]: Express.Multer.File[]};
+
+        const tenantUrl = files?.['tenant_signature_url']?.[0];
+        const landlordUrl = files?.['landlord_signature_url']?.[0];
+
+        if(!tenantUrl && !landlordUrl){
+            throw new BadRequestError("At least one file (tenant_signature_url or landlord_signature_url) is required")
+        }
+
+        const data = await this.contractService.uploadContractDocUrl(id, {
+            tenant: tenantUrl,
+            landlord: landlordUrl
+        });
+
+        return res.send({
+            message: "Contract document uploaded succefully",
+            data,
+        });
+    };
 }

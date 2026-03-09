@@ -79,7 +79,7 @@ export class ContractRepository {
         await contract.destroy();
         return true;
     }
-
+    
     countContract():Promise<number> {
         return this.contract.count({paranoid:false})
     }

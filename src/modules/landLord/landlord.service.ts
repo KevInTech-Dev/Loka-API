@@ -4,6 +4,7 @@ import { landLordRepository } from "./landlord.repository";
 import { UserRepository } from "../users/user.repository";
 import { landLordResponse } from "./landlord.types";
 import { DuplicateEntryError, NotFoundError } from "@/common/errors";
+import { UserResponse } from "../users/user.types";
 
 
 export  class landLordService {
@@ -64,27 +65,12 @@ export  class landLordService {
         }
     }
 
-    async getlandLordById(id: string): Promise<landLordResponse | null>{
+    async getlandLordById(id: string){
         const landlord = await this.landlordRepository.getlandLordById(id);
         if(!landlord) {
             throw new NotFoundError("Landlord ");
         }
-        return {
-             id: landlord.id,
-            userId: landlord.userId,
-            companyName: landlord.companyName,
-            businessType: landlord.businessType,
-            taxId: landlord.taxId,
-            registrationNumber: landlord.registrationNumber,
-            phonePrimary: landlord.phonePrimary,
-            phoneSecondary: landlord.phoneSecondary,
-            address: landlord.address,
-            city: landlord.city,
-            country: landlord.country,
-            isVerified: landlord.isVerified,
-            createdAt: landlord.createdAt,
-            updatedAt: landlord.updatedAt
-        };
+        return landlord;
     }
 
     async getAllLandlords(): Promise<landLordResponse[]> {
@@ -108,7 +94,7 @@ export  class landLordService {
         });
     }
 
-    async getlandLordPaginated(page: number, limit: number): Promise<landLordResponse[]> {
+    async getlandLordPaginated(page: number, limit: number): Promise<landLordResponse[]>{
         return (await this.landlordRepository.getlandLordPaginated(page, limit)).map(
             (landlord) => {
                 return {
@@ -125,13 +111,14 @@ export  class landLordService {
                     country: landlord.country,
                     isVerified: landlord.isVerified,
                     createdAt: landlord.createdAt,
-                    updatedAt: landlord.updatedAt
+                    updatedAt: landlord.updatedAt,
+                    landlordUser:(landlord as any).landlordUser as UserResponse
                 };
             },
         );
     }
 
-    async updatelandLord(id: string, data: Partial<CreateLandlordInput>): Promise<landLordResponse | null> {
+    async updatelandLord(id: string, data: Partial<CreateLandlordInput>): Promise<landLordResponse | null>{
         const updatelandLord = await this.landlordRepository.updatelandLord(id, data);
         if(!updatelandLord) {
             throw new NotFoundError("Landlord ")
@@ -152,6 +139,7 @@ export  class landLordService {
             createdAt: updatelandLord.createdAt,
             updatedAt: updatelandLord.updatedAt,
     };
+
 }
     async deletelandLord(id: string): Promise<boolean> {
         const deleted = await this.landlordRepository.deletelandLord(id);

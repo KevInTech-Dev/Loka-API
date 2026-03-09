@@ -9,6 +9,8 @@ export interface ContractAttributes extends BaseModel {
     property_id: string;
     unit_id: string;
     tenant_id: string;
+    landlord_signature_url?: string;
+    tenant_signature_url?: string;
     contract_type: ContractTypeEnum;
     contract_start_date: Date;
     contract_end_date: Date;
@@ -60,6 +62,8 @@ class Contract
         declare initial_water_reading: number;
         declare auto_renewal: boolean;
         declare special_terms: string;
+        declare landlord_signature_url?: string;
+        declare tenant_signature_url?: string;
         declare contract_status: ContractStatusEnum;
         declare is_signed_by_landlord: boolean;
         declare is_signed_by_tenant: boolean;
@@ -202,10 +206,17 @@ const initModelContract = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            
             contract_status: {
                type: DataTypes.ENUM(...Object.values(ContractStatusEnum)),
                defaultValue: ContractStatusEnum.DRAFT,
+            },
+            tenant_signature_url: {
+                type:DataTypes.STRING,
+                allowNull: true,
+            },
+            landlord_signature_url: {
+                type:DataTypes.STRING,
+                allowNull: true,
             },
             is_signed_by_landlord: {
                 type: DataTypes.BOOLEAN,

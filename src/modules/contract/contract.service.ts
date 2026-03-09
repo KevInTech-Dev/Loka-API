@@ -7,6 +7,7 @@ import { PropertyRepository } from "@modules/property/property.repository";
 import { UnitLocationRepository } from "@modules/unitLocation/unitLocation.repository";
 import { NotFoundError } from "@/common/errors";
 import { ContractStatusEnum } from "@/enums/ContractStatusEnum";
+import { deleteFile, fileExists } from "@/utils/file.utils";
 
 export class ContractService {
     private contractRepository: ContractRepository;
@@ -216,7 +217,28 @@ export class ContractService {
         )
        
     }
+    async uploadContractDocUrl(id: string, files: {tenant? :Express.Multer.File, landlord?: Express.Multer.File}){
+        const contract = await this.getContractById(id);
+        if(!contract){
+            throw new NotFoundError("Contract");
+        }
 
+        const uploadData: any = {};
+
+        if(files.landlord){
+            if(contract.landlord_signature_url && fileExists(contract.landlord_signature_url)){
+                deleteFile(contract.landlord_signature_url)
+            }
+            uploadData.landlord_signature_url = files.landlord.path;
+        }
+        if(files.tenant){
+            if(contract.tenant_signature_url && fileExists(contract.tenant_signature_url)){
+                deleteFile(contract.tenant_signature_url)
+            }
+            uploadData.tenant_signature_url = files.tenant.path;
+        }
+        return await this.contractRepository.updateContract(id, uploadData);
+    }
     async updateContract(id: string, data: Partial<createContractInput>): Promise<contractResponse | null> {
         const updateContract = await this.contractRepository.updateContract(id, {...data, other_changes:JSON.parse(JSON.stringify(data.other_changes))});
         if(!updateContract){
