@@ -18,7 +18,7 @@ export class UserService {
 
     async createUser(data: CreateUserInput): Promise<UserResponse | null> {
 
-        const haspass = await hashWord(data.password);
+        const haspass = await hashWord(data?.password);
 
         const user = await this.userRepository.create(this.userMapper.toEntity({...data, password: haspass}));
 
@@ -36,9 +36,9 @@ export class UserService {
         }
 
         try {
-            if (user.profilePhotoUrl && user.profilePhotoUrl.length > 0) {
-                if (fileExists(user.profilePhotoUrl)) {
-                    deleteFile(user.profilePhotoUrl)
+            if (user?.profilePhotoUrl && user?.profilePhotoUrl.length > 0) {
+                if (fileExists(user?.profilePhotoUrl)) {
+                    deleteFile(user?.profilePhotoUrl)
                 }
             }
         } catch (error) {
@@ -97,18 +97,18 @@ export class UserService {
         return (await this.userRepository.getUserPaginated(page, limit)).map(
             (user) => {
                 return {
-                    id: user.id,
-                    username: user.username,
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    phoneNumber: user.phoneNumber,
-                    role: user.role,
-                    email: user.email,
-                    isActive: user.isActive,
-                    profilePhotoUrl: user.profilePhotoUrl,
-                    isEmailVerified: user.isEmailVerified,
-                    createdAt: user.createdAt,
-                    updatedAt: user.updatedAt,
+                    id: user?.id,
+                    username: user?.username,
+                    firstname: user?.firstname,
+                    lastname: user?.lastname,
+                    phoneNumber: user?.phoneNumber,
+                    role: user?.role,
+                    email: user?.email,
+                    isActive: user?.isActive,
+                    profilePhotoUrl: user?.profilePhotoUrl,
+                    isEmailVerified: user?.isEmailVerified,
+                    createdAt: user?.createdAt,
+                    updatedAt: user?.updatedAt,
                 };
             },
         );
