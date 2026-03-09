@@ -23,7 +23,7 @@ export interface ContractAttributes extends BaseModel {
     water_included: boolean;
     electricity_rate_per_kwh: number;
     water_rate_per_m3: number;
-    other_changes: JSON;
+    other_charges: JSON;
     initial_electricity_reading: number;
     initial_water_reading: number;
     auto_renewal: boolean;
@@ -57,7 +57,7 @@ class Contract
         declare water_included: boolean;
         declare electricity_rate_per_kwh: number;
         declare water_rate_per_m3: number;
-        declare other_changes: JSON;
+        declare other_charges: JSON;
         declare initial_electricity_reading: number;
         declare initial_water_reading: number;
         declare auto_renewal: boolean;
@@ -186,7 +186,7 @@ const initModelContract = (sequelize: Sequelize) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            other_changes: {
+            other_charges: {
                 type: DataTypes.JSON,
                 allowNull: true,
             },

@@ -20,7 +20,7 @@ export type contractResponse = BaseTypes & {
         water_included: boolean;
         electricity_rate_per_kwh: number;
         water_rate_per_m3: number;
-        other_changes: JSON;
+        other_charges: JSON;
         initial_electricity_reading: number;
         initial_water_reading: number;
         auto_renewal: boolean;

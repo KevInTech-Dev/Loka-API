@@ -1,10 +1,11 @@
 import {ModelStatic} from "sequelize";
-import {Contract, ContractCreationAttributes} from "@database/models/Contracts";
+import {Contract, ContractAttributes, ContractCreationAttributes} from "@database/models/Contracts";
 import { NotFoundError } from "@/common/errors";
 import {LandLord} from '@database/models/landLord'
 import { Tenant } from "@/database/models/Tenants";
 import { Property } from "@/database/models/Property";
 import { UnitLocation } from "@/database/models/UnitLocation";
+
 export class ContractRepository {
     
     private contract: ModelStatic<Contract>
@@ -82,5 +83,13 @@ export class ContractRepository {
     
     countContract():Promise<number> {
         return this.contract.count({paranoid:false})
+    }
+
+    getContractByAttribut(attribut: keyof ContractAttributes, value: boolean){
+        return this.contract.findOne({
+            where : {
+                [attribut]: value
+            }
+        });
     }
 }

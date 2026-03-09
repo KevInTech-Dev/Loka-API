@@ -85,7 +85,7 @@ const contractSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 default: 0,
                 description: "The water rate per m3",
             },
-            other_changes: {
+            other_charges: {
                 type: "object",
                 description: "The changes",
             },

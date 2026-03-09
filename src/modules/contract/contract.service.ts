@@ -66,7 +66,7 @@ export class ContractService {
             water_included: data.water_included,
             electricity_rate_per_kwh: data.electricity_rate_per_kwh,
             water_rate_per_m3: data.water_rate_per_m3,
-            other_changes: JSON,
+            other_charges: JSON,
             initial_electricity_reading: data.initial_electricity_reading,
             initial_water_reading: data.initial_water_reading,
             auto_renewal: false,
@@ -94,7 +94,7 @@ export class ContractService {
             water_included: contract.water_included,
             electricity_rate_per_kwh: contract.electricity_rate_per_kwh,
             water_rate_per_m3: contract.water_rate_per_m3,
-            other_changes: contract.other_changes,
+            other_charges: contract.other_charges,
             initial_electricity_reading: contract.initial_electricity_reading,
             initial_water_reading: contract.initial_water_reading,
             auto_renewal: contract.auto_renewal,
@@ -131,7 +131,7 @@ export class ContractService {
             water_included: contract.water_included,
             electricity_rate_per_kwh: contract.electricity_rate_per_kwh,
             water_rate_per_m3: contract.water_rate_per_m3,
-            other_changes: contract.other_changes,
+            other_charges: contract.other_charges,
             initial_electricity_reading: contract.initial_electricity_reading,
             initial_water_reading: contract.initial_water_reading,
             auto_renewal: contract.auto_renewal,
@@ -165,7 +165,7 @@ export class ContractService {
                 water_included: contract.water_included,
                 electricity_rate_per_kwh: contract.electricity_rate_per_kwh,
                 water_rate_per_m3: contract.water_rate_per_m3,
-                other_changes: contract.other_changes,
+                other_charges: contract.other_charges,
                 initial_electricity_reading: contract.initial_electricity_reading,
                 initial_water_reading: contract.initial_water_reading,
                 auto_renewal: contract.auto_renewal,
@@ -202,7 +202,7 @@ export class ContractService {
                     water_included: contract.water_included,
                     electricity_rate_per_kwh: contract.electricity_rate_per_kwh,
                     water_rate_per_m3: contract.water_rate_per_m3,
-                    other_changes: contract.other_changes,
+                    other_charges: contract.other_charges,
                     initial_electricity_reading: contract.initial_electricity_reading,
                     initial_water_reading: contract.initial_water_reading,
                     auto_renewal: contract.auto_renewal,
@@ -240,7 +240,7 @@ export class ContractService {
         return await this.contractRepository.updateContract(id, uploadData);
     }
     async updateContract(id: string, data: Partial<createContractInput>): Promise<contractResponse | null> {
-        const updateContract = await this.contractRepository.updateContract(id, {...data, other_changes:JSON.parse(JSON.stringify(data.other_changes))});
+        const updateContract = await this.contractRepository.updateContract(id, {...data, other_charges:JSON.parse(JSON.stringify(data.other_charges))});
         if(!updateContract){
             throw new NotFoundError("Contract")
         }
@@ -264,7 +264,7 @@ export class ContractService {
                 water_included: updateContract.water_included,
                 electricity_rate_per_kwh: updateContract.electricity_rate_per_kwh,
                 water_rate_per_m3: updateContract.water_rate_per_m3,
-                other_changes: updateContract.other_changes,
+                other_charges: updateContract.other_charges,
                 initial_electricity_reading: updateContract.initial_electricity_reading,
                 initial_water_reading: updateContract.initial_water_reading,
                 auto_renewal: updateContract.auto_renewal,
