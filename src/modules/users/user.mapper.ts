@@ -28,6 +28,7 @@ export class UserMapper implements BaseMapper<User, UserResponse> {
             username: data?.username,
             role: data?.role,
             phoneNumber: data?.phoneNumber,
+            password: data.password,
             isEmailVerified: false,
             isActive: false,
             firstname: data?.firstname,
