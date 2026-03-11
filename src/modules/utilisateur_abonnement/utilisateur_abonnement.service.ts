@@ -94,7 +94,6 @@ export class Utilisateur_AbonnementService {
                     break;
 
                 case PlanAbonnementEnum.CUSTOM || PlanAbonnementEnum.ENTREPRISE || PlanAbonnementEnum.PRO:
-                    data.status = StatusAbonnementEnum.INACTIVE;
                     const invNumber = await this.factureAbonnementRepository.getLastInvNumber();
                     this.factureAbonnementService.createFactureAbonnement({
                         invoiceType: InvoiceType.ABONNEMENT,
@@ -107,6 +106,7 @@ export class Utilisateur_AbonnementService {
                         utilisateurAbonnement: response.id,
                         dateEcheance: new Date(new Date().getDate() + 15),
                     }, transaction);
+                    await this.repository.updateUtilisateurAbonnement(data.id, { ...data, status: StatusAbonnementEnum.INACTIVE }, transaction)
             }
             transaction.commit()
         } catch (error) {
