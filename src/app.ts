@@ -17,6 +17,13 @@ import unitTypeRoute from "./modules/unitType/unitType.route";
 import unitLocationRoute from "./modules/unitLocation/unitLocation.route";
 import propertyUnitLocationRoute from "./modules/propertyUnitLocation/propertyUnitLocation.route";
 import authRoute from "./modules/authentification/auth.route";
+import contractRoute from "@modules/contract/contract.routes";
+import factureAbonnementRoute from "./modules/Facture_Abonnement/factureAbonnement.route";
+import factureEauRoute from "./modules/Facture_Eau/factureEau.route";
+import factureElectriciteRoute from "./modules/Facture_Electricite/factureElectricite.route";
+import factureLoyerRoute from "./modules/Facture_Loyer/factureLoyer.route";
+import factureMaintenanceRoute from "./modules/Facture_Maintenance/factureMaintenance.route";
+
 
 const app: Express = express();
 const API_PREFIX = env.API_PREFIX;
@@ -68,6 +75,16 @@ app.use(`${API_PREFIX}/propertyUnitLocation`, propertyUnitLocationRoute);
 app.use(`${API_PREFIX}/tenants`, tenantRoute);
 app.use(`${API_PREFIX}/auth`, authRoute);
 app.use(`${API_PREFIX}/utilisateur-abonnements`, utilisateur_AbonnementRoute);
+app.use(`${API_PREFIX}/contracts`, contractRoute);
+app.use(`${API_PREFIX}/facture-abonnement`, factureAbonnementRoute);
+app.use(`${API_PREFIX}/facture-eau`, factureEauRoute);
+app.use(`${API_PREFIX}/facture-electricite`, factureElectriciteRoute);
+app.use(`${API_PREFIX}/facture-loyer`, factureLoyerRoute);
+app.use(`${API_PREFIX}/facture-maintenance`, factureMaintenanceRoute);
+
+
+
+
 
 
 

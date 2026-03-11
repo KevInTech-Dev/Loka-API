@@ -1,11 +1,12 @@
 import { GenderEnum } from "@/enums/GenderEnum";
 import { OpenAPIV3 } from "openapi-types";
 import {userSchema} from "@/swagger/user.swagger";
+import { idCardTypeEnum } from "@/enums/idCardTypeEnum";
 
 
 const tenantTags: OpenAPIV3.TagObject = {
     name: "Tenant",
-    description: "Operations related to tenant Mangement"
+    description: "Operations related to tenant Managment"
 }
 
 const tenantSchema : OpenAPIV3.ComponentsObject['schemas'] = {
@@ -41,23 +42,26 @@ const tenantSchema : OpenAPIV3.ComponentsObject['schemas'] = {
             id_card_type: {
                 type: "string",
                 default: "",
-                description: "Le type de carte d'identité"
+                description: "Le type de carte d'identité, CARTE_D_IDENTITE | PASSEPORT | CARTE_ELECTEUR | CERTIFICAT_NATIONALITE",
+                enum: [...Object.values(idCardTypeEnum)]
             },
             id_card_number: {
                 type: "string",
                 default: "",
                 description: "Numero de la carte"
             },
-           /* id_card_front_url: {
+            id_card_front_url: {
                 type: "string",
+                nullable: true,
                 format: "binary",
-                description: "Photo recto"
+                description: "Photo recto de la carte"
             },
             id_card_back_url: {
                 type: "string",
+                nullable: true,
                 format: "binary",
-                description: "Photo verso"
-            },*/
+                description: "Photo verso de la carte"
+            },
             occupation: {
                 type: "string",
                 default: "",
@@ -89,7 +93,7 @@ const tenantSchema : OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Relatioin avec la personne à prévenir"
             }
         },
-        // required: ["userId", "date_of_birth", "gender", "nationality", "phone_primary", "id_card_type", "id_card_number", "id_card_front_url", "id_card_back_url", ...userSchema["createUserRequest"]["required"]]
+         required: ["date_of_birth", "gender", "nationality", "phone_primary", "id_card_type", "id_card_number", ...userSchema["createUserRequest"]["required"]]
     },
 
     paginatedTenant: {
@@ -118,6 +122,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["Tenant"],
             summary: "Get all tenants with pagination",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a paginated list of all tenants in the system",
             parameters: [
                 {
@@ -134,7 +139,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
                     in: "query",
                     schema: {
                         type: "integer",
-                        default: "10"
+                        default: 10
                     },
                     description: "Number of items per page"
                 },
@@ -169,7 +174,8 @@ const tenantPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["Tenant"],
             summary: "Create a new tenant",
-            description: "Create a new landlord with the provide informations",
+            security: [{ bearerAuth: [] }],
+            description: "Create a new tenant with the provide informations",
             requestBody: {
                 required: true,
                 content: {
@@ -186,10 +192,18 @@ const tenantPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/tenant"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/tenant"
+                                    }
+                                }
                             }
                         }
                     }
+                },
+                "400" : {
+                    description: "Invalide Input"
                 }
             }
         }
@@ -198,13 +212,16 @@ const tenantPath: OpenAPIV3.PathsObject = {
         get: {
             tags: ["Tenant"],
             summary: "Get tenant by ID",
+            security: [{ bearerAuth: [] }],
             description: "Retrieve a tenant by their unique ID",
             parameters: [
                 {
                     name: "id",
                     in: "path",
+                    required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format: "uuid"
                     },
                     description: "The unique identifier of the tenant"
                 }
@@ -215,7 +232,12 @@ const tenantPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json" : {
                             schema: {
-                                $ref: "#/components/schemas/tenant"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/tenant"
+                                    }
+                                }
                             }
                         }
                     }
@@ -228,6 +250,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
         patch: {
             tags: ["Tenant"],
             summary: "Update tenant by ID",
+            security: [{ bearerAuth: [] }],
             description: "Update the information of the tenant by their unique ID",
             parameters: [
                 {
@@ -235,7 +258,8 @@ const tenantPath: OpenAPIV3.PathsObject = {
                     in: "path",
                     required: true,
                     schema: {
-                        type: "string"
+                        type: "string",
+                        format: "uuid"
                     },
                     description: "The unique identifier of the tenant"
                 }
@@ -256,7 +280,12 @@ const tenantPath: OpenAPIV3.PathsObject = {
                     content: {
                         "application/json" :{
                             schema: {
-                                $ref: "#/components/schemas/tenant"
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/tenant"
+                                    }
+                                }
                             }
                         }
                     }
@@ -269,6 +298,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
         delete: {
             tags: ["Tenant"],
             summary: "Delete tenant by ID",
+            security: [{ bearerAuth: [] }],
             description: "Delete a tenant by their unique ID",
             parameters: [
                 {
@@ -290,8 +320,73 @@ const tenantPath: OpenAPIV3.PathsObject = {
                 }
             }
         }
+     },
+     "/tenants/photo/{id}": {
+        patch: {
+            tags: ["Tenant"],
+            security: [{ bearerAuth: [] }],
+            summary: "Update tenant id card photo",
+            description: "Upload id card photo for a tenant by their unique ID",
+            parameters: [
+                {
+                    name:"id",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string",
+                        format: "uuid"
+                    },
+                    description: "The unique identifier of the tenant"
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "multipart/form-data": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                id_card_front_url: {
+                                    type: "string",
+                                    format: "binary",
+                                    description: "The id front card photo file to upload"
+                                },
+                                id_card_back_url: {
+                                    type: "string",
+                                    format: "binary",
+                                    description: "The id front card photo file to upload"
+                                }
+                            },
+                        }
+                    }
+                }
+            },
+            responses: {
+                "200": {
+                    description: "id card added successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/tenant"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                 "400": {
+                    description: "No file uploaded"
+                },
+                "404": {
+                    description: "Tenant not found"
+                }
+            }
+        }
      }
-    }
+}
 
     export {
         tenantTags,

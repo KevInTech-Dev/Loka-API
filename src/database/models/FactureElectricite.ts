@@ -75,11 +75,11 @@ const initModelFactureElectricite = (sequelize: Sequelize) => {
 
             },
             totalAPayer: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false
             },
             unitLocation: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.UUID,
                 allowNull: false
             }
         }, {

@@ -1,6 +1,7 @@
 import { BaseModel } from "@/common/models/base.model";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
-import { StatusAbonnementEnum } from "@/enums/StatusAbonnement";
+import { StatusFactures } from "@/enums/StatusFacturesEnum";
+
 
 export type FactureEauResponse = BaseModel & {
     dateEcheance: Date;
@@ -11,7 +12,7 @@ export type FactureEauResponse = BaseModel & {
     isTva: boolean;
     notes: string;
     numeroFacture: string;
-    status: StatusAbonnementEnum;
+    status: StatusFactures;
     totalAPayer: number;
     unitLocation: string;
 }

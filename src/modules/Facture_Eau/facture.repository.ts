@@ -30,4 +30,14 @@ export class FactureEauRepository extends BaseRepositoryImpl<FactureEau> {
             }
         });
     }
+
+    async isThereInvoice(idReleveCompteur: keyof FactureEauAttributes, value: string) {
+        const aujourdhui = new Date();
+        return this.model.findOne({
+            where: {
+                [idReleveCompteur]: value,
+                dateEmission: aujourdhui
+            }
+        })
+    }
 }

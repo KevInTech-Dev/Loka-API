@@ -8,7 +8,7 @@ export interface FactureAbonnementAttributes extends FactureAttributes {
     utilisateurAbonnement: string;
 }
 
-export interface FactureAbonnementCreationAttributes extends Optional<FactureAbonnementAttributes, "id" | "createdAt" | "updatedAt"> { }
+export interface FactureAbonnementCreationAttributes extends Optional<FactureAbonnementAttributes, "id" | "createdAt" | "updatedAt" | "dateEmission"> { }
 
 class FactureAbonnement extends Model<FactureAbonnementAttributes, FactureAbonnementCreationAttributes> implements FactureAbonnementAttributes {
 
@@ -39,7 +39,7 @@ const initModelFactureAbonnement = (sequelize: Sequelize) => {
                 allowNull: false
             },
             totalAPayer: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false
             },
             utilisateurAbonnement: {

@@ -45,13 +45,13 @@ class User
     declare readonly updatedAt?: Date;
     //J'ai ajouté l'association qui est entre landlord et user avec la méthode associate()
     static associate(models: any) {
-        User.hasOne(models.landLord, {
+        User.hasOne(models.LandLord, {
             foreignKey: 'userId',
-            as: 'landlord'
+            as: 'userLandlord'
         });
         User.hasOne(models.Tenant, {
             foreignKey: 'userId',
-            as: 'tenant'
+            as: 'userTenant'
         });
         User.hasMany(models.RefreshToken, {
             foreignKey: 'userId',

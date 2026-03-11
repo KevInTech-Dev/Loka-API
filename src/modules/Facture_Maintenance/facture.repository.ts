@@ -31,4 +31,14 @@ export class FactureMaintenanceRepository extends BaseRepositoryImpl<FactureMain
             }
         });
     }
+
+    async isThereInvoice(idTenant: keyof FactureMaintenanceAttributes, value: string) {
+        const aujourdhui = new Date();
+        return this.model.findOne({
+            where: {
+                [idTenant]: value,
+                dateEmission: aujourdhui
+            }
+        })
+    }
 }

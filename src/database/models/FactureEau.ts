@@ -77,7 +77,7 @@ const initModelFactureEau = (sequelize: Sequelize) => {
                 allowNull: false
             },
             totalAPayer: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
                 allowNull: false
             },
             unitLocation: {

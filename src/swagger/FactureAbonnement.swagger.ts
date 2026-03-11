@@ -98,10 +98,6 @@ const factureAbonnementSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 type: "string",
                 description: "Due date"
             },
-            dateEmission: {
-                type: "string",
-                description: "Date of making the invoice"
-            },
             invoiceType: {
                 type: "string",
                 description: "FACTURE_LOYER|FACTURE_MAINTENANCE|FACTURE_EAU|FACTURE_ELEC|ABONNEMENT",

@@ -1,5 +1,6 @@
 import { InvoiceType } from '@/enums/InvoiceTypeEnume'
 import { StatusAbonnementEnum } from '@/enums/StatusAbonnement'
+import { StatusFactures } from '@/enums/StatusFacturesEnum'
 import { z } from 'zod'
 
 const createFactureLoyerSchema = z.object({
@@ -7,7 +8,7 @@ const createFactureLoyerSchema = z.object({
     dateEmission: z.date(),
     invoiceType: z.enum(InvoiceType),
     dateEcheance: z.date(),
-    status: z.enum(StatusAbonnementEnum),
+    status: z.enum(StatusFactures),
     notes: z.string(),
     isTva: z.boolean(),
     id: z.string(),
@@ -22,11 +23,11 @@ const factureLoyerIdSchema = z.object({
     id: z.uuid('Invalid id for loyer'),
 })
 
-type CreateFactureLoyerSchema = z.infer<typeof createFactureLoyerSchema>
+type CreateFactureLoyerInput = z.infer<typeof createFactureLoyerSchema>
 type FactureLoyerIdSchema = z.infer<typeof factureLoyerIdSchema>
 
 export {
-    CreateFactureLoyerSchema,
+    CreateFactureLoyerInput,
     FactureLoyerIdSchema,
     factureLoyerIdSchema,
     createFactureLoyerSchema

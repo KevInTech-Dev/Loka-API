@@ -1,14 +1,14 @@
 import { AuthenticationError, DuplicateEntryError, NotFoundError } from "@/common/errors";
+import { notFoundHandler } from "../middleware/error.middleware";
 import { LoginInput } from "./auth.schema";
 import { UserRepository } from "@/modules/users/user.repository";
-import { compareHash, hashWord } from "@/utils/password.utils";
+import { compareHash } from "@/utils/password.utils";
 import { TokenService } from "./token.service";
 import { TokenResponse } from "./auth.type";
 import { CreateUserInput } from "../users/user.schema";
 import { UserResponse } from "../users/user.types";
 import { UserService } from "../users/user.service";
-import { triggerAsyncId } from "node:async_hooks";
-import { trim } from "zod";
+
 
 export class AuthService {
 
@@ -24,12 +24,10 @@ export class AuthService {
 
     login = async (param: LoginInput): Promise<TokenResponse> => {
         const existingUser = await this.userRepository.getUserByAttribut('username', param.username);
-        //console.log("Value of existing user", existingUser);
         if (!existingUser) {
             throw new NotFoundError("User not found");
         }
-        const verifyPassword = await compareHash(existingUser.password.trim(), param.password.trim());
-        //console.log("value of the verifyPassword:", verifyPassword + existingUser.password + param.password);
+        const verifyPassword = await compareHash(existingUser.password, param.password);
         if (!verifyPassword) {
             throw new AuthenticationError("Incorrect password");
         }

@@ -52,7 +52,7 @@ const initModelFactureLoyer = (sequelize: Sequelize) => {
             },
 
             totalAPayer: {
-                type: DataTypes.DECIMAL,
+                type: DataTypes.INTEGER,
                 allowNull: false
             },
             numeroFacture: {
@@ -88,8 +88,8 @@ const initModelFactureLoyer = (sequelize: Sequelize) => {
         },
         {
             sequelize,
-            tableName: "facturesloyer",
-            modelName: "FactureLoyer",
+            tableName: "Facturesloyer",
+            modelName: "factureLoyer",
             timestamps: true,
             underscored: true
         }

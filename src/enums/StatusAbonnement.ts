@@ -4,4 +4,5 @@ export enum StatusAbonnementEnum {
     EXPIRED = "expired",
     SUSPENDED = "suspended",
     CANCELLED = "cancelled",
+    INACTIVE = "inactive"
 }

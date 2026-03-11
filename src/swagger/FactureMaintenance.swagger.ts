@@ -35,7 +35,7 @@ const factureMaintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
             },
             invoiceType: {
                 type: "string",
-                description: "FACTURE_LOYER|FACTURE_MAINTENANCE|FACTURE_EAU|FACTURE_ELEC|ABONNEMENT",
+                description: "FACTURE_maintenance|FACTURE_MAINTENANCE|FACTURE_EAU|FACTURE_ELEC|ABONNEMENT",
                 enum: [...Object.values(InvoiceType)]
             },
             isTva: {
@@ -104,9 +104,9 @@ const factureMaintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
             },
             invoiceType: {
                 type: "string",
-                description: "FACTURE_LOYER|FACTURE_MAINTENANCE|FACTURE_EAU|FACTURE_ELEC|ABONNEMENT",
+                description: "FACTURE_maintenance|FACTURE_MAINTENANCE|FACTURE_EAU|FACTURE_ELEC|ABONNEMENT",
                 enum: [...Object.values(InvoiceType)],
-                default: "ABONNEMENT|FACTURE_EAU|FACTURE_ELEC|FACTURE_LOYER|FACTURE_MAINTENANCE"
+                default: "ABONNEMENT|FACTURE_EAU|FACTURE_ELEC|FACTURE_maintenance|FACTURE_MAINTENANCE"
             },
             isTva: {
                 type: "boolean",
@@ -137,7 +137,7 @@ const factureMaintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
 }
 
 const factureMaintenancePath: OpenAPIV3.PathsObject = {
-    "/facture-loyer": {
+    "/facture-maintenance": {
         get: {
             tags: ["MaintenanceInvoice"],
             summary: "Get all invoice",
@@ -225,7 +225,7 @@ const factureMaintenancePath: OpenAPIV3.PathsObject = {
             }
         }
     },
-    "/facture-loyer/{id}": {
+    "/facture-maintenance/{id}": {
         get: {
             tags: ["MaintenanceInvoice"],
             summary: "Get maintenance invoice by ID",

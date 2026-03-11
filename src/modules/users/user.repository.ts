@@ -1,7 +1,7 @@
-import { User, UserAttributes, UserCreationAttributes } from "@database/models/Users";
-import { CreationAttributes, ModelStatic } from "sequelize";
-import { WhereQueryUser } from "@modules/users/user.types";
-import { BaseRepositoryImpl } from "@common/base.repository";
+import {User, UserAttributes} from "@database/models/Users";
+import {CreationAttributes} from "sequelize";
+import {WhereQueryUser} from "@modules/users/user.types";
+import {BaseRepositoryImpl} from "@common/base.repository";
 
 export class UserRepository extends BaseRepositoryImpl<User> {
 
@@ -24,7 +24,7 @@ export class UserRepository extends BaseRepositoryImpl<User> {
 
     async getUserPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.model.findAll({ offset, limit });
+        return this.model.findAll({offset, limit});
     }
 
     getUserByAttribut(attribut: keyof UserAttributes, value: string) {

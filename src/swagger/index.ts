@@ -11,6 +11,7 @@ import { unitTypePath, unitTypeSchema } from "./unitType.swagger";
 
 import { tenantPath, tenantSchema, tenantTags } from "./tenant.swagger";
 import { authenticationSchema, AuthentificationPath, refreshTokenObjectPath, refreshTokenObjectSchema, RefreshTokenPath, refreshTokenSchema, RegistrationPath, registrationSchema } from "./login.swagger";
+import {contractPath, contractSchema, contractTags} from "@/swagger/contract.swagger";
 
 import { utilisateurAbonnementPath, utilisateurAbonnementSchema, utilisateurAbonnementTags } from "./utilisateur_abonnement.swagger";
 import { factureAbonnementPath, factureAbonnementSchema } from "./FactureAbonnement.swagger";
@@ -24,6 +25,9 @@ export const tags: OpenAPIV3.TagObject[] = [
     userTags,
     landlordTags,
     tenantTags,
+    abonnementsTags,
+    utilisateurAbonnementTags,
+    contractTags,
     abonnementsTags,
     utilisateurAbonnementTags
 ];
@@ -56,7 +60,6 @@ export const paths: OpenAPIV3.PathsObject = {
         },
     },
     // Module paths
-
     ...userPath,
     ...propertyPath,
     ...propertyTypePath,
@@ -70,6 +73,12 @@ export const paths: OpenAPIV3.PathsObject = {
     ...tenantPath,
     ...AuthentificationPath,
     ...RegistrationPath,
+    ...abonnementPath,
+    ...utilisateurAbonnementPath,
+    ...tenantPath,
+    ...abonnementsSchema,
+    ...RegistrationPath,
+    ...contractPath,
     ...RefreshTokenPath,
     ...refreshTokenObjectPath,
     ...abonnementPath,
@@ -96,6 +105,7 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...tenantSchema,
     ...registrationSchema,
     ...authenticationSchema,
+    ...contractSchema,
     ...refreshTokenSchema,
     ...refreshTokenObjectSchema,
     ...abonnementsSchema,

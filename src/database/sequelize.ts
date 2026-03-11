@@ -15,11 +15,12 @@ import { initRefreshToken } from "./models/RefreshToken";
 import { initmodelPermissions } from "./models/Permissions";
 import { initModelPermissionsAbonnement } from "./models/PermissionsAbonnement";
 import { initModelUtilisateur_Abonnement } from "./models/Utilisateur_Abonnement";
-import { initModelFactureMiantenance } from "./models/FacturesMaintenance";
-import { initModelFactureLoyer } from "./models/FactureLoyer";
-import { initModelFactureElectricite } from "./models/FactureElectricite";
-import { initModelFactureEau } from "./models/FactureEau";
+import { initModelContract } from "./models/Contracts";
 import { initModelFactureAbonnement } from "./models/FactureAbonnment";
+import { initModelFactureEau } from "./models/FactureEau";
+import { initModelFactureElectricite } from "./models/FactureElectricite";
+import { initModelFactureLoyer } from "./models/FactureLoyer";
+import { initModelFactureMiantenance } from "./models/FacturesMaintenance";
 
 
 const sequelize = new Sequelize({
@@ -73,6 +74,7 @@ const initModels = async () => {
   initUnitLocation(sequelize);
   initUnitType(sequelize);
   initRefreshToken(sequelize);
+  initModelContract(sequelize);
   initmodelPermissions(sequelize);
   initModelPermissionsAbonnement(sequelize);
   initModelUtilisateur_Abonnement(sequelize);

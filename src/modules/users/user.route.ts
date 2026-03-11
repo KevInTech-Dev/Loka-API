@@ -11,12 +11,12 @@ const router: Router = Router();
 const userController = new UserController();
 
 // get all users
-router.get("",
-    authMiddleware,
-    authorize(["admin", "proprietaire"]),
-    validate(defaultPaginationQuery, 'query'), userController.getAllUsers);
+// router.get("",
+//     authMiddleware,
+//     authorize(["admin", "proprietaire"]),
+//     validate(defaultPaginationQuery, 'query'), userController.getAllUsers);
 
-// router.get("", userController.getAllUsers);
+router.get("", userController.getAllUsers);
 
 
 // create user

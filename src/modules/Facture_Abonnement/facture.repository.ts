@@ -1,11 +1,12 @@
 import { BaseRepositoryImpl } from "@/common/base.repository";
 import { FactureAbonnement, FactureAbonnementAttributes } from "@/database/models/FactureAbonnment";
-import { CreateFactureAbonnementInput } from "./facture.schema";
+
 import { CreationAttributes } from "sequelize";
 
-export class factureAbonnementRepository extends BaseRepositoryImpl<FactureAbonnement> {
+
+export class FactureAbonnementRepository extends BaseRepositoryImpl<FactureAbonnement> {
     constructor() {
-        super(FactureAbonnement)
+        super(FactureAbonnement);
     }
     //Creer facture abonnment
     async create(data: CreationAttributes<FactureAbonnement>): Promise<FactureAbonnement> {
@@ -30,6 +31,30 @@ export class factureAbonnementRepository extends BaseRepositoryImpl<FactureAbonn
                 [attribut]: value
             }
         });
+    }
+
+    //Verifier si il existe déjà une facture pour une date précise concernant un utilisateurAbonnement
+    async isThereInvoice(utilisateurAbonnement: keyof FactureAbonnementAttributes, value: string) {
+        const aujourdhui = new Date();
+        return this.model.findOne({
+            where: {
+                [utilisateurAbonnement]: value,
+                dateEmission: aujourdhui
+            }
+        })
+    }
+
+    getLastInvNumber = async (): Promise<FactureAbonnement> => {
+        return this.model.findOne({
+            where: {
+                dateEmission: {
+                    [this.Op.lte]: new Date()
+                }
+            },
+            order: [
+                ["dateEmission", "DESC"]
+            ]
+        })
     }
 
 }

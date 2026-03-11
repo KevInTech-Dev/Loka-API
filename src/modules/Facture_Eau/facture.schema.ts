@@ -1,5 +1,6 @@
 import { InvoiceType } from '@/enums/InvoiceTypeEnume'
 import { StatusAbonnementEnum } from '@/enums/StatusAbonnement'
+import { StatusFactures } from '@/enums/StatusFacturesEnum'
 import { z } from 'zod'
 
 const creationFactureEauSchema = z.object({
@@ -11,7 +12,7 @@ const creationFactureEauSchema = z.object({
     isTva: z.boolean(),
     notes: z.string(),
     numeroFacture: z.string(),
-    status: z.enum(StatusAbonnementEnum),
+    status: z.enum(StatusFactures),
     totalAPayer: z.number(),
     unitLocation: z.string()
 })

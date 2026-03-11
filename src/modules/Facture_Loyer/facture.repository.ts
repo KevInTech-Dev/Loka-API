@@ -31,4 +31,14 @@ export class FactureLoyerRepository extends BaseRepositoryImpl<FactureLoyer> {
             }
         });
     }
+
+    async isThereInvoice(idTenant: keyof FactureLoyerAttributes, value: string) {
+        const aujourdhui = new Date();
+        return this.model.findOne({
+            where: {
+                [idTenant]: value,
+                dateEmission: aujourdhui
+            }
+        })
+    }
 }

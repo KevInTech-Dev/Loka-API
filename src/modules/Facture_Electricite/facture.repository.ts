@@ -2,9 +2,9 @@ import { BaseRepositoryImpl } from "@/common/base.repository";
 import { FactureElectricite, FactureElectriciteAttributes } from "@/database/models/FactureElectricite";
 import { CreationAttributes } from "sequelize";
 
-export class FactureElecticiteRepository extends BaseRepositoryImpl<FactureElectricite> {
+export class FactureElectriciteRepository extends BaseRepositoryImpl<FactureElectricite> {
     constructor() {
-        super(FactureElectricite)
+        super(FactureElectricite);
     }
     //Creer facture Electricite 
     async create(data: CreationAttributes<FactureElectricite>): Promise<FactureElectricite> {
@@ -29,5 +29,15 @@ export class FactureElecticiteRepository extends BaseRepositoryImpl<FactureElect
                 [attribut]: value
             }
         });
+    }
+
+    async isThereInvoice(idReleveCompteur: keyof FactureElectriciteAttributes, value: string) {
+        const aujourdhui = new Date();
+        return this.model.findOne({
+            where: {
+                [idReleveCompteur]: value,
+                dateEmission: aujourdhui
+            }
+        })
     }
 }

@@ -78,13 +78,13 @@ const initModelFactureMiantenance = (sequelize: Sequelize) => {
             allowNull: false
         },
         totalAPayer: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: false
         }
     }, {
         sequelize,
-        tableName: 'factureMaintenance',
-        modelName: 'FactureMaintenance',
+        tableName: 'FactureMaintenance',
+        modelName: 'factureMaintenance',
         timestamps: true,
         underscored: true,
         paranoid: true

@@ -1,5 +1,6 @@
 import { BaseTypes } from "@/common/models/base.model";
 import { BusinessTypeEnum } from "@/enums/BusinessTypeEnum";
+import { UserResponse } from "../users/user.types";
 
 export type landLordResponse = BaseTypes & {
         userId: string;
@@ -13,4 +14,5 @@ export type landLordResponse = BaseTypes & {
         city?: string;
         country?: string;
         isVerified: boolean;
+        landlordUser?: UserResponse;
 }

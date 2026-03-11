@@ -23,11 +23,11 @@ const factureMaintenanceIdSchema = z.object({
     id: z.uuid('Invalid id for facture maintenance'),
 })
 
-type CreateFactureMaintenanceSchema = z.infer<typeof createFactureMaintenanceSchema>
+type CreateFactureMaintenanceInput = z.infer<typeof createFactureMaintenanceSchema>
 type FactureMaintenanceIdSchema = z.infer<typeof factureMaintenanceIdSchema>
 
 export {
-    CreateFactureMaintenanceSchema,
+    CreateFactureMaintenanceInput,
     FactureMaintenanceIdSchema,
     createFactureMaintenanceSchema,
     factureMaintenanceIdSchema

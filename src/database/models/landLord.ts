@@ -15,42 +15,44 @@ export interface landLordAtributes extends BaseModel {
     city?: string;
     country?: string;
     isVerified: boolean;
-    deletedAt?: Date | null;
 }
 
 //l'id est optionnel parceque Sequelize génère le UUID automatiquement
 export interface landLordCreationAtributes extends Optional<
     landLordAtributes,
-    "id" | "companyName" | "phoneSecondary" | "city" | "country"
+    "id" | "companyName" | "phoneSecondary" | "city" | "country" | 'creditBalance'
 > {
 }
 
 class LandLord
     extends Model<landLordAtributes, landLordCreationAtributes>
     implements landLordAtributes {
-        declare id: string;
-        declare userId: string;
-        declare businessType: BusinessTypeEnum
-        declare taxId: string;
-        declare creditBalance: number;
-        declare registrationNumber: string;
-        declare companyName: string;
-        declare phonePrimary: string;
-        declare phoneSecondary: string;
-        declare address: string;
-        declare city: string;
-        declare country: string;
-        declare isVerified: boolean;
-        declare readonly createdAt: Date;
-        declare readonly updatedAt?: Date;
-        declare deletedAt: Date | null;
-        static associate(models: any) {
-            LandLord.belongsTo(models.User, { 
-                foreignKey: 'userId', 
-                as: 'user' 
-            });
-        }
+    declare id: string;
+    declare userId: string;
+    declare businessType: BusinessTypeEnum
+    declare taxId: string;
+    declare creditBalance: number;
+    declare registrationNumber: string;
+    declare companyName: string;
+    declare phonePrimary: string;
+    declare phoneSecondary: string;
+    declare address: string;
+    declare city: string;
+    declare country: string;
+    declare isVerified: boolean;
+    declare readonly createdAt: Date;
+    declare readonly updatedAt?: Date;
+    static associate(models: any) {
+        LandLord.belongsTo(models.User, {
+            foreignKey: 'userId',
+            as: 'landlordUser',
+        });
+        LandLord.hasMany(models.Contract, {
+            foreignKey: 'landlord_id',
+            as: 'landlordContract'
+        });
     }
+}
 
 const initModelandLord = (sequelize: Sequelize) => {
     LandLord.init(
@@ -78,13 +80,13 @@ const initModelandLord = (sequelize: Sequelize) => {
                 allowNull: false,
                 defaultValue: BusinessTypeEnum.PARTICULIER,
             },
-            taxId:{
+            taxId: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
             creditBalance: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                allowNull: true,
             },
             registrationNumber: {
                 type: DataTypes.STRING,
@@ -94,11 +96,6 @@ const initModelandLord = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true
-            },
-            deletedAt: {
-                type: DataTypes.DATE,
-                allowNull: true,
-                defaultValue: null,
             },
             phoneSecondary: {
                 type: DataTypes.STRING,
@@ -123,8 +120,8 @@ const initModelandLord = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        {sequelize, modelName: "landLord", tableName: "landlords", timestamps: true, underscored: true, paranoid: true,},
+        { sequelize, modelName: "LandLord", tableName: "landlords", timestamps: true, underscored: true, paranoid: true, },
     );
 };
 
-export {LandLord, initModelandLord}
+export { LandLord, initModelandLord }
