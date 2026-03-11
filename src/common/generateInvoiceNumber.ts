@@ -1,21 +1,14 @@
-export const generateIvoiceNumber = (lastInvNumber?: string): string => {
+export const generateIvoiceNumber = (lastInvNumber?: number): string => {
     const prefix = "FAC";
     const currentYear = new Date().getFullYear();
-    let nextNumber = 1;
 
     if (lastInvNumber) {
-        const parts = lastInvNumber.split("-");
-        const lastYear = parseInt(parts[1], 10);
-        const lastNumber = parseInt(parts[2], 10);
-
-        if (lastYear === currentYear) {
-            nextNumber = lastNumber + 1;
-        }
+        const nextNumber = lastInvNumber + 1;
+        const paddedNumber = String(nextNumber).padStart(3, "0");
+        return `${prefix}-${currentYear}-${paddedNumber}`;
+    } else {
+        throw new Error("Please verify your last invoice number")
     }
-
-    const paddedNumber = String(nextNumber).padStart(3, "0");
-
-    return `${prefix}-${currentYear}-${paddedNumber}`;
 }
 
 

@@ -1,7 +1,7 @@
 import { BaseRepositoryImpl } from "@/common/base.repository";
 import { FactureAbonnement, FactureAbonnementAttributes } from "@/database/models/FactureAbonnment";
 
-import { CreationAttributes } from "sequelize";
+import { CreationAttributes, Transaction } from "sequelize";
 
 
 export class FactureAbonnementRepository extends BaseRepositoryImpl<FactureAbonnement> {
@@ -9,9 +9,11 @@ export class FactureAbonnementRepository extends BaseRepositoryImpl<FactureAbonn
         super(FactureAbonnement);
     }
     //Creer facture abonnment
-    async create(data: CreationAttributes<FactureAbonnement>): Promise<FactureAbonnement> {
-        return this.model.create(data);
+    async create(data: CreationAttributes<FactureAbonnement>, transaction?: Transaction): Promise<FactureAbonnement> {
+        return this.model.create(data, { transaction });
     }
+
+
 
     //Find facture abonnement by id
     async findById(id: string) {
@@ -44,17 +46,8 @@ export class FactureAbonnementRepository extends BaseRepositoryImpl<FactureAbonn
         })
     }
 
-    getLastInvNumber = async (): Promise<FactureAbonnement> => {
-        return this.model.findOne({
-            where: {
-                dateEmission: {
-                    [this.Op.lte]: new Date()
-                }
-            },
-            order: [
-                ["dateEmission", "DESC"]
-            ]
-        })
+    getLastInvNumber = async (): Promise<number> => {
+        return this.model.count()
     }
 
 }

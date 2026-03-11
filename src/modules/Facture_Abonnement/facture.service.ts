@@ -6,6 +6,7 @@ import { FactureAbonnementRepository } from "./facture.repository";
 import { generateIvoiceNumber } from "@/common/generateInvoiceNumber";
 import { landLordRepository } from "../landLord/landlord.repository";
 import { FactureAbonnementAttributes } from "@/database/models/FactureAbonnment";
+import { Transaction } from "sequelize";
 
 export class FactureAbonnementService {
     private factureAbonnementRepository: FactureAbonnementRepository;
@@ -19,7 +20,7 @@ export class FactureAbonnementService {
     }
 
     // creer une facture pour un abonnement
-    createFactureAbonnement = async (datas: CreateFactureAbonnementInput): Promise<FactureAbonnementResponse> => {
+    createFactureAbonnement = async (datas: CreateFactureAbonnementInput, transaction?: Transaction): Promise<FactureAbonnementResponse> => {
         //verifier l'existance du landlord
         const existingLandorld = await this.landlordRepository.getlandLordById(datas.landlordId);
         if (!existingLandorld) {
@@ -33,9 +34,8 @@ export class FactureAbonnementService {
 
         //Recuperer la facture recente et ensuite recuperer son numero de facture
         const invoiceObjt = await this.factureAbonnementRepository.getLastInvNumber();
-        const lastInvNumber = invoiceObjt.numeroFacture;
 
-        const invoiceToCreate = await this.factureAbonnementRepository.create(this.factureAbonnementMapper.toEntity({ ...datas, numeroFacture: generateIvoiceNumber(lastInvNumber) }));
+        const invoiceToCreate = await this.factureAbonnementRepository.create(this.factureAbonnementMapper.toEntity({ ...datas, numeroFacture: generateIvoiceNumber(invoiceObjt) }), transaction);
         return this.factureAbonnementMapper.toResponse(invoiceToCreate);
     }
 

@@ -17,7 +17,7 @@ export interface BaseRepository<T extends Model> {
 
 export abstract class BaseRepositoryImpl<T extends Model> implements BaseRepository<T> {
     protected model: ModelStatic<T>;
-    protected sequelizeInstance: typeof sequelize;
+    public sequelizeInstance: typeof sequelize;
     protected Op: typeof Op;
 
     constructor(model: ModelStatic<T>) {

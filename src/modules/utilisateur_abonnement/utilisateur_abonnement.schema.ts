@@ -1,3 +1,4 @@
+import { StatusAbonnementEnum } from '@/enums/StatusAbonnement';
 import { z } from 'zod';
 
 
@@ -6,6 +7,7 @@ import { z } from 'zod';
 const createUtilisateurAbonnementSchema = z.object({
     utilisateurId: z.uuid(),
     abonnementId: z.uuid(),
+    // status: StatusAbonnementEnum.INACTIVE,
     autoRenouvellement: z.boolean().optional().default(false),
     startDate: z.iso.datetime().optional().default(() => new Date().toISOString()),
     endDate: z.iso.datetime().optional().nullable(),
@@ -49,7 +51,9 @@ const getActifsQuerySchema = z.object({
 
 // TYPES INFÉRÉS
 
-export type CreateUtilisateurAbonnementInput = z.infer<typeof createUtilisateurAbonnementSchema>;
+export type CreateUtilisateurAbonnementInput = z.infer<typeof createUtilisateurAbonnementSchema> & {
+    status?: StatusAbonnementEnum
+};
 export type UtilisateurAbonnementIdParams = z.infer<typeof utilisateurAbonnementIdSchema>;
 export type GetByUtilisateurIdParams = z.infer<typeof getByUtilisateurIdSchema>;
 export type GetByAbonnementIdParams = z.infer<typeof getByAbonnementIdSchema>;
