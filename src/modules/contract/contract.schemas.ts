@@ -1,7 +1,10 @@
-import { ContractStatusEnum } from "@/enums/ContractStatusEnum"
 import { ContractTypeEnum } from "@/enums/ContractTypeEnum"
 import z from "zod"
 
+const manualRenewalSchema = z.object({
+    contract_start_date: z.coerce.date(),
+    contract_end_date: z.coerce.date()
+})
 const createContractSchema = z.object({
     landlord_id: z.uuid("Invalid landlord id format"),
     property_id: z.uuid("Invalid landlord id format"),
@@ -37,6 +40,7 @@ const contractPaginationSchema = z.object({
 type createContractInput = z.infer<typeof createContractSchema>
 type contractIdParams = z.infer<typeof contractIdSchema>
 type paginatedContract = z.infer<typeof contractPaginationSchema>
+type manualRenawalInput = z.infer<typeof manualRenewalSchema>
 
 export {
     createContractInput,
@@ -45,4 +49,6 @@ export {
     createContractSchema,
     contractIdSchema,
     contractPaginationSchema,
+    manualRenewalSchema,
+    manualRenawalInput,
 }
