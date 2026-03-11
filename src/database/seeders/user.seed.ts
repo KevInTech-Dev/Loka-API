@@ -1,6 +1,6 @@
-import {User, UserCreationAttributes} from "@database/models/Users";
-import {RoleEnum} from "@/enums/RoleEnum";
-import {hashWord} from '@utils/password.utils';
+import { User, UserCreationAttributes } from "@database/models/Users";
+import { RoleEnum } from "@/enums/RoleEnum";
+import { hashWord } from '@utils/password.utils';
 
 
 const SEED_USERS: UserCreationAttributes[] = [
@@ -52,7 +52,7 @@ export const seedUsers = async (): Promise<void> => {
     console.log("Seeding users...");
     try {
         for (const userData of SEED_USERS) {
-            const existing = await User.findOne({where: {email: userData.email}});
+            const existing = await User.findOne({ where: { email: userData.email } });
             if (existing) {
                 console.log(`  ⏭️  ${userData.email} exists, skipping`);
                 continue;

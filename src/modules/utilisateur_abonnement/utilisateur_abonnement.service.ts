@@ -35,11 +35,7 @@ export class Utilisateur_AbonnementService {
     async create(data: UtilisateurAbonnementAttributes): Promise<Utilisateur_Abonnement> {
         let transaction: Transaction;
         let response;
-        //Verifier le type d'abonnement
-        const checkSubType = await this.abonnementRepository.findById(data.abonnementId);
-        if (!checkSubType) {
-            throw new NotFoundError("This subscription");
-        }
+
         //Verifier si l'utilisateur existe
         const existingUserSubs = await this.utilisateurRepository.findById(data.utilisateurId);
         if (!existingUserSubs) {
