@@ -31,7 +31,7 @@ const maintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "HIGH|LOW|MEDIUM|URGENT",
                 enum: [...Object.values(Priority)],
             },
-            reponsable: {
+            responsable: {
                 type: "string",
                 format: "uuid",
                 description: "Id of the technical manager"
@@ -82,15 +82,31 @@ const maintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
             categorie: {
                 type: "string",
                 enum: [...Object.values(CategoryMaintenanceRequest)],
-                description: "APPLIANCE|ELECTRICAL|HEATING|OTHERS|PLUMBING"
+                default: "APPLIANCE | ELECTRICAL | HEATING | OTHERS | PLUMBING"
             },
             priority: {
                 type: "string",
-                description: "HIGH|LOW|MEDIUM|URGENT",
+                default: "HIGH | LOW | MEDIUM | URGENT",
                 enum: [...Object.values(Priority)],
             },
         },
         required: ["titre", "categorie", "locataireId", "priority"]
+    },
+    addTechnicalManager: {
+        type: 'object',
+        properties: {
+            responsable: {
+                type: 'string',
+                format: 'uuid',
+                description: "Id of the technical manager"
+            },
+            statut: {
+                type: "string",
+                enum: [...Object.values(StatutMaintenanceRequest)],
+                default: "accused | ongoing | resolved | submitted "
+            }
+        },
+        required: ["responsable"]
     }
 }
 
@@ -302,6 +318,55 @@ const maintenancePath: OpenAPIV3.PathsObject = {
                 },
                 "404": {
                     description: "Maintenance not found"
+                }
+            }
+        }
+    },
+    "/maintenance-request/{id}/add-technical-manager": {
+        patch: {
+            tags: ["Maintenance"],
+            summary: "Update Maintenance by adding a technical manager and updating the statut",
+            description: "Update the information of a Maintenance by their unique ID",
+            parameters: [
+                {
+                    name: "id",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string",
+                        format: "uuid"
+                    },
+                    description: "The unique identifier of the Maintenance"
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            $ref: "#/components/schemas/addTechnicalManager"
+                        }
+                    }
+                }
+            },
+            responses: {
+                "200": {
+                    description: "Maintenance updated successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/maintenance"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    description: "Maintenance  not found"
                 }
             }
         }

@@ -1,6 +1,7 @@
 import { BaseRepositoryImpl } from "@/common/base.repository";
 import { NotFoundError } from "@/common/errors";
 import { Maintenance, MaintenanceAttributes } from "@/database/models/maintenance";
+import { CategoryMaintenanceRequest } from "@/enums/CategoryMaintenanceRequest";
 import { CreationAttributes, Transaction } from "sequelize";
 
 export class MaintenanceRepository extends BaseRepositoryImpl<Maintenance> {
@@ -42,5 +43,24 @@ export class MaintenanceRepository extends BaseRepositoryImpl<Maintenance> {
             throw new Error("Error when deleting")
         }
 
+    }
+
+    async checkRequestOfUser(idParsed: string, categorieParsed: CategoryMaintenanceRequest) {
+
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+
+        const todayEnd = new Date();
+        todayEnd.setHours(23, 59, 59, 999);
+
+        return this.model.findOne({
+            where: {
+                locataireId: idParsed,
+                date: {
+                    [this.Op.between]: [todayStart, todayEnd]
+                },
+                categorie: categorieParsed
+            }
+        })
     }
 }

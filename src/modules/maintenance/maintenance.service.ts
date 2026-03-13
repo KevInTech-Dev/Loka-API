@@ -1,10 +1,11 @@
-import { NotFoundError } from "@/common/errors";
+import { DuplicateEntryError, NotFoundError } from "@/common/errors";
 import { TechnicalMangerRepository } from "../technicalManger/technicalManger.repository";
-import { CreateMaintenanceInput } from "./maintenance.schema";
+import { AddTechnicalManager, CreateMaintenanceInput } from "./maintenance.schema";
 
 import { MaintenanceMapper } from "./maintenance.mapper";
 import { MaintenanceRepository } from "./maintenance.repository";
 import { MaintenanceResponse } from "./maintenance.type";
+import { StatutMaintenanceRequest } from "@/enums/StatutMaintenanceRequest";
 
 
 export class MaintenanceService {
@@ -18,14 +19,14 @@ export class MaintenanceService {
     }
 
     async createMaintenance(data: CreateMaintenanceInput): Promise<MaintenanceResponse> {
-        //Verifier si le technicalManger existe
-        const existingTechnical = await this.technicalManagerRepository.findById(data.responsable);
-        if (!existingTechnical) {
-            throw new NotFoundError("Technical Manger")
+        //Verifier si le locataire a deja effectuer une requete a un date precise
+        const checkRequest = await this.maintenanceRespository.checkRequestOfUser(data.locataireId, data.categorie);
+
+        if (checkRequest) {
+            throw new DuplicateEntryError("You did a request already");
         }
 
-        const dataSave = await this.maintenanceRespository.create(this.maintenancerMapper.toEntity(data));
-        return dataSave;
+        return await this.maintenanceRespository.createMaintenance(this.maintenancerMapper.toEntity(data));
     }
 
     async updateMaintenance(id: string, data: CreateMaintenanceInput): Promise<MaintenanceResponse> {
@@ -36,6 +37,27 @@ export class MaintenanceService {
         }
 
         const updatedData = await this.maintenanceRespository.update(id, data);
+        if (!updatedData) {
+            throw new Error("Error when updating");
+        }
+
+        return await this.maintenancerMapper.toResponse(updatedData);
+    }
+
+    async addTechnicalManager(id: string, data: AddTechnicalManager): Promise<MaintenanceResponse> {
+        //verifier l'existance de l'id
+        const verifyId = await this.maintenanceRespository.findById(id);
+        if (!verifyId) {
+            throw new NotFoundError("Maintenance");
+        }
+
+        //Verifier l'existance du technical manager
+        const verifyTechnicalManager = await this.technicalManagerRepository.findById(data.responsable);
+        if (!verifyTechnicalManager) {
+            throw new NotFoundError("This technical manager");
+        }
+
+        const updatedData = await this.maintenanceRespository.update(id, { ...data, responsable: data.responsable, statut: StatutMaintenanceRequest.ACCUSED });
         if (!updatedData) {
             throw new Error("Error when updating");
         }

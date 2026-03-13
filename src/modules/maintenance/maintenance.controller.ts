@@ -14,11 +14,22 @@ export class MaintenanceController {
         return sendCreated(
             res,
             data,
-            "Operation succesfull"
+            "Operation succesfull",
         );
     }
 
+
     updateMaintenance = async (req: Request, res: Response) => {
+        const idObject = req.params.id as string;
+        const update = await this.maintenanceService.updateMaintenance(idObject, req.body);
+        return sendSuccess(
+            res,
+            update,
+            "Operation of update successfull"
+        );
+    }
+
+    addTechnicalManager = async (req: Request, res: Response) => {
         const idObject = req.params.id as string;
         const update = await this.maintenanceService.updateMaintenance(idObject, req.body);
         return sendSuccess(

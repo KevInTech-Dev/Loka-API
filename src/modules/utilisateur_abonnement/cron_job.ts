@@ -5,12 +5,17 @@ import { Op } from 'sequelize'
 export const utilisateurAbonnementCronJob = () => {
 
     cron.schedule('00***', async () => {
-        const today = new Date()
+        // const today = new Date()
+        //Journée d'hier
+        const yesterdayStart = new Date(new Date().getDate() - 1);
+        yesterdayStart.setHours(0, 0, 0, 0);
+        const yesterdayEnd = new Date(new Date().getDate() - 1);
+        yesterdayEnd.setHours(23, 59, 59, 999)
+
         const abonnementExpire: Utilisateur_Abonnement[] = await Utilisateur_Abonnement.findAll({
             where: {
                 endDate: {
-                    [Op.lt]: today,
-                    [Op.gt]: today.setDate(new Date().getDate() - 1)
+                    [Op.between]: [yesterdayStart, yesterdayEnd],
                 }
             }
         });

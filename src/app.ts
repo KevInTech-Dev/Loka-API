@@ -86,6 +86,7 @@ app.use(`${API_PREFIX}/facture-maintenance`, factureMaintenanceRoute);
 app.use(`${API_PREFIX}/technicalManager`, technicalManagerRoute);
 app.use(`${API_PREFIX}/maintenance-request`, maintenanceRoute);
 
+
 // 404 handler
 app.use(notFoundHandler);
 

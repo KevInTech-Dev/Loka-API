@@ -69,8 +69,8 @@ const initMaintenance = (sequelize: Sequelize) => {
         }
     }, {
         sequelize,
-        modelName: "TechnicalManger",
-        tableName: 'technicalManger',
+        modelName: "Maintenance",
+        tableName: 'maintenance',
         timestamps: true,
         underscored: true,
         paranoid: true
