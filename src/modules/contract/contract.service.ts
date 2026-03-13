@@ -1,5 +1,5 @@
 import { ContractRepository } from '@modules/contract/contract.repository';
-import { createContractInput, manualRenawalInput } from '@modules/contract/contract.schemas';
+import { createContractInput, manualRenawalInput, manualSignatureInput } from '@modules/contract/contract.schemas';
 import { contractResponse } from '@modules/contract/contract.types';
 import { landLordRepository } from '@modules/landLord/landlord.repository';
 import { TenantRepository } from '@modules/tenant/tenant.repository';
@@ -75,34 +75,7 @@ export class ContractService {
       is_signed_by_tenant: false,
     });
     return {
-      id: contract.id,
-      contract_number: contract.contract_number,
-      landlord_id: contract.landlord_id,
-      property_id: contract.property_id,
-      unit_id: contract.unit_id,
-      tenant_id: contract.tenant_id,
-      contract_type: contract.contract_type,
-      contract_start_date: contract.contract_start_date,
-      contract_end_date: contract.contract_end_date,
-      monthly_rent: contract.monthly_rent,
-      security_deposit: contract.security_deposit,
-      deposit_paid: contract.deposit_paid,
-      rent_due_day: contract.rent_due_day,
-      late_fee_grace_days: contract.late_fee_grace_days,
-      electricity_included: contract.electricity_included,
-      water_included: contract.water_included,
-      electricity_rate_per_kwh: contract.electricity_rate_per_kwh,
-      water_rate_per_m3: contract.water_rate_per_m3,
-      other_charges: contract.other_charges,
-      initial_electricity_reading: contract.initial_electricity_reading,
-      initial_water_reading: contract.initial_water_reading,
-      auto_renewal: contract.auto_renewal,
-      special_terms: contract.special_terms,
-      contract_status: contract.contract_status,
-      is_signed_by_landlord: contract.is_signed_by_landlord,
-      is_signed_by_tenant: contract.is_signed_by_tenant,
-      updatedAt: contract.updatedAt,
-      createdAt: contract.createdAt,
+      ...contract.toJSON()
     };
   }
   async getContractById(id: string): Promise<contractResponse | null> {
@@ -112,69 +85,21 @@ export class ContractService {
     }
 
     return {
-      id: contract.id,
-      contract_number: contract.contract_number,
-      landlord_id: contract.landlord_id,
-      property_id: contract.property_id,
-      unit_id: contract.unit_id,
-      tenant_id: contract.tenant_id,
-      contract_type: contract.contract_type,
-      contract_start_date: contract.contract_start_date,
-      contract_end_date: contract.contract_end_date,
-      monthly_rent: contract.monthly_rent,
-      security_deposit: contract.security_deposit,
-      deposit_paid: contract.deposit_paid,
-      rent_due_day: contract.rent_due_day,
-      late_fee_grace_days: contract.late_fee_grace_days,
-      electricity_included: contract.electricity_included,
-      water_included: contract.water_included,
-      electricity_rate_per_kwh: contract.electricity_rate_per_kwh,
-      water_rate_per_m3: contract.water_rate_per_m3,
-      other_charges: contract.other_charges,
-      initial_electricity_reading: contract.initial_electricity_reading,
-      initial_water_reading: contract.initial_water_reading,
-      auto_renewal: contract.auto_renewal,
-      special_terms: contract.special_terms,
+      ...contract.toJSON(),
+      is_signed_by_landlord: !!contract.landlord_signature_url || contract.is_signed_by_landlord,
+      is_signed_by_tenant: !!contract.tenant_signature_url || contract.is_signed_by_tenant,
       contract_status: contract.contract_status,
-      is_signed_by_landlord: contract.is_signed_by_landlord,
-      is_signed_by_tenant: contract.is_signed_by_tenant,
-      updatedAt: contract.updatedAt,
-      createdAt: contract.createdAt,
     };
   }
 
   async getAllContract(): Promise<contractResponse[]> {
     return (await this.contractRepository.getAllContract()).map((contract) => {
       return {
-        id: contract.id,
-        contract_number: contract.contract_number,
-        landlord_id: contract.landlord_id,
-        property_id: contract.property_id,
-        unit_id: contract.unit_id,
-        tenant_id: contract.tenant_id,
-        contract_type: contract.contract_type,
-        contract_start_date: contract.contract_start_date,
-        contract_end_date: contract.contract_end_date,
-        monthly_rent: contract.monthly_rent,
-        security_deposit: contract.security_deposit,
-        deposit_paid: contract.deposit_paid,
-        rent_due_day: contract.rent_due_day,
-        late_fee_grace_days: contract.late_fee_grace_days,
-        electricity_included: contract.electricity_included,
-        water_included: contract.water_included,
-        electricity_rate_per_kwh: contract.electricity_rate_per_kwh,
-        water_rate_per_m3: contract.water_rate_per_m3,
-        other_charges: contract.other_charges,
-        initial_electricity_reading: contract.initial_electricity_reading,
-        initial_water_reading: contract.initial_water_reading,
-        auto_renewal: contract.auto_renewal,
-        special_terms: contract.special_terms,
-        contract_status: contract.contract_status,
-        is_signed_by_landlord: contract.is_signed_by_landlord,
-        is_signed_by_tenant: contract.is_signed_by_tenant,
-        updatedAt: contract.updatedAt,
-        createdAt: contract.createdAt,
-      };
+        ...contract.toJSON(),
+           is_signed_by_landlord: !!contract.landlord_signature_url || contract.is_signed_by_landlord,
+          is_signed_by_tenant: !!contract.tenant_signature_url || contract.is_signed_by_tenant,
+          contract_status: contract.contract_status,
+        };
     });
   }
 
@@ -186,41 +111,14 @@ export class ContractService {
       await this.contractRepository.getContractPaginated(page, limit)
     ).map((contract) => {
       return {
-        id: contract.id,
-        contract_number: contract.contract_number,
-        landlord_id: contract.landlord_id,
-        property_id: contract.property_id,
-        unit_id: contract.unit_id,
-        tenant_id: contract.tenant_id,
-        contract_type: contract.contract_type,
-        contract_start_date: contract.contract_start_date,
-        contract_end_date: contract.contract_end_date,
-        monthly_rent: contract.monthly_rent,
-        security_deposit: contract.security_deposit,
-        deposit_paid: contract.deposit_paid,
-        rent_due_day: contract.rent_due_day,
-        late_fee_grace_days: contract.late_fee_grace_days,
-        electricity_included: contract.electricity_included,
-        water_included: contract.water_included,
-        electricity_rate_per_kwh: contract.electricity_rate_per_kwh,
-        water_rate_per_m3: contract.water_rate_per_m3,
-        other_charges: contract.other_charges,
-        initial_electricity_reading: contract.initial_electricity_reading,
-        initial_water_reading: contract.initial_water_reading,
-        auto_renewal: contract.auto_renewal,
-        special_terms: contract.special_terms,
-        contract_status: contract.contract_status,
-        is_signed_by_landlord: contract.is_signed_by_landlord,
-        is_signed_by_tenant: contract.is_signed_by_tenant,
-        updatedAt: contract.updatedAt,
-        createdAt: contract.createdAt,
-      };
+        ...contract.toJSON(),
+          is_signed_by_landlord: !!contract.landlord_signature_url || contract.is_signed_by_landlord,
+          is_signed_by_tenant: !!contract.tenant_signature_url || contract.is_signed_by_tenant,
+          contract_status: contract.contract_status,
+        };
     });
   }
-  async uploadContractDocUrl(
-    id: string,
-    files: { tenant?: Express.Multer.File; landlord?: Express.Multer.File },
-  ) {
+  async uploadContractDocUrl( id: string, files: { tenant?: Express.Multer.File; landlord?: Express.Multer.File } ) {
     const contract = await this.getContractById(id);
     if (!contract) {
       throw new NotFoundError('Contract');
@@ -236,6 +134,7 @@ export class ContractService {
         deleteFile(contract.landlord_signature_url);
       }
       uploadData.landlord_signature_url = files.landlord.path;
+      uploadData.is_signed_by_landlord = true;
     }
     if (files.tenant) {
       if (
@@ -245,6 +144,7 @@ export class ContractService {
         deleteFile(contract.tenant_signature_url);
       }
       uploadData.tenant_signature_url = files.tenant.path;
+      uploadData.is_signed_by_tenant = true;
     }
     return await this.contractRepository.updateContract(id, uploadData);
   }
@@ -363,7 +263,6 @@ export class ContractService {
     if(contractEndDate > today) {
       throw new Error("Contract has not expired yet");
     }
-
     const manualRenawalContract = await this.contractRepository.updateContract(id, {
       ...existingContract.toJSON(),
       id: undefined,
@@ -378,6 +277,30 @@ export class ContractService {
 
     return manualRenawalContract;
     
+  }
+
+  async signconract(id: string, data: Partial<manualSignatureInput>) {
+    const existingContract = await this.contractRepository.getContractById(id);
+    if(!existingContract){
+      throw new Error("Contract");
+    }
+
+    if(data.is_signed_by_landlord){
+      existingContract.is_signed_by_landlord = data.is_signed_by_landlord
+    }
+    if(data.is_signed_by_tenant){
+      existingContract.is_signed_by_tenant = data.is_signed_by_tenant
+    }
+    if(data.is_signed_by_landlord == true && data.is_signed_by_tenant == true){
+      existingContract.contract_status = ContractStatusEnum.ACTIVE
+    }
+    const updateContract = await this.contractRepository.updateContract(id, existingContract);
+
+    return {
+      ...updateContract.toJSON(),
+      is_signed_by_tenant: !!updateContract.tenant_signature_url || updateContract.is_signed_by_tenant,
+      is_signed_by_landlord: !!updateContract.landlord_signature_url || updateContract.is_signed_by_landlord,
+    }
   }
 
 }

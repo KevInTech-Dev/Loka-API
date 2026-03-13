@@ -368,7 +368,7 @@ const contractPath: OpenAPIV3.PathsObject = {
       },
     },
   },
-  '/contracts/contractDoc_url/:id': {
+  '/contracts/contractDoc_url/{id}': {
     patch: {
       tags: ['Contract'],
       summary: 'Upload a signed contract document',
@@ -494,5 +494,65 @@ const contractPath: OpenAPIV3.PathsObject = {
       },
     }
   },
+  '/contracts/manualSignature/{id}' : {
+    patch: {
+      tags: ['Contract'],
+      summary: 'Sign contract manually',
+      security: [{ bearerAuth: [] }],
+      description: 'Sign a contract manually',
+      parameters: [
+        {
+          name: 'id',
+          in: 'path',
+          required: true,
+          schema: {
+            type: 'string',
+            format: 'uuid',
+          },
+          description: 'The unique identifier of the contract',
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                is_signed_by_landlord:{
+                    type: 'string',
+                    description: 'contract is signed by tenant',
+                },
+                is_signed_by_tenant :{
+                   type: 'string',
+                    description: 'contract is signed by landlord',
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        '200': {
+          description: 'Contract signed successfully',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  data: {
+                    $ref: '#/components/schemas/contract',
+                  },
+                },
+              },
+            },
+          },
+        },
+        '404': {
+          description: 'Contract not found',
+        },
+      },
+    }
+  }
 };
 export { contractPath, contractTags, contractSchema };

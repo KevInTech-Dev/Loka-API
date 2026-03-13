@@ -47,8 +47,8 @@ export class ContractRepository {
     return this.contract.create(data);
   }
 
-  async getContractById(id: string) {
-    return this.contract.findByPk(id, {
+  async getContractById(id: string):Promise<Contract |null> {
+    return await this.contract.findByPk(id, {
       include: [
         {
           model: LandLord,
@@ -74,7 +74,11 @@ export class ContractRepository {
     const contract = await this.getContractById(id);
     if (!contract) throw new NotFoundError('Contract');
 
-    await contract.update(data);
+    await contract.update(data, {
+      where:{
+        id : data.id
+      }
+    });
     return contract;
   }
 

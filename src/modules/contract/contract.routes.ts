@@ -2,12 +2,7 @@ import authMiddleware from '@modules/middleware/authMiddleware';
 import { authorize } from '@modules/middleware/authorization.middleware';
 import { fieldsUpload } from '@modules/middleware/upload.middleware';
 import { contractController } from '@modules/contract/contract.controller';
-import {
-  contractIdSchema,
-  contractPaginationSchema,
-  createContractSchema,
-  manualRenewalSchema,
-} from './contract.schemas';
+import { contractIdSchema, contractPaginationSchema, createContractSchema, manualRenewalSchema, manualSignatureSchema } from '@modules/contract/contract.schemas';
 import validate from '@modules/middleware/validate.middleware';
 import { Router } from 'express';
 
@@ -75,6 +70,15 @@ router.patch(
     body: manualRenewalSchema,
   }),
   ContractController.manualRenewal,
+);
+
+router.patch('/manualSignature/:id',
+  authorize(['admin','proprietaire']),
+  validate({
+    params: contractIdSchema,
+    body: manualSignatureSchema,
+  }),
+  ContractController.manualContractSign,
 );
 
 export default router;

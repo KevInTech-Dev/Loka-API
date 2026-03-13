@@ -4,6 +4,7 @@ import {  CreationMeterReadingAttributs, MeterReading, MeterReadingAttributs } f
 import { Property } from "@/database/models/Property";
 import { Tenant } from "@/database/models/Tenants";
 import { UnitLocation } from "@/database/models/UnitLocation";
+import { MeterTypeEnum } from "@/enums/MeterTypeEnum";
 import { CreationAttributes, } from "sequelize";
 
 export class MeterReadingRepository  extends BaseRepositoryImpl<MeterReading> {    
@@ -58,5 +59,15 @@ export class MeterReadingRepository  extends BaseRepositoryImpl<MeterReading> {
                   as: 'meterReadingTenant'
                 },
         ]});
+    }
+
+    async getLatestReadingValue(unit_id: string, meterType: MeterTypeEnum): Promise<MeterReading | null> {
+      return await this.model.findOne({
+        where : {
+          unit_id: unit_id,
+          meter_type: meterType
+        },
+        order: [['createdAt', 'DESC']]
+      });
     }
 }

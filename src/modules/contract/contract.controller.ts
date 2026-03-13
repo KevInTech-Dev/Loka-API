@@ -1,6 +1,6 @@
 import { ContractService } from "@modules/contract/contract.service";
 import {Request, Response} from "express";
-import { createContractInput, manualRenawalInput } from "@modules/contract/contract.schemas";
+import { createContractInput, manualRenawalInput, manualSignatureInput } from "@modules/contract/contract.schemas";
 import { BadRequestError } from "@/common/errors";
 
 export class contractController {
@@ -48,6 +48,14 @@ export class contractController {
             return res.send({
                 data: await this.contractService.manualRenewal(id, data),
             });
+    }
+
+    manualContractSign = async(req: Request, res: Response) => {
+        const id = req.params.id as string;
+        const data: manualSignatureInput = req.body;
+        return res.send({
+            data: await this.contractService.signconract(id, data)
+        });
     }
 
     deleteContract = async (req: Request, res: Response) => {
