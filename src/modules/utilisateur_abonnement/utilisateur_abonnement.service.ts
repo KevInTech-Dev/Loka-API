@@ -35,17 +35,17 @@ export class Utilisateur_AbonnementService {
     async create(data: UtilisateurAbonnementAttributes): Promise<Utilisateur_Abonnement> {
         let transaction: Transaction;
         let response;
-
+        //Verifier le type d'abonnement
+        const checkSubType = await this.abonnementRepository.findById(data.abonnementId);
+        if (!checkSubType) {
+            throw new NotFoundError("This subscription");
+        }
         //Verifier si l'utilisateur existe
         const existingUserSubs = await this.utilisateurRepository.findById(data.utilisateurId);
         if (!existingUserSubs) {
             throw new NotFoundError("User")
         }
-        //Verifier si l'abonnement existe
-        const existingSub = await this.abonnementRepository.findById(data.abonnementId);
-        if (!existingSub) {
-            throw new NotFoundError("Subscription")
-        }
+
 
         try {
 
@@ -65,7 +65,6 @@ export class Utilisateur_AbonnementService {
                         await this.repository.checkIfUserHasAlreadySubBasic(data.utilisateurId, idSubscription.id)
                     ) {
 
-                        const transaction = await this.repository.sequelizeInstance.transaction();
                         // Si oui générer une facture
                         const invNumber = await this.factureAbonnementRepository.getLastInvNumber();
                         this.factureAbonnementService.createFactureAbonnement({

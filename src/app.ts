@@ -23,6 +23,8 @@ import factureEauRoute from "./modules/Facture_Eau/factureEau.route";
 import factureElectriciteRoute from "./modules/Facture_Electricite/factureElectricite.route";
 import factureLoyerRoute from "./modules/Facture_Loyer/factureLoyer.route";
 import factureMaintenanceRoute from "./modules/Facture_Maintenance/factureMaintenance.route";
+import technicalManagerRoute from "./modules/technicalManger/technicalManager.route";
+import maintenanceRoute from "./modules/maintenance/maintenance.route";
 
 
 const app: Express = express();
@@ -81,12 +83,8 @@ app.use(`${API_PREFIX}/facture-eau`, factureEauRoute);
 app.use(`${API_PREFIX}/facture-electricite`, factureElectriciteRoute);
 app.use(`${API_PREFIX}/facture-loyer`, factureLoyerRoute);
 app.use(`${API_PREFIX}/facture-maintenance`, factureMaintenanceRoute);
-
-
-
-
-
-
+app.use(`${API_PREFIX}/technicalManager`, technicalManagerRoute);
+app.use(`${API_PREFIX}/maintenance-request`, maintenanceRoute);
 
 // 404 handler
 app.use(notFoundHandler);

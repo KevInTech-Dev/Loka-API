@@ -1,24 +1,26 @@
 import env from "@config/env";
 import { OpenAPIV3 } from "openapi-types";
 import { userPath, userSchema, userTags } from "@/swagger/user.swagger";
-import { propertyPath, propertyShema } from "./property.swagger";
-import { propertyTypePath, propertyTypeShema } from "./propertType.swagger";
+import { propertyPath, propertyShema, propertyTags } from "./property.swagger";
+import { propertyTypePath, propertyTypeShema, propertyTypeTags } from "./propertType.swagger";
 import { abonnementsSchema, abonnementsTags, abonnementPath } from "./abonnement.swagger";
 import { landlordPath, landlordSchema, landlordTags } from "./landLord.swagger";
 import { propertyUnitLocationPath, propertyUnitLocationSchema } from "./propertyUnitLocation.swagger";
-import { unitLocationPath, unitLocationSchema } from "./unitLocation.swagger";
+import { unitLocationPath, unitLocationSchema, unitLocationTags } from "./unitLocation.swagger";
 import { unitTypePath, unitTypeSchema } from "./unitType.swagger";
 
 import { tenantPath, tenantSchema, tenantTags } from "./tenant.swagger";
 import { authenticationSchema, AuthentificationPath, refreshTokenObjectPath, refreshTokenObjectSchema, RefreshTokenPath, refreshTokenSchema, RegistrationPath, registrationSchema } from "./login.swagger";
-import {contractPath, contractSchema, contractTags} from "@/swagger/contract.swagger";
+import { contractPath, contractSchema, contractTags } from "@/swagger/contract.swagger";
 
 import { utilisateurAbonnementPath, utilisateurAbonnementSchema, utilisateurAbonnementTags } from "./utilisateur_abonnement.swagger";
-import { factureAbonnementPath, factureAbonnementSchema } from "./FactureAbonnement.swagger";
-import { factureLoyerPath, factureLoyerSchema } from "./FactureLoyer.swagger";
-import { factureElectricitePath, factureElectriciteSchema } from "./FactureElectricite.swagger";
-import { factureMaintenancePath, factureMaintenanceSchema } from "./FactureMaintenance.swagger";
-import { factureEauPath, factureEauSchema } from "./FactureEau.swagger";
+import { factureAbonnementPath, factureAbonnementSchema, factureAbonnementTags } from "./FactureAbonnement.swagger";
+import { factureLoyerPath, factureLoyerSchema, factureLoyerTags } from "./FactureLoyer.swagger";
+import { factureElectricitePath, factureElectriciteSchema, factureElectriciteTags } from "./FactureElectricite.swagger";
+import { factureMaintenancePath, factureMaintenanceSchema, factureMaintenanceTags } from "./FactureMaintenance.swagger";
+import { factureEauPath, factureEauSchema, factureEauTags } from "./FactureEau.swagger";
+import { maintenancePath, maintenanceSchema, maintenanceTags } from "./maintenance.swagger";
+import { technicalManagerPath, technicalManagerSchema, technicalManagerTags } from "./technicalManager.swagger";
 
 
 export const tags: OpenAPIV3.TagObject[] = [
@@ -29,7 +31,19 @@ export const tags: OpenAPIV3.TagObject[] = [
     utilisateurAbonnementTags,
     contractTags,
     abonnementsTags,
-    utilisateurAbonnementTags
+    utilisateurAbonnementTags,
+    maintenanceTags,
+    factureAbonnementTags,
+    factureMaintenanceTags,
+    factureLoyerTags,
+    factureEauTags,
+    factureElectriciteTags,
+    propertyTags,
+    unitLocationTags,
+    propertyTypeTags,
+    abonnementsTags,
+    utilisateurAbonnementTags,
+    technicalManagerTags
 ];
 
 export const paths: OpenAPIV3.PathsObject = {
@@ -89,6 +103,8 @@ export const paths: OpenAPIV3.PathsObject = {
     ...factureElectricitePath,
     ...factureMaintenancePath,
     ...factureEauPath,
+    ...maintenancePath,
+    ...technicalManagerPath
 
 };
 
@@ -114,6 +130,8 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...factureElectriciteSchema,
     ...factureMaintenanceSchema,
     ...factureEauSchema,
+    ...maintenanceSchema,
+    ...technicalManagerSchema
 
 };
 

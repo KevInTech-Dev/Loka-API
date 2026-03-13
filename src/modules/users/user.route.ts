@@ -3,7 +3,6 @@ import { UserController } from "@modules/users/user.controller";
 import validate from "@modules/middleware/validate.middleware";
 import { createUserSchema, userIdShema } from "@modules/users/user.schema";
 import { singleUpload } from "@modules/middleware/upload.middleware";
-import { defaultPaginationQuery } from "@common/api.schema";
 import authMiddleware from "../middleware/authMiddleware";
 import { authorize } from "../middleware/authorization.middleware";
 
