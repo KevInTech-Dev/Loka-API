@@ -39,6 +39,16 @@ export class MaintenanceController {
         );
     }
 
+    changeStateOfMaintenance = async (req: Request, res: Response) => {
+        const idObject = req.params.id as string;
+        const update = await this.maintenanceService.updateMaintenance(idObject, req.body);
+        return sendSuccess(
+            res,
+            update,
+            "Operation of update successfull"
+        );
+    }
+
     getMaintenanceById = async (req: Request, res: Response) => {
         const id = req.params.id as string;
         const objectToGet = await this.maintenanceService.getMaintenanceById(id);

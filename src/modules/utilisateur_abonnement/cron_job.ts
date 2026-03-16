@@ -15,7 +15,9 @@ export const utilisateurAbonnementCronJob = () => {
         const abonnementExpire: Utilisateur_Abonnement[] = await Utilisateur_Abonnement.findAll({
             where: {
                 endDate: {
-                    [Op.between]: [yesterdayStart, yesterdayEnd],
+                    [Op.gte]: yesterdayStart,
+                    [Op.lte]: yesterdayEnd,
+
                 }
             }
         });

@@ -1,6 +1,7 @@
 import { CategoryMaintenanceRequest } from "@/enums/CategoryMaintenanceRequest";
 import { Priority } from "@/enums/Priority";
 import { StatutMaintenanceRequest } from "@/enums/StatutMaintenanceRequest";
+import { changeStateOfMaintenance } from "@/modules/maintenance/maintenance.schema";
 import { OpenAPIV3 } from "openapi-types";
 
 const maintenanceTags: OpenAPIV3.TagObject = {
@@ -104,9 +105,25 @@ const maintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 type: "string",
                 enum: [...Object.values(StatutMaintenanceRequest)],
                 default: "accused | ongoing | resolved | submitted "
+            },
+            priority: {
+                type: "string",
+                enum: [...Object.values(Priority)],
+                default: "high | low | urgent | medium"
             }
         },
-        required: ["responsable"]
+        required: ["responsable", "priority"]
+    },
+    changeStateOfMaintenance: {
+        type: 'object',
+        properties: {
+            statut: {
+                type: "string",
+                enum: [...Object.values(StatutMaintenanceRequest)],
+                default: "ongoing | submitted"
+            }
+        },
+        required: ["statut"]
     }
 }
 
@@ -345,6 +362,55 @@ const maintenancePath: OpenAPIV3.PathsObject = {
                     "application/json": {
                         schema: {
                             $ref: "#/components/schemas/addTechnicalManager"
+                        }
+                    }
+                }
+            },
+            responses: {
+                "200": {
+                    description: "Maintenance updated successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    data: {
+                                        $ref: "#/components/schemas/maintenance"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    description: "Maintenance  not found"
+                }
+            }
+        }
+    },
+    "/maintenance-request/{id}/change-state-maintenance": {
+        patch: {
+            tags: ["Maintenance"],
+            summary: "Update Maintenance by updating the statut",
+            description: "Update the information of a Maintenance by their unique ID",
+            parameters: [
+                {
+                    name: "id",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string",
+                        format: "uuid"
+                    },
+                    description: "The unique identifier of the Maintenance"
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            $ref: "#/components/schemas/changeStateOfMaintenance"
                         }
                     }
                 }

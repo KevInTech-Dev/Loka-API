@@ -6,14 +6,17 @@ import { z } from 'zod'
 const createMaintenanceSchema = z.object({
     titre: z.string(),
     locataireId: z.uuid('Invalid id for locataire'),
-    categorie: z.enum(CategoryMaintenanceRequest),
-    priority: z.enum(Priority),
+    categorie: z.enum(CategoryMaintenanceRequest)
 })
 
 const addTechnicalManager = z.object({
     responsable: z.uuid('Invalid id for responsable'),
-    // date: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).transform((v) => { return new Date(v) }),
-    statut: z.enum(StatutMaintenanceRequest)
+    statut: z.enum(StatutMaintenanceRequest),
+    priority: z.enum(Priority)
+})
+
+const changeStateOfMaintenance = z.object({
+    statut: z.enum([StatutMaintenanceRequest.ONGOING, StatutMaintenanceRequest.SUBMITTED]),
 })
 
 const maintenanceIdSchema = z.object({
@@ -23,12 +26,15 @@ const maintenanceIdSchema = z.object({
 type CreateMaintenanceInput = z.infer<typeof createMaintenanceSchema>
 type MaintenanceIdSchema = z.infer<typeof maintenanceIdSchema>
 type AddTechnicalManager = z.infer<typeof addTechnicalManager>
+type ChangeStateOfMaintenance = z.infer<typeof changeStateOfMaintenance>
 
 export {
     CreateMaintenanceInput,
     MaintenanceIdSchema,
     AddTechnicalManager,
+    ChangeStateOfMaintenance,
     addTechnicalManager,
     maintenanceIdSchema,
-    createMaintenanceSchema
+    createMaintenanceSchema,
+    changeStateOfMaintenance
 }

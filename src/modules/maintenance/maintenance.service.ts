@@ -1,6 +1,6 @@
 import { DuplicateEntryError, NotFoundError } from "@/common/errors";
 import { TechnicalMangerRepository } from "../technicalManger/technicalManger.repository";
-import { AddTechnicalManager, CreateMaintenanceInput } from "./maintenance.schema";
+import { AddTechnicalManager, ChangeStateOfMaintenance, CreateMaintenanceInput } from "./maintenance.schema";
 
 import { MaintenanceMapper } from "./maintenance.mapper";
 import { MaintenanceRepository } from "./maintenance.repository";
@@ -57,12 +57,35 @@ export class MaintenanceService {
             throw new NotFoundError("This technical manager");
         }
 
-        const updatedData = await this.maintenanceRespository.update(id, { ...data, responsable: data.responsable, statut: StatutMaintenanceRequest.ACCUSED });
+        if (data.statut != StatutMaintenanceRequest.ACCUSED) {
+            throw new Error("Please the statut must be ACCUSED");
+        }
+
+        const updatedData = await this.maintenanceRespository.update(id, { ...data, responsable: data.responsable, statut: StatutMaintenanceRequest.ACCUSED, priority: data.priority });
         if (!updatedData) {
             throw new Error("Error when updating");
         }
 
         return await this.maintenancerMapper.toResponse(updatedData);
+    }
+
+    async changeStateOfMaintenance(id: string, data: ChangeStateOfMaintenance) {
+        //verifier l'existance de l'id
+        const verifyId = await this.maintenanceRespository.findById(id);
+        if (!verifyId) {
+            throw new NotFoundError("Maintenance");
+        }
+
+        if (data.statut != StatutMaintenanceRequest.ONGOING && data.statut != StatutMaintenanceRequest.SUBMITTED) {
+            throw new Error("Please the statut must be ONGOING or SUBMITTED");
+        }
+
+        const update = await this.maintenanceRespository.update(id, { statut: data.statut });
+        if (!update) {
+            throw new Error("Error when updating");
+        }
+
+        return await this.maintenancerMapper.toResponse(update);
     }
 
     async getMaintenanceById(id: string): Promise<MaintenanceResponse> {

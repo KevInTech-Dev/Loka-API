@@ -18,6 +18,10 @@ const userSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 type: "string",
                 description: "First name of the user"
             },
+            dateFinEssaie: {
+                type: "string",
+                description: "Date of trial end"
+            },
             lastname: {
                 type: "string",
                 description: "Last name of the user"

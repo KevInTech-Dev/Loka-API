@@ -26,7 +26,7 @@ export class MaintenanceMapper implements BaseMapper<Maintenance, MaintenanceRes
             titre: data.titre,
             locataireId: data.locataireId,
             categorie: data.categorie,
-            priority: data.priority,
+            priority: null,
             responsable: null,
             date: new Date(),
             statut: StatutMaintenanceRequest.SUBMITTED

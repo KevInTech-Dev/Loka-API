@@ -82,7 +82,20 @@ export class Utilisateur_AbonnementService {
                         await this.repository.updateUtilisateurAbonnement(data.id, { ...data, status: StatusAbonnementEnum.INACTIVE }, transaction);
                     }
 
-                    // Si non passer le status à TRIAL
+                    // Si non passer le status à TRIAL et generer la facture 
+                    const invoiceNumber = await this.factureAbonnementRepository.getLastInvNumber();
+                    this.factureAbonnementService.createFactureAbonnement({
+                        invoiceType: InvoiceType.ABONNEMENT_TRIAL,
+                        isTva: false,
+                        landlordId: data.utilisateurId,
+                        notes: `FACTURES D'\ABONNEMENT AU STATUT GRATUIT GENERER LE : ${new Date().getDate()}`,
+                        numeroFacture: generateIvoiceNumber(invoiceNumber),
+                        status: StatusFactures.EN_ATTENTE,
+                        totalAPayer: checkSubType.prix,
+                        utilisateurAbonnement: response.id,
+                        dateEcheance: new Date(new Date().getDate() + 30),
+                    }, transaction)
+
                     const dateDebut = data.startDate = new Date();
                     const finDate = new Date(data.endDate.setDate(dateDebut.getDate() + 30));
                     await this.repository.updateUtilisateurAbonnement(data.id, { ...data, status: StatusAbonnementEnum.TRIAL, endDate: finDate, startDate: dateDebut }, transaction)
