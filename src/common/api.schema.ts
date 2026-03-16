@@ -8,6 +8,10 @@ const defaultPaginationQuery = z.object({
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
 })
 
+
+type defaultPaginationQueryType = z.infer<typeof defaultPaginationQuery>
+
 export {
     defaultPaginationQuery,
+    defaultPaginationQueryType
 }

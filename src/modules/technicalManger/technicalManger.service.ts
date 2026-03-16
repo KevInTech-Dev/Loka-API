@@ -4,6 +4,8 @@ import { TechnicalMangerRepository } from "./technicalManger.repository"
 import { TechnicalManagerInput } from "./technicalManger.schema"
 import { TechnicalManagerResponse } from "./technicalManger.type"
 
+import type { defaultPaginationQueryType } from '@/common/api.schema'
+
 export class TechnicalMangerService {
     private technicalManagerRepository: TechnicalMangerRepository;
     private technicalManagerMapper: TechnicalMangerMapper;
@@ -69,8 +71,8 @@ export class TechnicalMangerService {
         }
     }
 
-    getTechnicalMangerPaginated = async (page: number, limit: number) => {
-        const { rows, count } = await this.technicalManagerRepository.getTechnicalManagerPaginated(page, limit);
+    getTechnicalMangerPaginated = async ({ page, limit, sortBy, sortOrder, search }: defaultPaginationQueryType) => {
+        const { rows, count } = await this.technicalManagerRepository.getTechnicalManagerPaginated({ page, limit, sortBy, search, sortOrder });
         const mappedData = rows.map((object) => ({
             id: object.id,
             title: object.title,

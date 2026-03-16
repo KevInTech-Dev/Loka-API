@@ -2,6 +2,7 @@ import { BaseRepositoryImpl } from "@/common/base.repository";
 import { Attributes, CreationAttributes } from "sequelize";
 import { WhereQueryTechnicalManager } from "./technicalManger.type";
 import { TechnicalManager, TechnicalManagerAttributes } from "@/database/models/technicalManger";
+import { defaultPaginationQueryType } from "@/common/api.schema";
 
 export class TechnicalMangerRepository extends BaseRepositoryImpl<TechnicalManager> {
 
@@ -17,10 +18,23 @@ export class TechnicalMangerRepository extends BaseRepositoryImpl<TechnicalManag
         return this.model.findByPk(id);
     }
 
+    async getAllwhereName(nameOfTechnicalManager: string) {
+        return this.model.findAll({
+            where: {
+                name: nameOfTechnicalManager,
+            }
+        })
+    }
 
-    async getTechnicalManagerPaginated(page: number, limit: number) {
+
+    async getTechnicalManagerPaginated({ page, limit, sortBy, sortOrder, search }: defaultPaginationQueryType) {
         const offset = (page - 1) * limit;
-        return this.model.findAndCountAll({ offset, limit });
+        return this.model.findAndCountAll({
+            offset, limit, where: {
+                name: { [this.Op.like]: `%${search}` }
+            },
+            order: [[sortBy, sortOrder]]
+        });
     }
 
     getTechnicalManagerByAttribut(attribut: keyof TechnicalManagerAttributes, value: string) {
@@ -32,7 +46,7 @@ export class TechnicalMangerRepository extends BaseRepositoryImpl<TechnicalManag
     }
 
 
-    getUserByMutipleAttributs(attribut: WhereQueryTechnicalManager) {
+    getTechnicalManagerByMutipleAttributs(attribut: WhereQueryTechnicalManager) {
         return this.model.findOne({
             where: {
                 ...attribut

@@ -31,7 +31,7 @@ export class MaintenanceController {
 
     addTechnicalManager = async (req: Request, res: Response) => {
         const idObject = req.params.id as string;
-        const update = await this.maintenanceService.updateMaintenance(idObject, req.body);
+        const update = await this.maintenanceService.addTechnicalManager(idObject, req.body);
         return sendSuccess(
             res,
             update,

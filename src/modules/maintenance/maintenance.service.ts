@@ -6,6 +6,8 @@ import { MaintenanceMapper } from "./maintenance.mapper";
 import { MaintenanceRepository } from "./maintenance.repository";
 import { MaintenanceResponse } from "./maintenance.type";
 import { StatutMaintenanceRequest } from "@/enums/StatutMaintenanceRequest";
+import { TechnicalManager } from "@/database/models/technicalManger";
+import { TechnicalManagerInput } from "../technicalManger/technicalManger.schema";
 
 
 export class MaintenanceService {
@@ -44,14 +46,18 @@ export class MaintenanceService {
         return await this.maintenancerMapper.toResponse(updatedData);
     }
 
-    async addTechnicalManager(id: string, data: AddTechnicalManager): Promise<MaintenanceResponse> {
+    async addTechnicalManager(id: string, data: AddTechnicalManager, objectTechnicalManager?: TechnicalManagerInput): Promise<MaintenanceResponse> {
         //verifier l'existance de l'id
         const verifyId = await this.maintenanceRespository.findById(id);
         if (!verifyId) {
             throw new NotFoundError("Maintenance");
         }
 
-        //Verifier l'existance du technical manager
+        if (data.responsable === null) {
+            const technicien = await this.technicalManagerRepository.create(objectTechnicalManager);
+            data.responsable = technicien.id;
+        }
+
         const verifyTechnicalManager = await this.technicalManagerRepository.findById(data.responsable);
         if (!verifyTechnicalManager) {
             throw new NotFoundError("This technical manager");

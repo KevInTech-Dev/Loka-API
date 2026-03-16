@@ -89,6 +89,32 @@ const technicalManagerPath: OpenAPIV3.PathsObject = {
                         default: 10
                     },
                     description: "Number of items per page"
+                },
+                {
+                    name: "search",
+                    in: "query",
+                    schema: {
+                        type: "string",
+                    },
+                    description: "Item to search"
+                },
+                {
+                    name: "sortBy",
+                    in: "query",
+                    schema: {
+                        type: "string",
+                        default: 'createdAt'
+                    },
+                    description: "Attribute to use to sort"
+                },
+                {
+                    name: "sortOrder",
+                    in: "query",
+                    schema: {
+                        type: "string",
+                        enum: ['desc', 'asc']
+                    },
+                    description: "Order of item to sort"
                 }
             ],
             responses: {
@@ -118,41 +144,41 @@ const technicalManagerPath: OpenAPIV3.PathsObject = {
                 }
             }
         },
-        post: {
-            tags: ["TechnicalManager"],
-            summary: "Create a new TechnicalManager",
-            description: "Create a new TechnicalManager with the provided information",
-            requestBody: {
-                required: true,
-                content: {
-                    "application/json": {
-                        schema: {
-                            $ref: "#/components/schemas/createTechnicalManager"
-                        }
-                    }
-                }
-            },
-            responses: {
-                "201": {
-                    description: "Maintenance created successfully",
-                    content: {
-                        "application/json": {
-                            schema: {
-                                type: "object",
-                                properties: {
-                                    data: {
-                                        $ref: "#/components/schemas/technicalManager"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "400": {
-                    description: "Invalid input"
-                }
-            }
-        }
+        // post: {
+        //     tags: ["TechnicalManager"],
+        //     summary: "Create a new TechnicalManager",
+        //     description: "Create a new TechnicalManager with the provided information",
+        //     requestBody: {
+        //         required: true,
+        //         content: {
+        //             "application/json": {
+        //                 schema: {
+        //                     $ref: "#/components/schemas/createTechnicalManager"
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     responses: {
+        //         "201": {
+        //             description: "Maintenance created successfully",
+        //             content: {
+        //                 "application/json": {
+        //                     schema: {
+        //                         type: "object",
+        //                         properties: {
+        //                             data: {
+        //                                 $ref: "#/components/schemas/technicalManager"
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         },
+        //         "400": {
+        //             description: "Invalid input"
+        //         }
+        //     }
+        // }
     },
     "/technicalManager/{id}": {
         get: {

@@ -26,7 +26,7 @@ const initTechnicalManager = (sequelize: Sequelize) => {
         },
         title: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         name: {
             type: DataTypes.STRING,
@@ -34,7 +34,7 @@ const initTechnicalManager = (sequelize: Sequelize) => {
         },
         contact: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         }
     }, {
         sequelize,

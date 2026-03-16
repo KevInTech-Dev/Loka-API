@@ -36,13 +36,18 @@ export class TechnicalManagerController {
     getTechnicalMangerPaginated = async (req: Request, res: Response): Promise<Response> => {
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
-        const { data, total } = await this.technicalMangerService.getTechnicalMangerPaginated(page, limit)
-        return sendPaginated(
-            res,
-            data,
-            limit,
-            page,
-            total
+        const search = req.query.search as string;
+        const sortBy = req.query.sortBy as string;
+        const sortOrder = req.query.sortOrder as 'asc' | 'desc';
+        const data = await this.technicalMangerService.getTechnicalMangerPaginated({ page, limit, search, sortBy, sortOrder: sortOrder })
+        return res.send({
+            data: data,
+            page: page,
+            limit: limit,
+            search: search,
+            sortBy: sortBy,
+            sortOrder: sortOrder
+        }
         );
 
     }

@@ -98,8 +98,8 @@ const maintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
         properties: {
             responsable: {
                 type: 'string',
-                format: 'uuid',
-                description: "Id of the technical manager"
+                format: "uuid",
+                description: "Name of the technical manager"
             },
             statut: {
                 type: "string",

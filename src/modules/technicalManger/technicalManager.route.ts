@@ -10,7 +10,7 @@ const technicalMangerController = new TechnicalManagerController();
 
 router.get('', validate(defaultPaginationQuery, "query"), technicalMangerController.getTechnicalMangerPaginated);
 router.get('/:id', validate(technicalManagerIdSchema, "params"), technicalMangerController.getTechnicalManagerById);
-router.post('', validate(technicalMangerSchema, 'body'), technicalMangerController.createTechnicalManager);
+//router.post('', validate(technicalMangerSchema, 'body'), technicalMangerController.createTechnicalManager);
 router.patch('/:id', validate({ params: maintenanceIdSchema, body: createMaintenanceSchema }), technicalMangerController.updateTechnicalManger);
 router.delete('/:id', validate(technicalManagerIdSchema, 'params'), technicalMangerController.deleteTechnicalManger);
 
