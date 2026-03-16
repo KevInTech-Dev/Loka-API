@@ -5,9 +5,13 @@ export type TokenResponse = {
 
 
 export type PayLoadToken = {
-    userId: string,
+    id: string,
     role: string,
     phoneNumber: string,
     username: string,
     permission?: string[]
+    firstname: string,
+    lastname: string,
+    email: string,
+
 }

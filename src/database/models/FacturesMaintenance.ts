@@ -1,5 +1,4 @@
-import { BaseModel } from "@/common/models/base.model";
-import { Facture, FactureAttributes } from "./Facture";
+import { FactureAttributes } from "./Facture";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
 import { StatusFactures } from "@/enums/StatusFacturesEnum";

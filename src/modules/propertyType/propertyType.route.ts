@@ -7,14 +7,14 @@ import authMiddleware from "../middleware/authMiddleware";
 import { authorize } from "../middleware/authorization.middleware";
 
 const router: Router = Router();
-router.use(authMiddleware);
+// router.use(authMiddleware);
 const propertyTypeController = new PropertyTypeController();
 
 // create propertyType
-router.post('', authMiddleware, authorize(['proprietaire', 'admin']), validate(createPropertyTypeSchema, 'body'), propertyTypeController.createpropertyType);
+router.post('', /*authMiddleware, authorize(['proprietaire', 'admin']),*/ validate(createPropertyTypeSchema, 'body'), propertyTypeController.createpropertyType);
 
 // get all propertyTpe
-router.get('', authMiddleware, authorize(['proprietaire', 'admin']), validate(defaultPaginationQuery, 'body'), propertyTypeController.getAllpropertyType);
+router.get('', /*authMiddleware, authorize(['proprietaire', 'admin']),*/ validate(defaultPaginationQuery, 'body'), propertyTypeController.getAllpropertyType);
 
 // delete propertyType by id
 router.delete('/:id', authMiddleware, authorize(['proprietaire', 'admin']), validate(propertyTypeIdShema, 'params'), propertyTypeController.deletepropertyType);

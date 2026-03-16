@@ -8,14 +8,14 @@ import authMiddleware from "../middleware/authMiddleware";
 import { authorize } from "../middleware/authorization.middleware";
 
 const router: Router = Router();
-router.use(authMiddleware);
+//router.use(authMiddleware);
 const propertyController = new PropertyController();
 
 // create property
-router.post('', authMiddleware, authorize(['proprietaire', 'admin']), validate(createPropertySchema, 'body'), propertyController.createProperty);
+router.post('', /*authMiddleware, authorize(['proprietaire', 'admin']),*/ validate(createPropertySchema, 'body'), propertyController.createProperty);
 
 // get all propertys
-router.get('', authMiddleware, authorize(['proprietaire', 'admin']), validate(defaultPaginationQuery, 'query'), propertyController.getAllProperty);
+router.get('', /*authMiddleware, authorize(['proprietaire', 'admin']),*/ validate(defaultPaginationQuery, 'query'), propertyController.getAllProperty);
 
 // delete property by id
 router.delete('/:id', authMiddleware, authorize(['proprietaire', 'admin']), validate(propertyIdShema, 'params'), propertyController.deleteProperty);

@@ -1,3 +1,4 @@
+import { UnitStatusEnum } from "@/enums/UnitStatusEnum";
 import { OpenAPIV3 } from "openapi-types";
 import { DataTypes } from "sequelize";
 
@@ -185,7 +186,8 @@ const unitLocationSchema: OpenAPIV3.ComponentsObject['schemas'] = {
             },
             unitStatus: {
                 type: "string",
-                example: "string",
+                enum: [...Object.values(UnitStatusEnum)],
+                default: "availablle | occuped | maintenance",
                 description: "Statu of the unit"
             },
             description: {

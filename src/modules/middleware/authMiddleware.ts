@@ -21,7 +21,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
 
 
     // Trouver l'utilisateur dans la base de données
-    const user = await userRepository.findById(decoded.userId); // userId est l'ID stocké dans le payload du token
+    const user = await userRepository.findById(decoded.id); // userId est l'ID stocké dans le payload du token
 
     if (!user) {
         throw new NotFoundError('Authentification échouée: utilisateur non trouvé.');
@@ -29,11 +29,14 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
 
     // Attacher l'utilisateur à l'objet Request pour les prochaines middlewares/routes
     req.user = {
-        userId: user.id,
+        id: user.id,
         role: user.role,
         phoneNumber: user.phoneNumber,
         username: user.username,
-        permission: []
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        //permission: []
 
     } as PayLoadToken;
     next();

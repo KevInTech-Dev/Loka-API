@@ -39,7 +39,6 @@ class User
     declare role: RoleEnum
     declare dateDebutSuspension: Date;
     declare dateFinSuspension: Date;
-    declare dateFinEssaie?: Date;
     declare isActive: boolean;
     declare profilePhotoUrl?: string;
     declare isEmailVerified: boolean;
@@ -77,10 +76,6 @@ const initModelUser = (sequelize: Sequelize) => {
             }, firstname: {
                 type: DataTypes.STRING,
                 allowNull: true,
-            },
-            dateFinEssaie: {
-                type: DataTypes.DATE(),
-                allowNull: true
             },
             phoneNumber: {
                 type: DataTypes.STRING,

@@ -32,6 +32,10 @@ export class FactureMaintenanceRepository extends BaseRepositoryImpl<FactureMain
         });
     }
 
+    getLastInvNumber = async (): Promise<number> => {
+        return this.model.count()
+    }
+
     async isThereInvoice(idTenant: keyof FactureMaintenanceAttributes, value: string) {
         const aujourdhui = new Date();
         return this.model.findOne({

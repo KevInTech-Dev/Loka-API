@@ -31,36 +31,36 @@ export interface TenantCreationAttributes extends Optional<
 class Tenant
     extends Model<TenantAttributes, TenantCreationAttributes>
     implements TenantAttributes {
-        declare id: string;
-        declare userId: string;
-        declare date_of_birth: Date;
-        declare gender: GenderEnum;
-        declare nationality: string;
-        declare phone_primary: string;
-        declare phone_secondary?: string;
-        declare id_card_type: idCardTypeEnum;
-        declare id_card_number: string;
-        declare id_card_front_url?: string
-        declare id_card_back_url?: string;
-        declare occupation?: string;
-        declare employer_name?: string;
-        declare employer_contact?: string;
-        declare emergency_contact_name?: string;
-        declare emergency_contact_phone?: string;
-        declare emergenc_contact_relationship?: string;
-        declare readonly createdAt: Date;
-        declare readonly updatedAt: Date;
-        static associate(models: any) {
-            Tenant.belongsTo(models.User, {
-                foreignKey: 'userId',
-                as: 'tenantUser'
-            });
-            Tenant.hasMany(models.Contract, {
-                foreignKey: 'tenant_id',
-                as: 'tenantContract'
-             });
-        }
+    declare id: string;
+    declare userId: string;
+    declare date_of_birth: Date;
+    declare gender: GenderEnum;
+    declare nationality: string;
+    declare phone_primary: string;
+    declare phone_secondary?: string;
+    declare id_card_type: idCardTypeEnum;
+    declare id_card_number: string;
+    declare id_card_front_url?: string
+    declare id_card_back_url?: string;
+    declare occupation?: string;
+    declare employer_name?: string;
+    declare employer_contact?: string;
+    declare emergency_contact_name?: string;
+    declare emergency_contact_phone?: string;
+    declare emergenc_contact_relationship?: string;
+    declare readonly createdAt: Date;
+    declare readonly updatedAt: Date;
+    static associate(models: any) {
+        Tenant.belongsTo(models.User, {
+            foreignKey: 'userId',
+            as: 'tenantUser'
+        });
+        Tenant.hasMany(models.Contract, {
+            foreignKey: 'tenant_id',
+            as: 'tenantContract'
+        });
     }
+}
 
 
 const initModelTenant = (sequelize: Sequelize) => {
@@ -97,56 +97,56 @@ const initModelTenant = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true
-                },
-                phone_secondary: {
-                    type: DataTypes.STRING,
-                    allowNull: true,
-                    unique: true,
-                },
-                id_card_type: {
-                    type: DataTypes.ENUM(...Object.values(idCardTypeEnum)),
-                    allowNull: false,
-                    defaultValue: idCardTypeEnum.CNI,
-                },
-                id_card_number: {
-                    type: DataTypes.STRING,
-                    allowNull: false
-                },
-                id_card_front_url: {
-                    type: DataTypes.STRING,
-                    allowNull: true
-                },
-                id_card_back_url: {
-                    type: DataTypes.STRING,
-                    allowNull: true
-                },
-                occupation: {
-                    type: DataTypes.STRING,
-                    allowNull: true
-                },
-                employer_name: {
-                    type: DataTypes.STRING,
-                    allowNull: true
-                },
-                employer_contact: {
-                    type: DataTypes.STRING,
-                    allowNull: true
-                },
-                emergency_contact_name: {
-                    type: DataTypes.STRING,
-                    allowNull: true
-                },
-                emergency_contact_phone: {
-                    type: DataTypes.STRING,
-                    allowNull: true
-                },
-                emergency_contact_relationship: {
-                    type: DataTypes.STRING,
-                    allowNull: true
-                }
             },
-            {sequelize, modelName: "Tenant", tableName: "tenants", timestamps: true, underscored: true, paranoid:true},
-        );
-    };
+            phone_secondary: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                unique: true,
+            },
+            id_card_type: {
+                type: DataTypes.ENUM(...Object.values(idCardTypeEnum)),
+                allowNull: false,
+                defaultValue: idCardTypeEnum.CNI,
+            },
+            id_card_number: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            id_card_front_url: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            id_card_back_url: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            occupation: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            employer_name: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            employer_contact: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            emergency_contact_name: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            emergency_contact_phone: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            emergency_contact_relationship: {
+                type: DataTypes.STRING,
+                allowNull: true
+            }
+        },
+        { sequelize, modelName: "Tenant", tableName: "tenants", timestamps: true, underscored: true, paranoid: true },
+    );
+};
 
 export { Tenant, initModelTenant }

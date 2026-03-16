@@ -2,8 +2,6 @@ import { BaseMapper } from "@/common/mapper/base.mapper";
 import { Maintenance } from "@/database/models/maintenance";
 import { MaintenanceResponse } from "./maintenance.type";
 import { CreateMaintenanceInput } from "./maintenance.schema";
-import { Priority } from "@/enums/Priority";
-import { CategoryMaintenanceRequest } from "@/enums/CategoryMaintenanceRequest";
 import { StatutMaintenanceRequest } from "@/enums/StatutMaintenanceRequest";
 
 export class MaintenanceMapper implements BaseMapper<Maintenance, MaintenanceResponse> {

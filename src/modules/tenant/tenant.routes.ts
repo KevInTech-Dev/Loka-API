@@ -11,9 +11,9 @@ const router: Router = Router();
 // router.use(authMiddleware);
 const tenantController = new TenantController();
 
-router.get('',
-    authorize(['admin', 'proprietaire']),
-    validate(paginatedTenantSchema, 'query'), tenantController.getAllTenants);
+router.get('', tenantController.getAllTenants);
+// authorize(['admin', 'proprietaire']),
+// validate(paginatedTenantSchema, 'query'), );
 
 router.post('',
     // authorize(['admin', 'proprietaire']),

@@ -10,10 +10,10 @@ const router: Router = Router();
 const unitLocationController = new UnitLocationController();
 
 // get all unitLocations
-router.get('', authMiddleware, authorize(['proprietaire', 'admin']), validate(defaultPaginationQuery, 'query'), unitLocationController.getAllUnitLocations);
+router.get('', /*authMiddleware, authorize(['proprietaire', 'admin']),*/ validate(defaultPaginationQuery, 'query'), unitLocationController.getAllUnitLocations);
 
 // create unitLocation
-router.post('', authMiddleware, authorize(['proprietaire', 'admin']), validate(createUnitLocationSchema, 'body'), unitLocationController.createUnitLocation);
+router.post('', /*authMiddleware, authorize(['proprietaire', 'admin']),*/ validate(createUnitLocationSchema, 'body'), unitLocationController.createUnitLocation);
 
 // get unitLocation by id
 router.get('/:id', authMiddleware, authorize(['proprietaire', 'admin']), validate(unitLocationIdShema, 'params'), unitLocationController.getUnitLocation);
