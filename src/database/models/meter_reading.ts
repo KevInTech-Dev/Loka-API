@@ -132,7 +132,7 @@ const initModelMeterReading = (sequelize: Sequelize) => {
                 allowNull:false,
             },
             recorded_by_user_id: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.UUID,
                 allowNull: false,
             },
             is_verified: {

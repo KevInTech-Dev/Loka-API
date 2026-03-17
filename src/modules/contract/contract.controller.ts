@@ -35,7 +35,12 @@ export class contractController {
                 data: await this.contractService.updateContract(id, data),
             })
     }
-    
+    terminateContract = async (req: Request, res:Response) => {
+        const id = req.params.id as string;
+        return res.send ({
+            data: await this.contractService.terminateContract(id),
+        })
+    }
     createContract = async (req: Request, res: Response) => {
             const data: createContractInput = req.body;
             return res.send({

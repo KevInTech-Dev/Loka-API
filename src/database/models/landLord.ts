@@ -51,6 +51,10 @@ class LandLord
                 foreignKey: 'landlord_id',
                 as: 'landlordContract'
             });
+            LandLord.hasMany(models.MeterReading, {
+                foreignKey: 'landlord_id',
+                as: 'landlordMeterReading'
+            });
         }
     }
 
@@ -95,12 +99,10 @@ const initModelandLord = (sequelize: Sequelize) => {
             phonePrimary: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true
             },
             phoneSecondary: {
                 type: DataTypes.STRING,
                 allowNull: true,
-                unique: true,
             },
             address: {
                 type: DataTypes.STRING,

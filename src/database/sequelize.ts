@@ -16,6 +16,8 @@ import { initmodelPermissions } from "./models/Permissions";
 import { initModelPermissionsAbonnement } from "./models/PermissionsAbonnement";
 import { initModelUtilisateur_Abonnement } from "./models/Utilisateur_Abonnement";
 import { initModelContract } from "./models/Contracts";
+import { initModelMeterReading } from "@database/models/meter_reading";
+
 
 
 const sequelize = new Sequelize({
@@ -72,9 +74,8 @@ const initModels = async () => {
   initModelContract(sequelize);
   initmodelPermissions(sequelize);
   initModelPermissionsAbonnement(sequelize);
-  initModelUtilisateur_Abonnement(sequelize)
-
-
+  initModelUtilisateur_Abonnement(sequelize);
+  initModelMeterReading(sequelize);
   initModelTenant(sequelize);
 
   // If you have more models, initialize them here and set up associations if needed before syncing the database.

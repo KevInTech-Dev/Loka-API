@@ -45,7 +45,11 @@ export class landLordRepository extends BaseRepositoryImpl<LandLord>{
         const landlord = await this.getlandLordById(id);
         if (!landlord) return null;
 
-        await landlord.update(data);
+        await landlord.update(data, {
+            where: {
+                id: data.id
+            }
+        });
         return landlord;
     }
 

@@ -553,6 +553,46 @@ const contractPath: OpenAPIV3.PathsObject = {
         },
       },
     }
-  }
+  },
+  '/contracts/terminateContract/{id}' : {
+    patch: {
+      tags: ['Contract'],
+      summary: 'Terminate the contract by ID',
+      security: [{ bearerAuth: [] }],
+      description: 'Terminate the contract by ID',
+      parameters: [
+        {
+          name: 'id',
+          in: 'path',
+          required: true,
+          schema: {
+            type: 'string',
+            format: 'uuid',
+          },
+          description: 'The unique identifier of the contract',
+        },
+      ],
+      responses: {
+        '200': {
+          description: 'Contract terminated successfully',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  data: {
+                    $ref: '#/components/schemas/contract',
+                  },
+                },
+              },
+            },
+          },
+        },
+        '404': {
+          description: 'Contract not found',
+        },
+      },
+    },
+    }
 };
 export { contractPath, contractTags, contractSchema };

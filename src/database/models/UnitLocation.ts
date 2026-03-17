@@ -54,6 +54,10 @@ class UnitLocation extends Model<UnitLocationAttributes, UnitLocationCreationAtt
                 foreignKey: 'unit_id',
                 as: 'unitLocationContract'
             });
+        UnitLocation.hasMany(models.MeterReading, {
+                foreignKey: 'unit_id',
+                as: 'unitLocationMeterReading'
+            });
     }
 
 }

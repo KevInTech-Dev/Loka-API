@@ -80,5 +80,12 @@ router.patch('/manualSignature/:id',
   }),
   ContractController.manualContractSign,
 );
+router.patch('/terminateContract/:id',
+  authorize(['admin','proprietaire']),
+  validate({
+    params: contractIdSchema,
+  }),
+  ContractController.terminateContract,
+);
 
 export default router;

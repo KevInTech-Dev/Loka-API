@@ -18,6 +18,7 @@ import unitLocationRoute from "./modules/unitLocation/unitLocation.route";
 import propertyUnitLocationRoute from "./modules/propertyUnitLocation/propertyUnitLocation.route";
 import authRoute from "./modules/authentification/auth.route";
 import contractRoute from "@modules/contract/contract.routes";
+import meterReadingRoute from "@modules/meterReading/meterReading.routes";
 
 const app: Express = express();
 const API_PREFIX = env.API_PREFIX;
@@ -70,7 +71,7 @@ app.use(`${API_PREFIX}/tenants`, tenantRoute);
 app.use(`${API_PREFIX}/auth`, authRoute);
 app.use(`${API_PREFIX}/utilisateur-abonnements`, utilisateur_AbonnementRoute);
 app.use(`${API_PREFIX}/contracts`, contractRoute);
-
+app.use(`${API_PREFIX}/meterReading`, meterReadingRoute);
 
 // 404 handler
 app.use(notFoundHandler);

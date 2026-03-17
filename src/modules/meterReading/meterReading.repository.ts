@@ -1,6 +1,6 @@
 import { BaseRepositoryImpl } from "@/common/base.repository";
 import { LandLord } from "@/database/models/landLord";
-import {  CreationMeterReadingAttributs, MeterReading, MeterReadingAttributs } from "@/database/models/meter_reading";
+import {   MeterReading } from "@/database/models/meter_reading";
 import { Property } from "@/database/models/Property";
 import { Tenant } from "@/database/models/Tenants";
 import { UnitLocation } from "@/database/models/UnitLocation";

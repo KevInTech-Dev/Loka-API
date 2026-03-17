@@ -2,7 +2,7 @@ import { BaseMapper } from "@/common/mapper/base.mapper";
 import { MeterReading } from "@/database/models/meter_reading";
 import { MeterTypeEnum } from "@/enums/MeterTypeEnum";
 import { MeterResponse } from "@modules/meterReading/meterReading.types";
-import { CreationMeterReadingInput } from "./meterReading.schemas";
+import { CreationMeterReadingInput } from "@modules/meterReading/meterReading.schemas";
 
 export class MeterMapper implements BaseMapper<MeterReading, MeterResponse> {
     toResponse(meterReading: MeterReading): MeterResponse {
@@ -28,6 +28,10 @@ export class MeterMapper implements BaseMapper<MeterReading, MeterResponse> {
 
     toEntity(data: CreationMeterReadingInput): Partial<MeterReading> {
         return {
+            landlord_id: data?.landlord_id,
+            property_id: data?.property_id,
+            unit_id: data?.unit_id,
+            tenant_id: data?.tenant_id,
             meter_type: data?.meter_type,
             reading_date: data?.reading_date,
             meter_value: data?.meter_value,

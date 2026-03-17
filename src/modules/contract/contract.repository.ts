@@ -5,6 +5,7 @@ import { LandLord } from '@database/models/landLord';
 import { Tenant } from '@/database/models/Tenants';
 import { Property } from '@/database/models/Property';
 import { UnitLocation } from '@/database/models/UnitLocation';
+import { ContractStatusEnum } from '@/enums/ContractStatusEnum';
 
 export class ContractRepository {
     
@@ -94,6 +95,14 @@ export class ContractRepository {
     return this.contract.count({ paranoid: false });
   }
 
+  async getActiveContractByUnitId(unit_id: string) {
+    return await this.contract.findOne({
+      where: {
+        unit_id: unit_id,
+        contract_status: ContractStatusEnum.ACTIVE
+      }
+    });
+  }
   // Récupérer les contrats qui expirent aujourd'hui
     async getContractsExpiringOn(date) {
         const yyyy = date.getFullYear();
@@ -102,7 +111,7 @@ export class ContractRepository {
 
         const todayStr = `${yyyy}-${mm}-${dd}`;
 
-        return await Contract.findAll({
+        return await this.contract.findAll({
             where: {
                 contract_end_date: todayStr
             }

@@ -40,10 +40,13 @@ export class TokenService {
 
         let permission: string[] = [];
         const payload: PayLoadToken = {
-            userId: user.id,
+            id: user.id,
             role: user.role,
             phoneNumber: user.phoneNumber,
-            username: user.username
+            username: user.username,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
         }
         return jwt.sign(
             payload, process.env.JWT_SECRET as string, { expiresIn: env.ACCESS_TOKEN_EXPRIRY_TIME });

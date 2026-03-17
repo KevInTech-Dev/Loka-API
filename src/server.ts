@@ -2,6 +2,7 @@ import http from 'http';
 import app from './app';
 import env from './config/env';
 import { syncDatabase, testConnection } from '@database/sequelize';
+import { RunAllCron } from './cron';
 
 let server: http.Server;
 
@@ -14,6 +15,10 @@ const startServer = async () => {
 
   await syncDatabase(false, false); // Set force to false and alter to true for safer schema updates
 
+
+
+  // cron 
+  try{RunAllCron()}catch(e){console.log(e, "erroe run cron"); process.exit(1);}
   try {
     server = http.createServer(app);
     const PORT = env.PORT || 3000;

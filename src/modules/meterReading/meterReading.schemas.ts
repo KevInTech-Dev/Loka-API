@@ -1,4 +1,5 @@
 import { MeterTypeEnum } from "@/enums/MeterTypeEnum";
+import { UUID } from "node:crypto";
 import z from "zod";
 
 const CreationMeterReadingSchema = z.object({
@@ -7,18 +8,7 @@ const CreationMeterReadingSchema = z.object({
     unit_id: z.uuid("Invalid landlord id format"),
     tenant_id: z.uuid("Invalid landlord id format"),
     meter_type: z.enum(MeterTypeEnum),
-    reading_date: z.coerce.date(),
     meter_value: z.coerce.number(),
-    previous_meter_value: z.coerce.number(),
-    consumption: z.coerce.number(),
-    rate_per_unit: z.coerce.number(),
-    amount_due: z.coerce.number(),
-    recorded_by_user_id: z.uuid(),
-})
-
-const MeterPaginationSchema = z.object({
-    page: z.coerce.number().min(1).default(1),
-    limit: z.coerce.number().min(1).default(1),
 })
 
 const MeterReadingIdSchema = z.object({
@@ -26,14 +16,18 @@ const MeterReadingIdSchema = z.object({
 });
 
 type MeterReadingIdParams = z.infer<typeof MeterReadingIdSchema>
-type CreationMeterReadingInput = z.infer<typeof CreationMeterReadingSchema>
-type PaginationMeterReading = z.infer<typeof MeterPaginationSchema>
+type CreationMeterReadingInput = z.infer<typeof CreationMeterReadingSchema> & {
+    reading_date? : Date,
+    previous_meter_value?: number,
+    rate_per_unit?: number,
+    amount_due?: number,
+    consumption?: number,
+    recorded_by_user_id?: string,
+}
 
 export {
-    MeterPaginationSchema,
     CreationMeterReadingSchema,
     MeterReadingIdSchema,
     MeterReadingIdParams,
     CreationMeterReadingInput,
-    PaginationMeterReading,
 }

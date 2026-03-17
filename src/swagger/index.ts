@@ -14,6 +14,8 @@ import { authenticationSchema, AuthentificationPath, refreshTokenObjectPath, ref
 import {contractPath, contractSchema, contractTags} from "@/swagger/contract.swagger";
 
 import { utilisateurAbonnementPath, utilisateurAbonnementSchema, utilisateurAbonnementTags } from "./utilisateur_abonnement.swagger";
+import { meterReadingSchema, meterReadingTags } from "@/swagger/meterReading.swagger";
+import { meterReadingPath } from "@/swagger/meterReading.swagger";
 
 
 export const tags: OpenAPIV3.TagObject[] = [
@@ -24,7 +26,8 @@ export const tags: OpenAPIV3.TagObject[] = [
     utilisateurAbonnementTags,
     contractTags,
     abonnementsTags,
-    utilisateurAbonnementTags
+    utilisateurAbonnementTags,
+    meterReadingTags
 ];
 
 export const paths: OpenAPIV3.PathsObject = {
@@ -79,7 +82,7 @@ export const paths: OpenAPIV3.PathsObject = {
     ...abonnementPath,
     ...utilisateurAbonnementPath,
     ...tenantPath,
-
+    ...meterReadingPath
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
@@ -98,8 +101,8 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...contractSchema,
     ...refreshTokenSchema,
     ...refreshTokenObjectSchema,
-    ...abonnementsSchema
-
+    ...abonnementsSchema,
+    ...meterReadingSchema,
 };
 
 
