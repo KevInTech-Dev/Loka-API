@@ -155,7 +155,7 @@ const meterReadingPath: OpenAPIV3.PathsObject = {
           },
         },
     },
-    'meterReading/{id}': {
+    '/meterReading/{id}': {
         get: {
             tags: ['MeterReading'],
             summary: 'Get meter reading by id',
@@ -216,7 +216,7 @@ const meterReadingPath: OpenAPIV3.PathsObject = {
                 content: {
                     'application/json': {
                         schema: {
-                            $ref: '#/components/schema/UpdatemeterReading'
+                            $ref: '#/components/schemas/UpdatemeterReading'
                         },
                     },
                 },

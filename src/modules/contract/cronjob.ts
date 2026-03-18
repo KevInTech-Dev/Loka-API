@@ -6,7 +6,7 @@ import cron from 'node-cron';
   const contractService = new ContractService()  
  export const  contractCronJob = ()=>{
     console.log("cron contract run")
-      return cron.schedule("0 0 * * *", async () => {
+      return cron.schedule("/*1 * * * *", async () => {
         const today = new Date();
         console.log("Recherche des contrats expirant aujourd'hui...");
 

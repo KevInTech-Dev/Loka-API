@@ -16,12 +16,7 @@ router.get(
   validate(contractPaginationSchema, 'query'),
   ContractController.getAllContract,
 );
-router.get(
-  '/:id',
-  authorize(['admin', 'proprietaire']),
-  validate(contractIdSchema, 'params'),
-  ContractController.getContract,
-);
+router.get( '/:id', authorize(['admin', 'proprietaire']), validate(contractIdSchema, 'params'), ContractController.getContract );
 
 router.patch(
   '/:id',

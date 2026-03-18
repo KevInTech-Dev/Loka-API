@@ -1,4 +1,4 @@
-import { CreationMeterReadingInput } from "@modules/meterReading/meterReading.schemas";
+import { CreationMeterReadingInput, UpdateMeterReadingInput } from "@modules/meterReading/meterReading.schemas";
 import { MeterReadingService } from "@modules/meterReading/meterReading.service";
 import { Request, Response } from "express";
 import { read } from "node:fs";
@@ -37,7 +37,7 @@ export class MeterReadingController {
 
     updateMeterReading = async (req: Request, res: Response) => {
         const id = req.params.id as string;
-        const data = req.body as Partial<CreationMeterReadingInput>;
+        const data = req.body as Partial<UpdateMeterReadingInput>;
         return res.send({
             data: await this.meterService.updateMeterReading(id, data),
         })

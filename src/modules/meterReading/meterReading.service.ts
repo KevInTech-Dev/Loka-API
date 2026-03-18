@@ -4,7 +4,7 @@ import { PropertyRepository } from "@modules/property/property.repository";
 import { TenantRepository } from "@modules/tenant/tenant.repository";
 import { UnitLocationRepository } from "@modules/unitLocation/unitLocation.repository";
 import { MeterReadingRepository } from "@modules/meterReading/meterReading.repository";
-import { CreationMeterReadingInput } from "./meterReading.schemas";
+import { CreationMeterReadingInput, UpdateMeterReadingInput } from "./meterReading.schemas";
 import { MeterResponse } from "./meterReading.types";
 import { MeterMapper } from "./meterReading.mapper";
 import { BadRequestError, InternalServerError, NotFoundError } from "@/common/errors";
@@ -86,7 +86,7 @@ export class MeterReadingService {
         return this.meterMapper.toResponse(meterReading);
     }
 
-    async updateMeterReading(id: string, data: Partial<CreationMeterReadingInput>): Promise<MeterResponse | null> {
+    async updateMeterReading(id: string, data: Partial<UpdateMeterReadingInput>): Promise<MeterResponse | null> {
         const existingMeter = await this.meterReadingRepository.findById(id);
         if (!existingMeter) {
           throw new NotFoundError("Meter reading");

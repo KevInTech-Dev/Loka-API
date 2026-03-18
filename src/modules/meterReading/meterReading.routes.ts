@@ -2,7 +2,7 @@ import { Router } from "express";
 import authMiddleware from "../middleware/authMiddleware";
 import { MeterReadingController } from "./meterReading.controller";
 import { authorize } from "../middleware/authorization.middleware";
-import { CreationMeterReadingSchema, MeterReadingIdSchema } from "./meterReading.schemas";
+import { CreationMeterReadingSchema, MeterReadingIdSchema, UpdateMeterReadingSchema } from "./meterReading.schemas";
 import validate from "../middleware/validate.middleware";
 import { defaultPaginationQuery } from "@/common/api.schema";
 
@@ -18,7 +18,7 @@ router.post('', authorize(['admin', 'proprietaire']), validate(CreationMeterRead
 
 router.patch('/:id', authorize(['admin', 'proprietaire']), validate({
     params: MeterReadingIdSchema,
-    body: CreationMeterReadingSchema,
+    body: UpdateMeterReadingSchema,
 }), meterReandingController.updateMeterReading);
 
 export default router;
