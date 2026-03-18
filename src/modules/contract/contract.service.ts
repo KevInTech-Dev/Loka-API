@@ -204,12 +204,18 @@ export class ContractService {
   };
   async renewContract(id: string) {
     const existingContract = await this.contractRepository.getContractById(id);
-    if (!existingContract) {
-      throw new Error('Contract');
-    }
-
-    if (!existingContract.auto_renewal && existingContract.contract_status !== ContractStatusEnum.ACTIVE) {
-      throw new Error('Auto renewal is disabled and contract status is not active');
+  try {      
+      if (!existingContract) {
+        throw new Error('Contract');
+      }
+      if (!existingContract.auto_renewal) {
+        throw new Error('Auto renewal is disabled and contract status is not active');
+      }
+      if(existingContract.contract_status != ContractStatusEnum.ACTIVE) {
+        throw new Error('The contract status is not active');
+      }
+    } catch (error) {
+      throw new Error(error)
     }
 
     // Calcul de la durée initiale
@@ -226,12 +232,13 @@ export class ContractService {
     // Création du nouveau contrat
     const renewedContract = await this.contractRepository.createContract({
       ...existingContract.toJSON(),
+      contract_number: await this.generateContractNumber(),
       contract_start_date: newStartDate,
       contract_end_date: newEndDate,
       is_signed_by_landlord: true,
       is_signed_by_tenant: true,
     });
-
+    await this.contractRepository.updateContract(id, { contract_status: ContractStatusEnum.EXPIRED });
     return renewedContract;
   }
   async manualRenewal(id: string, data: manualRenawalInput) {

@@ -2,5 +2,9 @@ import { contractCronJob } from "@/modules/contract/cronjob"
 
 export const RunAllCron  = ()=>{
 
-    contractCronJob()
+    try {
+        contractCronJob();
+    } catch (error) {
+        console.error("Error occurred while running contract cron job:", error);
+    }
 }

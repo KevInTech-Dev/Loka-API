@@ -1,0 +1,10 @@
+
+
+export enum FactureTypeEnum {
+    RENT = 'RENT',
+    DEPOSIT = 'DEPOSIT',
+    MAINTENANCE = 'MAINTENANCE',
+    WATER = 'WATER',
+    ELECTRICITY = 'ELECTRICITY',
+    ABONNEMENT = 'ABONNEMENT',
+}

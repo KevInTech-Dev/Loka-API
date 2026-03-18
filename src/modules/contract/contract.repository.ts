@@ -45,6 +45,7 @@ export class ContractRepository {
     });
   }
   async createContract(data: ContractCreationAttributes) {
+    delete data.id;
     return this.contract.create(data);
   }
 
@@ -103,18 +104,18 @@ export class ContractRepository {
       }
     });
   }
-  // Récupérer les contrats qui expirent aujourd'hui
-    async getContractsExpiringOn(date) {
-        const yyyy = date.getFullYear();
-        const mm = String(date.getMonth() + 1).padStart(2, "0");
-        const dd = String(date.getDate()).padStart(2, "0");
+  // // Récupérer les contrats qui expirent hier
+  //   async getContractsExpiringOn(date) {
+  //       const yyyy = date.getFullYear();
+  //       const mm = String(date.getMonth() + 1).padStart(2, "0");
+  //       const dd = String(date.getDate()).padStart(2, "0");
 
-        const todayStr = `${yyyy}-${mm}-${dd}`;
-
-        return await this.contract.findAll({
-            where: {
-                contract_end_date: todayStr
-            }
-        });
-      }
+  //       const todayStr = `${yyyy}-${mm}-${dd}`;
+  //       const today = new Date(todayStr);
+  //       return await this.contract.findAll({
+  //           where: {
+  //               contract_end_date: today
+  //           }
+  //       });
+  //     }
 }
