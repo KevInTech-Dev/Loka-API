@@ -98,10 +98,6 @@ const factureMaintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 type: "string",
                 description: "Due date"
             },
-            // dateEmission: {
-            //     type: "string",
-            //     description: "Date of making the invoice"
-            // },
             invoiceType: {
                 type: "string",
                 description: "FACTURE_maintenance|FACTURE_MAINTENANCE|FACTURE_EAU|FACTURE_ELEC|ABONNEMENT",
@@ -113,10 +109,6 @@ const factureMaintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 default: false,
                 description: "Boolean value to add or not tva on the invoice",
             },
-            // numeroFacture: {
-            //     type: "string",
-            //     description: "Number of the invoice",
-            // },
             status: {
                 type: "string",
                 enum: [...Object.values(StatusFactures)],
@@ -138,7 +130,7 @@ const factureMaintenanceSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "This represent the id of maintenance request"
             }
         },
-        required: ["totalAPayer", "idTenant", "dateEcheance", /*"dateEmission",*/ "invoiceType", "isTva", /*"numeroFacture",*/ "status", "notes", "unitLocation", "maintenanceId"]
+        required: ["totalAPayer", "idTenant", "dateEcheance", "invoiceType", "isTva", "status", "notes", "unitLocation", "maintenanceId"]
     }
 }
 

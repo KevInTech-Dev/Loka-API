@@ -30,7 +30,7 @@ export class FactureMaintenanceMapper implements BaseMapper<FactureMaintenance, 
         }
     }
     //const lastInvoiceNumber = await this.factureMaintenanceRepository.getLastInvNumber();
-    toEntity(data: CreateFactureMaintenanceInput): Partial<FactureMaintenance> {
+    toEntity(data: CreateFactureMaintenanceInput, invoiceNumber?: number): Partial<FactureMaintenance> {
         return {
             dateEcheance: data?.dateEcheance,
             dateEmission: new Date(),
@@ -39,7 +39,7 @@ export class FactureMaintenanceMapper implements BaseMapper<FactureMaintenance, 
             invoiceType: InvoiceType.FACTURE_MAINTENANCE,
             isTva: false,
             notes: data?.notes,
-            numeroFacture: generateIvoiceNumber(),
+            numeroFacture: generateIvoiceNumber(invoiceNumber),
             status: data?.status,
             totalAPayer: data?.totalAPayer,
             unitLocation: data?.unitLocation

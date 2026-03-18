@@ -5,7 +5,7 @@ import { Op } from 'sequelize'
 export const utilisateurAbonnementCronJob = () => {
 
     cron.schedule('00***', async () => {
-        // const today = new Date()
+
         //Journée d'hier
         const yesterdayStart = new Date(new Date().getDate() - 1);
         yesterdayStart.setHours(0, 0, 0, 0);

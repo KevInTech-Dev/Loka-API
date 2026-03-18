@@ -3,20 +3,15 @@ import { StatusFactures } from '@/enums/StatusFacturesEnum'
 import { z } from 'zod'
 
 const createFactureMaintenanceSchema = z.object({
-    createdAt: z.date(),
-    dateEcheance: z.date(),
-    dateEmission: z.date(),
-    id: z.string(),
+    dateEcheance: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).transform((v) => { return new Date(v) }),
     idTenant: z.string(),
     invoiceType: z.enum(InvoiceType),
     isTva: z.boolean(),
     maintenanceId: z.string(),
     notes: z.string(),
-    numeroFacture: z.string(),
     totalAPayer: z.number(),
     status: z.enum(StatusFactures),
     unitLocation: z.string(),
-    updatedAt: z.date(),
 })
 
 const factureMaintenanceIdSchema = z.object({

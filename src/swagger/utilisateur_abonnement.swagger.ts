@@ -87,32 +87,13 @@ const utilisateurAbonnementSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 description: "Identifiant de l'abonnement",
                 example: "123e4567-e89b-12d3-a456-426614174002"
             },
-            dateDebut: {
-                type: "string",
-                format: "date-time",
-                description: "Date de début de l'abonnement (défaut: maintenant)",
-                example: "2026-01-15T10:30:00Z"
-            },
-            endDate: {
-                type: "string",
-                format: "date-time",
-                description: "Date de fin de l'abonnement",
-                example: "2027-01-15T10:30:00Z",
-                nullable: true
-            },
-            statut: {
-                type: "string",
-                enum: ["ACTIF", "INACTIF", "EXPIRE", "SUSPENDU"],
-                description: "Statut de l'abonnement utilisateur (défaut: ACTIF)",
-                example: "ACTIF"
-            },
             autoRenouvellement: {
                 type: "boolean",
                 description: "Indique si l'abonnement se renouvelle automatiquement (défaut: false)",
                 example: true
             }
         },
-        required: ["utilisateurId", "abonnementId"]
+        required: ["utilisateurId", "abonnementId", "autoRenouvellement"]
     },
 
     UtilisateurAbonnementUpdate: {
@@ -142,22 +123,52 @@ const utilisateurAbonnementSchema: OpenAPIV3.ComponentsObject['schemas'] = {
 
 
 // PATHS
-
 const utilisateurAbonnementPath: OpenAPIV3.PathsObject = {
     "/utilisateur-abonnements": {
         get: {
             tags: ["Utilisateur Abonnement"],
             summary: "Récupérer toutes les relations",
             description: "Récupère la liste de toutes les relations utilisateurs-abonnements",
+            parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 1
+                    },
+                    description: "Page umber (starting from 1)"
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    schema: {
+                        type: "integer",
+                        default: 10
+                    },
+                    description: "Number of items per page"
+                }
+            ],
             responses: {
                 "200": {
-                    description: "Liste des relations récupérée avec succès",
+                    description: "A list of maintenance invoice",
                     content: {
                         "application/json": {
                             schema: {
-                                type: "array",
-                                items: {
-                                    $ref: "#/components/schemas/UtilisateurAbonnement"
+                                type: "object",
+                                properties: {
+                                    page: {
+                                        type: "integer"
+                                    },
+                                    limit: {
+                                        type: "integer"
+                                    },
+                                    data: {
+                                        type: "array",
+                                        items: {
+                                            $ref: "#/components/schemas/UtilisateurAbonnement"
+                                        }
+                                    }
                                 }
                             }
                         }

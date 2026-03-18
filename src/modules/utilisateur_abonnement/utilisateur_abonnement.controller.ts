@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { Utilisateur_AbonnementService } from "./utilisateur_abonnement.service";
 import { asyncHandler } from "../middleware/error.middleware";
 import { NotFoundError } from "../../common/errors";
+import { sendCreated } from "@/common/api.response";
 
 
 export class Utilisateur_AbonnementController {
@@ -11,14 +12,16 @@ export class Utilisateur_AbonnementController {
     private utilisateur_abonnementService = new Utilisateur_AbonnementService();
 
 
-    create = asyncHandler(async (req: Request, res: Response) => {
+    create = async (req: Request, res: Response) => {
 
         const result = await this.service.create(req.body);
+        return sendCreated(
+            res,
+            result,
+            "Operation of creation succesffull"
+        );
 
-
-        return res.status(201).json(result);
-
-    });
+    };
 
 
     //Pagination a faire plus tard, ne plus uiliser getAll 

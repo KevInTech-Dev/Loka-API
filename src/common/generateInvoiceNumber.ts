@@ -2,7 +2,7 @@ export const generateIvoiceNumber = (lastInvNumber?: number): string => {
     const prefix = "FAC";
     const currentYear = new Date().getFullYear();
 
-    if (lastInvNumber) {
+    if (lastInvNumber >= 0) {
         const nextNumber = lastInvNumber + 1;
         const paddedNumber = String(nextNumber).padStart(3, "0");
         return `${prefix}-${currentYear}-${paddedNumber}`;

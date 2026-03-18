@@ -19,6 +19,6 @@ router.get("/utilisateur/:id", validate
     }), controller.getAbonnementByUtilisateurPaginated);
 
 //router.put("/:id", controller.update);
-//router.delete("/:id", controller.delete);
+//router.delete("/:id", controller.);
 
 export default router;

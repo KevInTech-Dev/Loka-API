@@ -1,11 +1,11 @@
-import {CreateUserInput} from "@modules/users/user.schema";
-import {UserRepository} from "@modules/users/user.repository";
+import { CreateUserInput } from "@modules/users/user.schema";
+import { UserRepository } from "@modules/users/user.repository";
 
-import {hashWord} from "@utils/password.utils";
-import {UserResponse} from "./user.types";
-import {NotFoundError} from "@/common/errors";
-import {deleteFile, fileExists} from "@/utils/file.utils";
-import {UserMapper} from "@modules/users/user.mapper";
+import { hashWord } from "@utils/password.utils";
+import { UserResponse } from "./user.types";
+import { NotFoundError } from "@/common/errors";
+import { deleteFile, fileExists } from "@/utils/file.utils";
+import { UserMapper } from "@modules/users/user.mapper";
 
 export class UserService {
     private userRepository: UserRepository;
@@ -20,7 +20,7 @@ export class UserService {
 
         const haspass = await hashWord(data?.password);
 
-        const user = await this.userRepository.create(this.userMapper.toEntity({...data, password: haspass}));
+        const user = await this.userRepository.create(this.userMapper.toEntity({ ...data, password: haspass }));
 
         console.log("nothing");
 
@@ -77,20 +77,7 @@ export class UserService {
             throw new NotFoundError("User not found");
         }
 
-        return {
-            id: user.id,
-            username: user.username,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            role: user.role,
-            phoneNumber: user.phoneNumber,
-            email: user.email,
-            isActive: user.isActive,
-            profilePhotoUrl: user.profilePhotoUrl,
-            isEmailVerified: user.isEmailVerified,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
-        };
+        return user
     }
 
     async getUserPaginated(page: number, limit: number): Promise<UserResponse[]> {

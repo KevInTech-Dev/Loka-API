@@ -3,6 +3,7 @@ import { ModelStatic, Transaction } from "sequelize";
 import { BadRequestError } from "@/common/errors";
 import { BaseRepositoryImpl } from "@/common/base.repository";
 import { CreateUtilisateurAbonnementInput } from "./utilisateur_abonnement.schema";
+import { StatusAbonnementEnum } from "@/enums/StatusAbonnement";
 
 export class Utilisateur_AbonnementRepository extends BaseRepositoryImpl<Utilisateur_Abonnement> {
 
@@ -14,7 +15,6 @@ export class Utilisateur_AbonnementRepository extends BaseRepositoryImpl<Utilisa
      * Création d'une relation utilisateur-abonnement
      */
     async create(data: UtilisateurAbonnementAttributes, transaction?: Transaction): Promise<Utilisateur_Abonnement> {
-
         return await this.model.create(data, { transaction });
     }
 
@@ -115,16 +115,13 @@ export class Utilisateur_AbonnementRepository extends BaseRepositoryImpl<Utilisa
     }
 
 
-    async checkIfUserHasAlreadySubBasic(id: string, idAbonnement: string): Promise<boolean> {
-        if (
-            this.model.findOne({
-                where: {
-                    utilisateurId: id,
-                    abonnementId: idAbonnement
-                }
-            })
-        ) return true;
-        else false;
+    async checkIfUserHasAlreadySubBasic(id: string, idAbonnement: string): Promise<UtilisateurAbonnementAttributes> {
+        return this.model.findOne({
+            where: {
+                utilisateurId: id,
+                abonnementId: idAbonnement
+            }
+        })
     }
 
 

@@ -17,6 +17,7 @@ class FactureAbonnement extends Model<FactureAbonnementAttributes, FactureAbonne
     declare utilisateurAbonnement: string;
     declare dateEcheance: Date;
     declare dateEmission: Date;
+    declare notes: string;
     declare id: string;
     declare invoiceType: InvoiceType;
     declare isTva: boolean;

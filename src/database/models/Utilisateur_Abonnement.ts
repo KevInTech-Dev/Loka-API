@@ -68,7 +68,7 @@ const initModelUtilisateur_Abonnement = (sequelize: Sequelize) => {
       status: {
         type: DataTypes.ENUM(...Object.values(StatusAbonnementEnum)),
         allowNull: false,
-        defaultValue: StatusAbonnementEnum.ACTIVE,
+        defaultValue: StatusAbonnementEnum.INACTIVE,
 
       },
       abonnementId: {
@@ -88,12 +88,12 @@ const initModelUtilisateur_Abonnement = (sequelize: Sequelize) => {
 
       startDate: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
 
       endDate: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

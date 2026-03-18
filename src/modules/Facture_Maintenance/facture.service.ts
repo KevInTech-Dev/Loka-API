@@ -20,8 +20,8 @@ export class FactureMaintenanceService {
         if (existingInvoice) {
             throw new DuplicateEntryError("Invoice already exit");
         }
-
-        const invoiceToCreate = await this.factureMaintenanceRepository.create(this.factureMaintenanceMapper.toEntity({ ...datas }));
+        const invoiceNumber = await this.factureMaintenanceRepository.getLastInvNumber();
+        const invoiceToCreate = await this.factureMaintenanceRepository.create(this.factureMaintenanceMapper.toEntity({ ...datas }, invoiceNumber));
         return this.factureMaintenanceMapper.toResponse(invoiceToCreate);
     }
 

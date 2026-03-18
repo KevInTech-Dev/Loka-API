@@ -7,13 +7,7 @@ import { z } from 'zod';
 const createUtilisateurAbonnementSchema = z.object({
     utilisateurId: z.uuid(),
     abonnementId: z.uuid(),
-    // status: StatusAbonnementEnum.INACTIVE,
     autoRenouvellement: z.boolean().optional().default(false),
-    startDate: z.iso.datetime().optional().default(() => new Date().toISOString()),
-    endDate: z.iso.datetime().optional().nullable(),
-    //dateDebut: z.iso.datetime().optional().default(() => new Date().toISOString()),
-    //dateFin: z.iso.datetime().optional().nullable(),
-    //autoRenouvellement: z.boolean().optional().default(false)
 });
 
 

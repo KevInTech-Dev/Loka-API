@@ -12,7 +12,7 @@ const startServer = async () => {
     process.exit(1);
   }
 
-  await syncDatabase(false, false); // Set force to false and alter to true for safer schema updates
+  await syncDatabase(false, true); // Set force to false and alter to true for safer schema updates
 
   try {
     server = http.createServer(app);

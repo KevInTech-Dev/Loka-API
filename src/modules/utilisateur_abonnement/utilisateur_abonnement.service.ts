@@ -3,7 +3,7 @@ import { Utilisateur_Abonnement } from "@database/models/Utilisateur_Abonnement"
 import { UtilisateurAbonnementAttributes } from "@database/models/Utilisateur_Abonnement";
 import { AbonnementRepository } from "../abonnements/abonnement.repository";
 import { UserRepository } from "../users/user.repository";
-import { NotFoundError } from "@/common/errors";
+import { ForbiddenError, NotFoundError } from "@/common/errors";
 import { PlanAbonnementEnum } from "@/enums/PlanAbonnementEnum";
 import { StatusAbonnementEnum } from "@/enums/StatusAbonnement";
 import { FactureAbonnementService } from "../Facture_Abonnement/facture.service";
@@ -12,7 +12,7 @@ import { FactureAbonnementRepository } from "../Facture_Abonnement/facture.repos
 import { generateIvoiceNumber } from "@/common/generateInvoiceNumber";
 import { StatusFactures } from "@/enums/StatusFacturesEnum";
 import { Transaction } from "sequelize";
-import { error } from "node:console";
+import { RoleEnum } from "@/enums/RoleEnum";
 
 export class Utilisateur_AbonnementService {
     private repository: Utilisateur_AbonnementRepository;
@@ -42,15 +42,16 @@ export class Utilisateur_AbonnementService {
         }
         //Verifier si l'utilisateur existe
         const existingUserSubs = await this.utilisateurRepository.findById(data.utilisateurId);
+        console.log("user ", (existingUserSubs as any)?.userLandlord.id)
         if (!existingUserSubs) {
             throw new NotFoundError("User")
+        } else if (existingUserSubs.role != RoleEnum.PROPRIETAIRE) {
+            throw new ForbiddenError();
         }
 
-
         try {
-
-            transaction = await this.repository.sequelizeInstance.transaction()
-            response = await this.repository.create(data, transaction)
+            transaction = await this.repository.sequelizeInstance.transaction();
+            response = await this.repository.create(data, transaction);
 
             //Switch case sur les types d'abonnement
             switch (checkSubType.planAbonnement as PlanAbonnementEnum) {
@@ -61,69 +62,87 @@ export class Utilisateur_AbonnementService {
                     */
                     const idSubscription = await this.abonnementRepository.getAbonnementByAttribut("planAbonnement", PlanAbonnementEnum.BASIC);
                     // On check si une ligne existe déjà concernant l'utilisateur et le type d'abonnement BASIC 
+                    const userSubObject = await this.repository.checkIfUserHasAlreadySubBasic(data.utilisateurId, idSubscription.id);
                     if (
-                        await this.repository.checkIfUserHasAlreadySubBasic(data.utilisateurId, idSubscription.id)
+                        userSubObject
                     ) {
 
-                        // Si oui générer une facture
-                        const invNumber = await this.factureAbonnementRepository.getLastInvNumber();
-                        this.factureAbonnementService.createFactureAbonnement({
-                            invoiceType: InvoiceType.ABONNEMENT,
+                        //Si l'abonnement est expiré générer la facture
+                        if (userSubObject.status === StatusAbonnementEnum.EXPIRED) {
+                            // Si oui générer une facture
+                            const invNumber = await this.factureAbonnementRepository.getLastInvNumber();
+                            const dateEcheance = new Date();
+                            dateEcheance.setDate(dateEcheance.getDate() + 15);
+                            await this.factureAbonnementService.createFactureAbonnement({
+                                invoiceType: InvoiceType.ABONNEMENT,
+                                isTva: false,
+                                landlordId: (existingUserSubs as any)?.userLandlord.id,
+                                notes: `FACTURES D'\ABONNEMENT GENERER LE : ${new Date()}`,
+                                numeroFacture: generateIvoiceNumber(invNumber),
+                                status: StatusFactures.EN_ATTENTE,
+                                totalAPayer: checkSubType.prix,
+                                utilisateurAbonnement: response.id,
+                                dateEcheance: dateEcheance,
+                            }, transaction);
+
+                            await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.EXPIRED, endDate: null, startDate: null }, transaction)
+                        }
+                        throw new Error("Subscription not expired yet");
+                    } else {
+                        // Si non passer le status à TRIAL et generer la facture 
+                        const invoiceNumber = await this.factureAbonnementRepository.getLastInvNumber();
+                        const dateEcheance = new Date();
+                        dateEcheance.setDate(dateEcheance.getDate() + 15);
+                        await this.factureAbonnementService.createFactureAbonnement({
+                            invoiceType: InvoiceType.ABONNEMENT_TRIAL,
                             isTva: false,
-                            landlordId: data.utilisateurId,
-                            notes: `FACTURES D'\ABONNEMENT GENERER LE : ${new Date().getDate()}`,
-                            numeroFacture: generateIvoiceNumber(invNumber),
+                            landlordId: (existingUserSubs as any)?.userLandlord.id,
+                            notes: `FACTURES D'\ABONNEMENT AU STATUT GRATUIT GENERER LE : ${new Date()}`,
+                            numeroFacture: generateIvoiceNumber(invoiceNumber),
                             status: StatusFactures.EN_ATTENTE,
                             totalAPayer: checkSubType.prix,
                             utilisateurAbonnement: response.id,
-                            dateEcheance: new Date(new Date().getDate() + 15),
-                        }, transaction)
-
-                        await this.repository.updateUtilisateurAbonnement(data.id, { ...data, status: StatusAbonnementEnum.INACTIVE }, transaction);
+                            dateEcheance: dateEcheance,
+                        }, transaction);
                     }
 
-                    // Si non passer le status à TRIAL et generer la facture 
-                    const invoiceNumber = await this.factureAbonnementRepository.getLastInvNumber();
-                    this.factureAbonnementService.createFactureAbonnement({
-                        invoiceType: InvoiceType.ABONNEMENT_TRIAL,
-                        isTva: false,
-                        landlordId: data.utilisateurId,
-                        notes: `FACTURES D'\ABONNEMENT AU STATUT GRATUIT GENERER LE : ${new Date().getDate()}`,
-                        numeroFacture: generateIvoiceNumber(invoiceNumber),
-                        status: StatusFactures.EN_ATTENTE,
-                        totalAPayer: checkSubType.prix,
-                        utilisateurAbonnement: response.id,
-                        dateEcheance: new Date(new Date().getDate() + 30),
-                    }, transaction)
+                    const dateDebut = new Date();
+                    const finDate = new Date();
+                    finDate.setDate(finDate.getDate() + 30)
 
-                    const dateDebut = data.startDate = new Date();
-                    const finDate = new Date(data.endDate.setDate(dateDebut.getDate() + 30));
-                    await this.repository.updateUtilisateurAbonnement(data.id, { ...data, status: StatusAbonnementEnum.TRIAL, endDate: finDate, startDate: dateDebut }, transaction)
+                    await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.TRIAL, startDate: dateDebut, endDate: finDate }, transaction)
                     break;
 
-                case PlanAbonnementEnum.CUSTOM || PlanAbonnementEnum.ENTREPRISE || PlanAbonnementEnum.PRO:
+                case PlanAbonnementEnum.CUSTOM:
+                case PlanAbonnementEnum.ENTREPRISE:
+                case PlanAbonnementEnum.PRO:
                     const invNumber = await this.factureAbonnementRepository.getLastInvNumber();
+                    const dateEcheance = new Date();
+                    dateEcheance.setDate(dateEcheance.getDate() + 15);
                     this.factureAbonnementService.createFactureAbonnement({
                         invoiceType: InvoiceType.ABONNEMENT,
                         isTva: false,
-                        landlordId: data.utilisateurId,
+                        landlordId: (existingUserSubs as any)?.userLandlord.id,
                         notes: `FACTURE D'\ ABONNEMENT GENERER LE : ${new Date().getDate()}`,
                         numeroFacture: generateIvoiceNumber(invNumber),
                         status: StatusFactures.EN_ATTENTE,
                         totalAPayer: checkSubType.prix,
                         utilisateurAbonnement: response.id,
-                        dateEcheance: new Date(new Date().getDate() + 15),
+                        dateEcheance: dateEcheance,
                     }, transaction);
-                    await this.repository.updateUtilisateurAbonnement(data.id, { ...data, status: StatusAbonnementEnum.INACTIVE }, transaction)
+
+                    await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.INACTIVE }, transaction)
             }
-            transaction.commit()
+            await transaction.commit()
+
+            return response;
         } catch (error) {
             if (transaction) {
-                transaction.rollback()
+                await transaction.rollback()
             }
-            console.log("error", error)
+            throw new Error(error)
         }
-        return response;
+
     }
 
     /**

@@ -35,7 +35,7 @@ export class FactureAbonnementService {
         //Recuperer la facture recente et ensuite recuperer son numero de facture
         const invoiceObjt = await this.factureAbonnementRepository.getLastInvNumber();
 
-        const invoiceToCreate = await this.factureAbonnementRepository.create(this.factureAbonnementMapper.toEntity({ ...datas, numeroFacture: generateIvoiceNumber(invoiceObjt) }), transaction);
+        const invoiceToCreate = await this.factureAbonnementRepository.create(this.factureAbonnementMapper.toEntity({ ...datas, notes: datas.notes, numeroFacture: generateIvoiceNumber(invoiceObjt) }), transaction);
         return this.factureAbonnementMapper.toResponse(invoiceToCreate);
     }
 

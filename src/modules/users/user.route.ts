@@ -32,7 +32,7 @@ router.post("/photo/:id", validate(userIdShema, 'params'), singleUpload({
 }), userController.addPhoto);
 
 // get user by id
-router.get("/:id", authMiddleware, authorize(["admin"]), userController.getUser);
+router.get("/:id", userController.getUser);
 
 // update user by id
 router.patch(
