@@ -25,6 +25,12 @@ class FactureAbonnement extends Model<FactureAbonnementAttributes, FactureAbonne
     declare status: StatusFactures;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
+    static associate(models: any) {
+        FactureAbonnement.hasOne(models.Payment, {
+            foreignKey: 'facture_ab_id',
+            as: 'Payment'
+        });
+    }
 }
 
 const initModelFactureAbonnement = (sequelize: Sequelize) => {

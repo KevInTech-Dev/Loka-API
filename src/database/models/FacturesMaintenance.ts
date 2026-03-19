@@ -27,6 +27,13 @@ class FactureMaintenance extends Model<FactureMaintenanceAttributes, FactureMain
     declare unitLocation: string;
     declare readonly updatedAt?: Date;
 
+    static associate(models: any) {
+        FactureMaintenance.hasOne(models.Payment, {
+            foreignKey: 'facture_mtn_id',
+            as: 'Payment'
+        });
+    }
+
 }
 
 const initModelFactureMiantenance = (sequelize: Sequelize) => {

@@ -26,6 +26,12 @@ class FactureLoyer extends Model<FactureLoyerAttributes, FactureLoyerCreationAtt
     declare totalAPayer: number;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
+    static associate(models: any) {
+        FactureLoyer.hasOne(models.Payment, {
+            foreignKey: 'facture_loy_id',
+            as: 'Payment'
+        });
+    }
 }
 
 const initModelFactureLoyer = (sequelize: Sequelize) => {

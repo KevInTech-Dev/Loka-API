@@ -29,6 +29,13 @@ class FactureEau extends Model<FactureEauAttributes, FactureEauCreationAttribute
     declare readonly updatedAt?: Date;
     declare readonly createdAt?: Date;
 
+    static associate(models: any) {
+        FactureEau.hasOne(models.Payment, {
+            foreignKey: 'facture_water_id',
+            as: 'Payment'
+        });
+    }
+
 }
 
 const initModelFactureEau = (sequelize: Sequelize) => {

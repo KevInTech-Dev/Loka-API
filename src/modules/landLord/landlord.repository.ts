@@ -1,13 +1,13 @@
-import { NotFoundError } from "@/common/errors";
-import { LandLord, landLordCreationAtributes } from "@/database/models/landLord";
-import { User } from "@/database/models/Users";
-import { ModelStatic } from "sequelize";
+import {NotFoundError} from "@/common/errors";
+import {LandLord, landLordCreationAtributes} from "@/database/models/landLord";
+import {User} from "@/database/models/Users";
+import {ModelStatic} from "sequelize";
 import {BaseRepositoryImpl} from "@common/base.repository";
 
-export class landLordRepository extends BaseRepositoryImpl<LandLord>{
+export class landLordRepository extends BaseRepositoryImpl<LandLord> {
     private landlord: ModelStatic<LandLord>
 
-    constructor(){
+    constructor() {
         super(LandLord);
         this.landlord = LandLord;
     }
@@ -17,31 +17,34 @@ export class landLordRepository extends BaseRepositoryImpl<LandLord>{
     }
 
     async getlandLordById(id: string) {
-        return this.landlord.findByPk(id, {include:
-           {
-            model: User,
-            as :'landlordUser'
-           }
-            });
+        return this.landlord.findByPk(id, {
+            include:
+                {
+                    model: User,
+                    as: 'landlordUser'
+                }
+        });
     }
 
-    async getlandLordByUserId(userId: string){
-        return this.landlord.findOne( {where: {userId}} )
+    async getlandLordByUserId(userId: string) {
+        return this.landlord.findOne({where: {userId}})
     }
 
-    async getAllLandlords(){
+    async getAllLandlords() {
         return this.landlord.findAll({include: User});
     }
 
     async getlandLordPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
-        return this.landlord.findAll({ offset, limit , include: [{
-            model: User,
-            as : 'landlordUser'
-        }]});
+        return this.landlord.findAll({
+            offset, limit, include: [{
+                model: User,
+                as: 'landlordUser'
+            }]
+        });
     }
 
-    async updatelandLord(id: string, data: Partial<landLordCreationAtributes>){
+    async updatelandLord(id: string, data: Partial<landLordCreationAtributes>) {
         const landlord = await this.getlandLordById(id);
         if (!landlord) return null;
 
@@ -55,7 +58,7 @@ export class landLordRepository extends BaseRepositoryImpl<LandLord>{
 
     async deletelandLord(id: string) {
         const landlord = await this.getlandLordById(id);
-        if(!landlord) 
+        if (!landlord)
             throw new NotFoundError("Landlord");
 
         // Suppression logique 

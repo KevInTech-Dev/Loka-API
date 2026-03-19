@@ -2,14 +2,18 @@ import {BaseModel} from "@/common/models/base.model";
 import {PaymentMethodEnum} from "@/enums/PaymentMethodEnum";
 import {PaymentProviderEnum} from "@/enums/PaymentProviderEnum";
 import {PaymentStatusEnum} from "@/enums/PaymentStatusEnum";
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 import {InvoiceType} from "@/enums/InvoiceTypeEnume";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 
-export interface PaymentAttributes extends BaseModel{
+export interface PaymentAttributes extends BaseModel {
     payment_reference: string;
     landlord_id: string;
     tenant_id: string;
-    facture_id: string;
+    facture_loy_id: string;
+    facture_ab_id: string;
+    facture_water_id: string;
+    facture_elec_id: string;
+    facture_mtn_id: string;
     payment_date: Date;
     amount_paid: number;
     payment_method: PaymentMethodEnum;
@@ -26,15 +30,19 @@ export interface PaymentAttributes extends BaseModel{
     refund_at: Date;
 }
 
-export interface PaymentCreationAttributes extends Optional<PaymentAttributes, 'id' | 'createdAt' | 'updatedAt' | 'payment_notes' | 'refund_reason'> {}
+export interface PaymentCreationAttributes extends Optional<PaymentAttributes, 'id' | 'createdAt' | 'updatedAt' | 'payment_notes' | 'refund_reason'> {
+}
 
-class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implements PaymentAttributes 
-   {
+class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implements PaymentAttributes {
     declare id: string;
     declare payment_reference: string;
     declare landlord_id: string;
     declare tenant_id: string;
-    declare facture_id: string;
+    declare facture_loy_id: string;
+    declare facture_ab_id: string;
+    declare facture_water_id: string;
+    declare facture_elec_id: string;
+    declare facture_mtn_id: string;
     declare payment_date: Date;
     declare amount_paid: number;
     declare factureType: InvoiceType;
@@ -51,14 +59,19 @@ class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implem
     declare refund_at: Date;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
-    static associate(models: any) {
-        Payment.belongsTo(models.LandLord, { as: 'paymentLandlord', foreignKey: 'landlord_id' });
-        Payment.belongsTo(models.Tenant, { as: 'paymentTenant', foreignKey: 'tenant_id' });
-        // Payment.belongsTo(models.Facture, { as: 'paymentFacture', foreignKey: 'facture_id' });
-    }
-   }
 
-   const initPaymentModel = (sequelize: Sequelize) => {
+    static associate(models: any) {
+        Payment.belongsTo(models.LandLord, {as: 'paymentLandlord', foreignKey: 'landlord_id'});
+        Payment.belongsTo(models.Tenant, {as: 'paymentTenant', foreignKey: 'tenant_id'});
+        Payment.belongsTo(models.factureLoyer, {as: 'factureLoyer', foreignKey: 'facture_loy_id'});
+        Payment.belongsTo(models.FactureAbonnement, {as: 'FactureAbonnement', foreignKey: 'facture_ab_id'});
+        Payment.belongsTo(models.factureMaintenance, {as: 'factureMaintenance', foreignKey: 'facture_mtn_id'});
+        Payment.belongsTo(models.factureElectricite, {as: 'factureElectricite', foreignKey: 'facture_elec_id'});
+        Payment.belongsTo(models.FactureEau, {as: 'FactureEau', foreignKey: 'facture_water_id'});
+    }
+}
+
+const initPaymentModel = (sequelize: Sequelize) => {
     Payment.init({
         id: {
             type: DataTypes.UUID,
@@ -80,10 +93,50 @@ class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implem
             defaultValue: DataTypes.UUIDV4,
             allowNull: false
         },
-        facture_id: {
+        facture_loy_id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
-            allowNull: false
+            allowNull: true,
+            references: {
+                    model: "Facturesloyer",
+                    key: "id"
+                },
+        },
+        facture_ab_id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            allowNull: true,
+            references: {
+                    model: "facturesAbonnement",
+                    key: "id"
+                },
+        },
+        facture_water_id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            allowNull: false,
+            references: {
+                    model: "facturesEau",
+                    key: "id"
+                },
+        },
+        facture_elec_id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            allowNull: true,
+            references: {
+                    model: "FactureElectricite",
+                    key: "id"
+                },
+        },
+        facture_mtn_id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            allowNull: true,
+            references: {
+                    model: "FactureMaintenance",
+                    key: "id"
+                },
         },
         payment_date: {
             type: DataTypes.DATE,
@@ -94,7 +147,7 @@ class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implem
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false
         },
-        factureType:{
+        factureType: {
             type: DataTypes.ENUM(...Object.values(InvoiceType)),
             allowNull: false
         },
@@ -149,8 +202,8 @@ class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implem
             allowNull: false
         }
     }, {
-        sequelize, tableName:'payments', modelName: 'Payment', timestamps: true, underscored: true, paranoid: true
+        sequelize, tableName: 'payments', modelName: 'Payment', timestamps: true, underscored: true, paranoid: true
     });
-   };
+};
 
-    export { Payment, initPaymentModel };
+export {Payment, initPaymentModel};

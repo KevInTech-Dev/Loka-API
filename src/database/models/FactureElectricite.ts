@@ -26,6 +26,12 @@ class FactureElectricite extends Model<FactureElectriciteAttributes, FactureElec
     declare totalAPayer: number;
     declare unitLocation: string;
     declare readonly updatedAt?: Date;
+    static associate(models: any) {
+        FactureElectricite.hasOne(models.Payment, {
+            foreignKey: 'facture_elec_id',
+            as: 'Payment'
+        });
+    }
 
 }
 
