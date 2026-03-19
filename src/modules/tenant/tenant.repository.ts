@@ -22,10 +22,6 @@ export class TenantRepository {
         }]});
     }
 
-    async getAllTenants() {
-        return this.tenant.findAll({ include: User});
-    }
-
     async getTenantPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
         return this.tenant.findAll({ offset, limit, include:[
@@ -40,7 +36,11 @@ export class TenantRepository {
         const tenant = await this.getTenantById(id);
         if(!tenant) return null
         
-        await tenant.update(data);
+        await tenant.update(data, {
+            where: {
+                id: data.id
+            }
+        });
         return tenant;
     }
 

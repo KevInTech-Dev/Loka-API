@@ -22,7 +22,6 @@ export class UserService {
 
         const user = await this.userRepository.create(this.userMapper.toEntity({ ...data, password: haspass }));
 
-        console.log("nothing");
 
         return this.userMapper.toResponse(user);
     }

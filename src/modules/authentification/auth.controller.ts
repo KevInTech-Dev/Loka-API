@@ -6,6 +6,7 @@ import { Request, Response } from 'express'
 import { CreateUserInput } from "../users/user.schema";
 import { TokenService } from "./token.service";
 import { RefreshTokenAttributes } from "@/database/models/RefreshToken";
+import { RoleEnum } from "@/enums/RoleEnum";
 
 export class AuthController {
 
@@ -28,7 +29,7 @@ export class AuthController {
     }
 
     register = async (req: Request, res: Response) => {
-        const dataRegister: CreateUserInput = { ...req.body, photo: req?.file?.path ?? null, role: "proprietaire" };
+        const dataRegister: CreateUserInput = { ...req.body, photo: req?.file?.path ?? null, role: RoleEnum.PROPRIETAIRE };
         const data = await this.authService.register(dataRegister)
         return sendSuccess(
             res,

@@ -33,11 +33,10 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
         role: user.role,
         phoneNumber: user.phoneNumber,
         username: user.username,
+        // permission: [],
         firstname: user.firstname,
-        lastname: user.lastname,
         email: user.email,
-        //permission: []
-
+        lastname: user.lastname
     } as PayLoadToken;
     next();
 

@@ -51,7 +51,14 @@ class LandLord
             foreignKey: 'landlord_id',
             as: 'landlordContract'
         });
-    }
+    LandLord.hasMany(models.MeterReading, {
+                foreignKey: 'landlord_id',
+                as: 'landlordMeterReading'
+            });
+            LandLord.hasMany(models.Payment, {
+                foreignKey: 'landlord_id',
+                as: 'landlordPaymentPayment'
+            } )}
 }
 
 const initModelandLord = (sequelize: Sequelize) => {

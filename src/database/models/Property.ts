@@ -45,6 +45,10 @@ class Property extends Model<PropertyAttribute, PropertyCreationAttributes> impl
                 foreignKey: 'property_id',
                 as: 'propertyContract'
             });
+        Property.hasMany(models.MeterReading, {
+                foreignKey: 'property_id',
+                as: 'propertyMeterReading'
+            });
     }
 }
 

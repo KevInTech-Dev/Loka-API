@@ -59,7 +59,14 @@ class Tenant
             foreignKey: 'tenant_id',
             as: 'tenantContract'
         });
-    }
+    Tenant.hasMany(models.MeterReading, {
+                foreignKey: 'tenant_id',
+                as: 'tenantMeterReading'
+             });
+             Tenant.hasMany(models.Payment, {
+               foreignKey: 'tenant_id',
+                as: 'tenantPayment'
+             })}
 }
 
 

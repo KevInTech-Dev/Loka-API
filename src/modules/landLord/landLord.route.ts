@@ -7,12 +7,11 @@ import validate from "@modules/middleware/validate.middleware";
 import { createlandLordSchema, landlordIdSchema, landlordPaginationSchema } from "@modules/landLord/landlord.schema";
 
 const router: Router = Router();
-// router.use(authMiddleware);
+router.use(authMiddleware);
 const landlordController = new LandLordController();
 
-router.get('', authorize(['admin']), validate(landlordPaginationSchema, 'query'), landlordController.getAllLandlords);
+router.get('',  authorize(['proprietaire', 'admin']), validate(landlordPaginationSchema, 'query'), landlordController.getAllLandlords);
 
-//router.post('',  authorize(['proprietaire', 'admin']), validate(createlandLordSchema, 'body'), landlordController.addLandlordInfo);
 router.post('', validate(createlandLordSchema, 'body'), landlordController.addLandlordInfo);
 
 

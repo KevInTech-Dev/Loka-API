@@ -1,7 +1,15 @@
-import { ContractStatusEnum } from "@/enums/ContractStatusEnum"
+import { ContractStatusEnum } from "@/enums/ContractStatusEnum";
 import { ContractTypeEnum } from "@/enums/ContractTypeEnum"
 import z from "zod"
 
+const manualRenewalSchema = z.object({
+    contract_start_date: z.coerce.date(),
+    contract_end_date: z.coerce.date(),
+})
+const manualSignatureSchema = z.object({
+    is_signed_by_landlord: z.coerce.boolean("La valeur doit être un boolean soit true ou false"),
+    is_signed_by_tenant: z.coerce.boolean("La valeur doit être un boolean soit true ou false"),
+})
 const createContractSchema = z.object({
     landlord_id: z.uuid("Invalid landlord id format"),
     property_id: z.uuid("Invalid landlord id format"),
@@ -18,7 +26,7 @@ const createContractSchema = z.object({
     water_included: z.boolean(),
     electricity_rate_per_kwh: z.number(),
     water_rate_per_m3: z.number(),
-    other_changes: z.record(z.string(), z.any()),
+    other_charges: z.record(z.string(), z.any()),
     initial_electricity_reading: z.number(),
     initial_water_reading: z.number(),
     auto_renewal: z.boolean(),
@@ -37,12 +45,19 @@ const contractPaginationSchema = z.object({
 type createContractInput = z.infer<typeof createContractSchema>
 type contractIdParams = z.infer<typeof contractIdSchema>
 type paginatedContract = z.infer<typeof contractPaginationSchema>
+type manualRenawalInput = z.infer<typeof manualRenewalSchema>
+type manualSignatureInput = z.infer<typeof manualSignatureSchema>
 
 export {
     createContractInput,
     contractIdParams,
     paginatedContract,
+    manualRenawalInput,
+    manualSignatureInput,
     createContractSchema,
     contractIdSchema,
     contractPaginationSchema,
+    manualRenewalSchema,
+    manualSignatureSchema,
+    
 }

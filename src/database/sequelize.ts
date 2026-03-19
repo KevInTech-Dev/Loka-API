@@ -16,6 +16,7 @@ import { initmodelPermissions } from "./models/Permissions";
 import { initModelPermissionsAbonnement } from "./models/PermissionsAbonnement";
 import { initModelUtilisateur_Abonnement } from "./models/Utilisateur_Abonnement";
 import { initModelContract } from "./models/Contracts";
+import { initModelMeterReading } from "@database/models/meter_reading";
 import { initModelFactureAbonnement } from "./models/FactureAbonnment";
 import { initModelFactureEau } from "./models/FactureEau";
 import { initModelFactureElectricite } from "./models/FactureElectricite";
@@ -70,6 +71,7 @@ const initModels = async () => {
   initModelUser(sequelize);
   initModelAbonnement(sequelize);
   initModelandLord(sequelize);
+  initModelTenant(sequelize);
   initModelProperty(sequelize);
   initModelPropertyType(sequelize);
   initPropertyUnitLocation(sequelize);
@@ -80,12 +82,13 @@ const initModels = async () => {
   initmodelPermissions(sequelize);
   initModelPermissionsAbonnement(sequelize);
   initModelUtilisateur_Abonnement(sequelize);
+  initModelMeterReading(sequelize);
+  initModelUtilisateur_Abonnement(sequelize);
   initModelFactureMiantenance(sequelize);
   initModelFactureLoyer(sequelize);
   initModelFactureElectricite(sequelize);
   initModelFactureEau(sequelize);
   initModelFactureAbonnement(sequelize);
-  initModelTenant(sequelize);
   initTechnicalManager(sequelize);
   initMaintenance(sequelize)
 
