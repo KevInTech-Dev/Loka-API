@@ -1,7 +1,7 @@
-import { BaseModel } from "@/common/models/base.model";
-import { UnitStatusEnum } from "@/enums/UnitStatusEnum";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import { Json } from "sequelize/lib/utils";
+import {BaseModel} from "@/common/models/base.model";
+import {UnitStatusEnum} from "@/enums/UnitStatusEnum";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
+import {Json} from "sequelize/lib/utils";
 
 export interface UnitLocationAttributes extends BaseModel {
     unitTypeId: string;

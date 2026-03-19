@@ -1,6 +1,6 @@
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import { RoleEnum } from "@/enums/RoleEnum";
-import { BaseModel } from "@common/models/base.model";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
+import {RoleEnum} from "@/enums/RoleEnum";
+import {BaseModel} from "@common/models/base.model";
 
 
 export interface UserAttributes extends BaseModel {

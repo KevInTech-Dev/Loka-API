@@ -1,8 +1,8 @@
-import { BaseModel } from "@/common/models/base.model";
-import { CategoryMaintenanceRequest } from "@/enums/CategoryMaintenanceRequest";
-import { Priority } from "@/enums/Priority";
-import { StatutMaintenanceRequest } from "@/enums/StatutMaintenanceRequest";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import {BaseModel} from "@/common/models/base.model";
+import {CategoryMaintenanceRequest} from "@/enums/CategoryMaintenanceRequest";
+import {Priority} from "@/enums/Priority";
+import {StatutMaintenanceRequest} from "@/enums/StatutMaintenanceRequest";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 
 export interface MaintenanceAttributes extends BaseModel {
     id: string;

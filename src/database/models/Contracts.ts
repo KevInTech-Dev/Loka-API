@@ -1,7 +1,7 @@
-import { BaseModel } from '@/common/models/base.model';
-import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { ContractStatusEnum } from '@/enums/ContractStatusEnum';
-import { ContractTypeEnum } from '@/enums/ContractTypeEnum';
+import {BaseModel} from '@/common/models/base.model';
+import {DataTypes, Model, Optional, Sequelize} from 'sequelize';
+import {ContractStatusEnum} from '@/enums/ContractStatusEnum';
+import {ContractTypeEnum} from '@/enums/ContractTypeEnum';
 
 export interface ContractAttributes extends BaseModel {
   contract_number: string;

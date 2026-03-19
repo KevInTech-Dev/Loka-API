@@ -1,5 +1,5 @@
-import { BaseModel } from "@/common/models/base.model";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import {BaseModel} from "@/common/models/base.model";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 
 export interface PropertyAttribute extends BaseModel {
     label: string;

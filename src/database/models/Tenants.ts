@@ -1,7 +1,7 @@
-import { BaseModel } from "@/common/models/base.model";
-import { GenderEnum } from "@/enums/GenderEnum";
-import { idCardTypeEnum } from "@/enums/idCardTypeEnum";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import {BaseModel} from "@/common/models/base.model";
+import {GenderEnum} from "@/enums/GenderEnum";
+import {idCardTypeEnum} from "@/enums/idCardTypeEnum";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 
 export interface TenantAttributes extends BaseModel {
     userId: string;

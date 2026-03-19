@@ -1,7 +1,7 @@
 // src/models/Utilisateur_Abonnement.ts
-import { Model, DataTypes, Sequelize, DATE, Optional } from 'sequelize';
-import { StatusAbonnementEnum } from '@/enums/StatusAbonnement';
-import { BaseModel } from '@/common/models/base.model';
+import {DataTypes, Model, Optional, Sequelize} from 'sequelize';
+import {StatusAbonnementEnum} from '@/enums/StatusAbonnement';
+import {BaseModel} from '@/common/models/base.model';
 
 export interface UtilisateurAbonnementAttributes extends BaseModel {
   utilisateurId: string;

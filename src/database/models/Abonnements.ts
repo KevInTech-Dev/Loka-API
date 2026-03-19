@@ -1,6 +1,6 @@
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import { PlanAbonnementEnum } from "@/enums/PlanAbonnementEnum";
-import { BaseModel } from "@common/models/base.model";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
+import {PlanAbonnementEnum} from "@/enums/PlanAbonnementEnum";
+import {BaseModel} from "@common/models/base.model";
 
 
 export interface AbonnementAttributes extends BaseModel {

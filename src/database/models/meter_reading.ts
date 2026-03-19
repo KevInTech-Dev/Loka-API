@@ -1,6 +1,6 @@
-import { BaseModel } from "@/common/models/base.model";
-import { MeterTypeEnum } from "@/enums/MeterTypeEnum";
-import { DataTypes, Model, Optional, Sequelize, UUIDV4 } from "sequelize";
+import {BaseModel} from "@/common/models/base.model";
+import {MeterTypeEnum} from "@/enums/MeterTypeEnum";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 
 export interface MeterReadingAttributs extends BaseModel {
     landlord_id: string;
