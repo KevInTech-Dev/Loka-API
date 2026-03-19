@@ -8,7 +8,7 @@ import { Contract } from "@/database/models/Contracts";
   const contractService = new ContractService()  
  export const  contractCronJob = ()=>{
     console.log("cron contract run")
-      return cron.schedule("*/1 * * * * *", async () => {
+      return cron.schedule("0 0 * * *", async () => {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         yesterday.setHours(0, 0, 0, 0); 
