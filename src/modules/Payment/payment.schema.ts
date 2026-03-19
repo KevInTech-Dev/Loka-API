@@ -1,4 +1,4 @@
-import { FactureTypeEnum } from "@/enums/FactureTypeEnum";
+import {InvoiceType} from "@/enums/InvoiceTypeEnume";
 import { PaymentMethodEnum } from "@/enums/PaymentMethodEnum";
 import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
 import { PaymentStatusEnum } from "@/enums/PaymentStatusEnum";
@@ -10,7 +10,7 @@ const PaymentSchema = z.object({
     facture_id: z.uuid("Invalid facture ID format"),
     payment_date: z.coerce.date("Invalid payment date format"),
     amount_paid: z.number(),
-    facture_type: z.enum(FactureTypeEnum),
+    facture_type: z.enum(InvoiceType),
     payment_method: z.enum(PaymentMethodEnum),
     payment_provider: z.enum(PaymentProviderEnum),
     payment_status: z.enum(PaymentStatusEnum),

@@ -1,7 +1,7 @@
-import { FactureAttributes } from "@database/models/Facture";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import { InvoiceType } from "@/enums/InvoiceTypeEnume";
-import { StatusFactures } from "@/enums/StatusFacturesEnum";
+import {FactureAttributes, FactureCreationAttributes} from "@database/models/Facture";
+import {DataTypes, Model, Sequelize} from "sequelize";
+import {InvoiceType} from "@/enums/InvoiceTypeEnume";
+import {StatusFactures} from "@/enums/StatusFacturesEnum";
 
 export interface FactureElectriciteAttributes extends FactureAttributes {
     unitLocation: string;
@@ -9,7 +9,7 @@ export interface FactureElectriciteAttributes extends FactureAttributes {
     idReleveCompteur: string;
 }
 
-export interface FactureElectriciteCreationAttributes extends Optional<FactureElectriciteAttributes, "id" | "createdAt" | "updatedAt"> { }
+export interface FactureElectriciteCreationAttributes extends FactureCreationAttributes{}
 
 class FactureElectricite extends Model<FactureElectriciteAttributes, FactureElectriciteCreationAttributes> implements FactureElectriciteAttributes {
     declare readonly createdAt?: Date;

@@ -1,8 +1,8 @@
 import { BaseTypes } from "@/common/models/base.model";
-import { FactureTypeEnum } from "@/enums/FactureTypeEnum";
 import { PaymentMethodEnum } from "@/enums/PaymentMethodEnum";
 import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
 import { PaymentStatusEnum } from "@/enums/PaymentStatusEnum";
+import {InvoiceType} from "@/enums/InvoiceTypeEnume";
 
 export type PaymentResponse = BaseTypes & {
     payment_reference: string;
@@ -11,7 +11,7 @@ export type PaymentResponse = BaseTypes & {
     facture_id: string;
     amount_paid: number;
     payment_date: Date;
-    factureType: FactureTypeEnum;
+    factureType: InvoiceType;
     payment_method: PaymentMethodEnum;
     payment_provider: PaymentProviderEnum;
     payment_status: PaymentStatusEnum;

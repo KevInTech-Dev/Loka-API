@@ -1,9 +1,9 @@
-import { BaseModel } from "@/common/models/base.model";
-import { FactureTypeEnum } from "@/enums/FactureTypeEnum";
-import { PaymentMethodEnum } from "@/enums/PaymentMethodEnum";
-import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
-import { PaymentStatusEnum } from "@/enums/PaymentStatusEnum";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import {BaseModel} from "@/common/models/base.model";
+import {PaymentMethodEnum} from "@/enums/PaymentMethodEnum";
+import {PaymentProviderEnum} from "@/enums/PaymentProviderEnum";
+import {PaymentStatusEnum} from "@/enums/PaymentStatusEnum";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
+import {InvoiceType} from "@/enums/InvoiceTypeEnume";
 
 export interface PaymentAttributes extends BaseModel{
     payment_reference: string;
@@ -15,7 +15,7 @@ export interface PaymentAttributes extends BaseModel{
     payment_method: PaymentMethodEnum;
     payment_provider: PaymentProviderEnum;
     payment_status: PaymentStatusEnum;
-    factureType: FactureTypeEnum;
+    factureType: InvoiceType;
     platform_commission: number;
     landlord_amount: number;
     payer_phone: string;
@@ -37,7 +37,7 @@ class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implem
     declare facture_id: string;
     declare payment_date: Date;
     declare amount_paid: number;
-    declare factureType: FactureTypeEnum;
+    declare factureType: InvoiceType;
     declare payment_method: PaymentMethodEnum;
     declare payment_provider: PaymentProviderEnum;
     declare payment_status: PaymentStatusEnum;
@@ -52,9 +52,9 @@ class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implem
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
     static associate(models: any) {
-        Payment.belongsTo(models.Landlord, { as: 'paymentLandlord', foreignKey: 'landlord_id' });
+        Payment.belongsTo(models.LandLord, { as: 'paymentLandlord', foreignKey: 'landlord_id' });
         Payment.belongsTo(models.Tenant, { as: 'paymentTenant', foreignKey: 'tenant_id' });
-        Payment.belongsTo(models.Facture, { as: 'paymentFacture', foreignKey: 'facture_id' });
+        // Payment.belongsTo(models.Facture, { as: 'paymentFacture', foreignKey: 'facture_id' });
     }
    }
 
@@ -95,7 +95,7 @@ class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implem
             allowNull: false
         },
         factureType:{
-            type: DataTypes.ENUM(...Object.values(FactureTypeEnum)),
+            type: DataTypes.ENUM(...Object.values(InvoiceType)),
             allowNull: false
         },
         payment_method: {

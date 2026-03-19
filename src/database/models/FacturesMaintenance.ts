@@ -1,7 +1,7 @@
-import { FactureAttributes } from "./Facture";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import { InvoiceType } from "@/enums/InvoiceTypeEnume";
-import { StatusFactures } from "@/enums/StatusFacturesEnum";
+import {FactureAttributes, FactureCreationAttributes} from "./Facture";
+import {DataTypes, Model, Sequelize} from "sequelize";
+import {InvoiceType} from "@/enums/InvoiceTypeEnume";
+import {StatusFactures} from "@/enums/StatusFacturesEnum";
 
 export interface FactureMaintenanceAttributes extends FactureAttributes {
     unitLocation: string;
@@ -9,7 +9,7 @@ export interface FactureMaintenanceAttributes extends FactureAttributes {
     maintenanceId: string;
 }
 
-export interface FactureMaintenanceCreationAttributes extends Optional<FactureMaintenanceAttributes, "id" | "createdAt" | "updatedAt"> { }
+export interface FactureMaintenanceCreationAttributes extends FactureCreationAttributes{}
 
 class FactureMaintenance extends Model<FactureMaintenanceAttributes, FactureMaintenanceCreationAttributes> implements FactureMaintenanceAttributes {
     declare readonly createdAt?: Date;

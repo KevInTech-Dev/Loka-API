@@ -1,8 +1,7 @@
-import { FactureAttributes } from "@database/models/Facture";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import { InvoiceType } from "@/enums/InvoiceTypeEnume";
-import { StatusFactures } from "@/enums/StatusFacturesEnum";
-import fa from "zod/v4/locales/fa.js";
+import {FactureAttributes, FactureCreationAttributes} from "@database/models/Facture";
+import {DataTypes, Model, Sequelize} from "sequelize";
+import {InvoiceType} from "@/enums/InvoiceTypeEnume";
+import {StatusFactures} from "@/enums/StatusFacturesEnum";
 
 export interface FactureEauAttributes extends FactureAttributes {
 
@@ -11,7 +10,7 @@ export interface FactureEauAttributes extends FactureAttributes {
     idReleveCompteur: string;
 }
 
-export interface FactureEauCreationAttributes extends Optional<FactureEauAttributes, "id" | "createdAt" | "updatedAt"> { }
+export interface FactureEauCreationAttributes extends FactureCreationAttributes{}
 
 class FactureEau extends Model<FactureEauAttributes, FactureEauCreationAttributes> implements FactureEauAttributes {
 

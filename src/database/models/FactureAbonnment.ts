@@ -1,14 +1,14 @@
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import { FactureAttributes } from "@database/models/Facture";
-import { InvoiceType } from "@/enums/InvoiceTypeEnume";
-import { StatusFactures } from "@/enums/StatusFacturesEnum";
+import {DataTypes, Model, Sequelize} from "sequelize";
+import {FactureAttributes, FactureCreationAttributes} from "@database/models/Facture";
+import {InvoiceType} from "@/enums/InvoiceTypeEnume";
+import {StatusFactures} from "@/enums/StatusFacturesEnum";
 
 export interface FactureAbonnementAttributes extends FactureAttributes {
     landlordId: string;
     utilisateurAbonnement: string;
 }
 
-export interface FactureAbonnementCreationAttributes extends Optional<FactureAbonnementAttributes, "id" | "createdAt" | "updatedAt" | "dateEmission"> { }
+export interface FactureAbonnementCreationAttributes extends FactureCreationAttributes{}
 
 class FactureAbonnement extends Model<FactureAbonnementAttributes, FactureAbonnementCreationAttributes> implements FactureAbonnementAttributes {
 

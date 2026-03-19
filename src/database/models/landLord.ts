@@ -1,6 +1,6 @@
-import { BaseModel } from "@/common/models/base.model";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import { BusinessTypeEnum } from "@/enums/BusinessTypeEnum";
+import {BaseModel} from "@/common/models/base.model";
+import {DataTypes, Model, Optional, Sequelize} from "sequelize";
+import {BusinessTypeEnum} from "@/enums/BusinessTypeEnum";
 
 export interface landLordAtributes extends BaseModel {
     userId: string;
@@ -42,6 +42,7 @@ class LandLord
     declare isVerified: boolean;
     declare readonly createdAt: Date;
     declare readonly updatedAt?: Date;
+
     static associate(models: any) {
         LandLord.belongsTo(models.User, {
             foreignKey: 'userId',
@@ -51,14 +52,15 @@ class LandLord
             foreignKey: 'landlord_id',
             as: 'landlordContract'
         });
-    LandLord.hasMany(models.MeterReading, {
-                foreignKey: 'landlord_id',
-                as: 'landlordMeterReading'
-            });
-            LandLord.hasMany(models.Payment, {
-                foreignKey: 'landlord_id',
-                as: 'landlordPaymentPayment'
-            } )}
+        LandLord.hasMany(models.MeterReading, {
+            foreignKey: 'landlord_id',
+            as: 'landlordMeterReading'
+        });
+        LandLord.hasMany(models.Payment, {
+            foreignKey: 'landlord_id',
+            as: 'landlordPaymentPayment'
+        })
+    }
 }
 
 const initModelandLord = (sequelize: Sequelize) => {
@@ -127,8 +129,15 @@ const initModelandLord = (sequelize: Sequelize) => {
                 defaultValue: false,
             }
         },
-        { sequelize, modelName: "LandLord", tableName: "landlords", timestamps: true, underscored: true, paranoid: true, },
+        {
+            sequelize,
+            modelName: "LandLord",
+            tableName: "landlords",
+            timestamps: true,
+            underscored: true,
+            paranoid: true,
+        },
     );
 };
 
-export { LandLord, initModelandLord }
+export {LandLord, initModelandLord}
