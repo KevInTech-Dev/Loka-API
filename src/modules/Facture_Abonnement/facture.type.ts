@@ -10,6 +10,7 @@ export type FactureAbonnementResponse = BaseModel & {
     dateEmission: Date;
     invoiceType: InvoiceType;
     isTva: boolean;
+    notes: string;
     numeroFacture: string;
     status: StatusFactures;
 }

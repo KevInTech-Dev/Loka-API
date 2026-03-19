@@ -85,9 +85,11 @@ export class Utilisateur_AbonnementService {
                                 dateEcheance: dateEcheance,
                             }, transaction);
 
-                            await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.EXPIRED, endDate: null, startDate: null }, transaction)
+                            await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.INACTIVE, endDate: null, startDate: null }, transaction)
+                        } else {
+                            throw new Error("Subscription not expired yet");
                         }
-                        throw new Error("Subscription not expired yet");
+                        break;
                     } else {
                         // Si non passer le status à TRIAL et generer la facture 
                         const invoiceNumber = await this.factureAbonnementRepository.getLastInvNumber();
@@ -108,7 +110,9 @@ export class Utilisateur_AbonnementService {
 
                     const dateDebut = new Date();
                     const finDate = new Date();
-                    finDate.setDate(finDate.getDate() + 30)
+                    finDate.setDate(dateDebut.getDate() + 30);
+
+
 
                     await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.TRIAL, startDate: dateDebut, endDate: finDate }, transaction)
                     break;
@@ -116,22 +120,36 @@ export class Utilisateur_AbonnementService {
                 case PlanAbonnementEnum.CUSTOM:
                 case PlanAbonnementEnum.ENTREPRISE:
                 case PlanAbonnementEnum.PRO:
-                    const invNumber = await this.factureAbonnementRepository.getLastInvNumber();
-                    const dateEcheance = new Date();
-                    dateEcheance.setDate(dateEcheance.getDate() + 15);
-                    this.factureAbonnementService.createFactureAbonnement({
-                        invoiceType: InvoiceType.ABONNEMENT,
-                        isTva: false,
-                        landlordId: (existingUserSubs as any)?.userLandlord.id,
-                        notes: `FACTURE D'\ ABONNEMENT GENERER LE : ${new Date().getDate()}`,
-                        numeroFacture: generateIvoiceNumber(invNumber),
-                        status: StatusFactures.EN_ATTENTE,
-                        totalAPayer: checkSubType.prix,
-                        utilisateurAbonnement: response.id,
-                        dateEcheance: dateEcheance,
-                    }, transaction);
+                    //Recuperer les objets des abonnement custom , entreprise ou pro
+                    const subCustom = await this.abonnementRepository.getAbonnementByAttribut("planAbonnement", PlanAbonnementEnum.CUSTOM);
+                    const subPro = await this.abonnementRepository.getAbonnementByAttribut("planAbonnement", PlanAbonnementEnum.PRO);
+                    const subEntreprise = await this.abonnementRepository.getAbonnementByAttribut("planAbonnement", PlanAbonnementEnum.ENTREPRISE);
+                    /*
+                        -Verifier si l'utilisateur a déjà un abonnement de cest types ci-dessus
+                        -Si oui vérifier si cet abonnement est expiré
+                        -Si non lui génerer la facture à payer
+                        */
+                    const existingUserWithSub = await this.repository.checkIfUserHasAlreadySubOther(data.utilisateurId, subCustom.id, subEntreprise.id, subPro.id);
+                    if (existingUserWithSub.status === StatusAbonnementEnum.EXPIRED) {
+                        const invNumber = await this.factureAbonnementRepository.getLastInvNumber();
+                        const dateEcheance = new Date();
+                        dateEcheance.setDate(dateEcheance.getDate() + 15);
+                        this.factureAbonnementService.createFactureAbonnement({
+                            invoiceType: InvoiceType.ABONNEMENT,
+                            isTva: false,
+                            landlordId: (existingUserSubs as any)?.userLandlord.id,
+                            notes: `FACTURE D'\ ABONNEMENT GENERER LE : ${new Date().getDate()}`,
+                            numeroFacture: generateIvoiceNumber(invNumber),
+                            status: StatusFactures.EN_ATTENTE,
+                            totalAPayer: checkSubType.prix,
+                            utilisateurAbonnement: response.id,
+                            dateEcheance: dateEcheance,
+                        }, transaction);
 
-                    await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.INACTIVE }, transaction)
+                        await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.INACTIVE, endDate: null, startDate: null }, transaction)
+                    } else {
+                        throw new Error("Subscription not expired yet")
+                    }
             }
             await transaction.commit()
 

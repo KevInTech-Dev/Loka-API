@@ -1,8 +1,6 @@
 import { Utilisateur_Abonnement, UtilisateurAbonnementAttributes, UtilisateurAbonnementCreationAttributes } from "@database/models/Utilisateur_Abonnement";
-import { ModelStatic, Transaction } from "sequelize";
-import { BadRequestError } from "@/common/errors";
+import { Transaction } from "sequelize";
 import { BaseRepositoryImpl } from "@/common/base.repository";
-import { CreateUtilisateurAbonnementInput } from "./utilisateur_abonnement.schema";
 import { StatusAbonnementEnum } from "@/enums/StatusAbonnement";
 
 export class Utilisateur_AbonnementRepository extends BaseRepositoryImpl<Utilisateur_Abonnement> {
@@ -24,8 +22,8 @@ export class Utilisateur_AbonnementRepository extends BaseRepositoryImpl<Utilisa
             {
                 ...dataToUpdate,
                 status: dataToUpdate.status,
-                startDate: new Date(dataToUpdate.startDate),
-                endDate: new Date(dataToUpdate.startDate),
+                startDate: dataToUpdate.startDate,
+                endDate: dataToUpdate.endDate,
             },
             {
                 where: {
@@ -124,6 +122,17 @@ export class Utilisateur_AbonnementRepository extends BaseRepositoryImpl<Utilisa
         })
     }
 
+    async checkIfUserHasAlreadySubOther(idUser: string, idCustom: string, idEntreprise: string, idPro: string): Promise<UtilisateurAbonnementAttributes> {
+        return this.model.findOne({
+            where: {
+                utilisateurId: idUser,
+                abonnementId: {
+                    [this.Op.in]: [idCustom, idEntreprise, idPro]
+                }
+            }
+        })
+    }
+
 
 
 
@@ -138,5 +147,22 @@ export class Utilisateur_AbonnementRepository extends BaseRepositoryImpl<Utilisa
         })
     }
 
+    async checkIfAlreadySubObject(
+        utilisateurId: string,
+        status: StatusAbonnementEnum,
+        abonnementId: string,
+        autoRenouvellement: Boolean,
+    ) {
+
+        return this.model.findOne({
+            where: {
+                utilisateurId: utilisateurId,
+                status: status,
+                abonnementId: abonnementId,
+                autoRenouvellement: autoRenouvellement,
+
+            }
+        })
+    }
 
 }

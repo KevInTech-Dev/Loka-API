@@ -18,6 +18,7 @@ export class FactureAbonnementMapper implements BaseMapper<FactureAbonnement, Fa
             isTva: factureAbonnement?.isTva,
             numeroFacture: factureAbonnement?.numeroFacture,
             status: factureAbonnement?.status,
+            notes: factureAbonnement.notes,
             createdAt: factureAbonnement?.createdAt,
             updatedAt: factureAbonnement?.updatedAt
         }
@@ -31,6 +32,7 @@ export class FactureAbonnementMapper implements BaseMapper<FactureAbonnement, Fa
             utilisateurAbonnement: data?.utilisateurAbonnement,
             dateEcheance: new Date(data?.dateEcheance),
             dateEmission: new Date(),
+            notes: data.notes,
             invoiceType: data?.invoiceType,
             isTva: false,
             numeroFacture: data?.numeroFacture,
