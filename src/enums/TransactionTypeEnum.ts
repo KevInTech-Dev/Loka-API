@@ -1,0 +1,9 @@
+export enum TransactionTypeEnum {
+    LOYER = 'LOYER',
+    ABONNEMENT = 'ABONNEMENT',
+    ELECTRICITE = 'ELECTRICITE',
+    EAU = 'EAU',
+    MAINTENANCE = 'MAINTENANCE',
+    REMBOURSEMENT = 'REMBOURSEMENT',
+    AUTRE = 'AUTRE',
+}

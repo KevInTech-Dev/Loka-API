@@ -5,18 +5,18 @@ import { z } from 'zod'
 
 const createFactureLoyerSchema = z.object({
     numeroFacture: z.string(),
-    dateEmission: z.date(),
+    dateEmission: z.coerce.date(),
     invoiceType: z.enum(InvoiceType),
-    dateEcheance: z.date(),
+    dateEcheance: z.coerce.date(),
     status: z.enum(StatusFactures),
     notes: z.string(),
     isTva: z.boolean(),
-    id: z.string(),
+    // id: z.string(),
     unitLocation: z.string(),
-    idTenant: z.string(),
+    idTenant: z.uuid(),
     totalAPayer: z.number(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
+    // createdAt: z.date(),
+    // updatedAt: z.date(),
 })
 
 const factureLoyerIdSchema = z.object({

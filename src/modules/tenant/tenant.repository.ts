@@ -22,6 +22,16 @@ export class TenantRepository {
         }]});
     }
 
+    async getTenantByUserId(userId: string) {
+        return this.tenant.findOne({
+            where: { userId },
+            include: [{
+                model: User,
+                as: 'tenantUser',
+            }]
+        });
+    }
+
     async getTenantPaginated(page: number, limit: number) {
         const offset = (page - 1) * limit;
         return this.tenant.findAll({ offset, limit, include:[

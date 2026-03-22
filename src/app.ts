@@ -26,6 +26,7 @@ import factureLoyerRoute from "./modules/Facture_Loyer/factureLoyer.route";
 import factureMaintenanceRoute from "./modules/Facture_Maintenance/factureMaintenance.route";
 import technicalManagerRoute from "./modules/technicalManger/technicalManager.route";
 import maintenanceRoute from "./modules/maintenance/maintenance.route";
+import paymentRoute from "@modules/Payment/payment.route";
 
 
 const app: Express = express();
@@ -87,6 +88,7 @@ app.use(`${API_PREFIX}/facture-loyer`, factureLoyerRoute);
 app.use(`${API_PREFIX}/facture-maintenance`, factureMaintenanceRoute);
 app.use(`${API_PREFIX}/technicalManager`, technicalManagerRoute);
 app.use(`${API_PREFIX}/maintenance-request`, maintenanceRoute);
+app.use(`${API_PREFIX}/payments`, paymentRoute);
 
 
 // 404 handler
