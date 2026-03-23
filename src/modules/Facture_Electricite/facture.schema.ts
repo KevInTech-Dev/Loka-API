@@ -3,8 +3,8 @@ import { StatusFactures } from '@/enums/StatusFacturesEnum'
 import { z } from 'zod'
 
 const createFactureElectriciteSchema = z.object({
-    dateEcheance: z.date(),
-    dateEmission: z.date(),
+    dateEcheance: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).transform((v) => { return new Date(v) }),
+    dateEmission: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).transform((v) => { return new Date(v) }),
     id: z.string(),
     idReleveCompteur: z.string(),
     idTenant: z.string(),
