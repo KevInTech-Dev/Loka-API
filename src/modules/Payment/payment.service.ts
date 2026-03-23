@@ -136,32 +136,8 @@ export class PaymentService {
         page: number,
         limit: number,
     ): Promise<{ data: PaymentResponse[]; total: number }> {
-        if (role === "admin") {
-            const { rows, count } = await this.paymentRepository.getPaymentPaginated(page, limit);
-            return { data: rows.map((payment) => this.paymentMapper.toResponse(payment)), total: count };
-        }
-
-        if (role === "locataire") {
-            const tenant = await this.tenantRepository.getTenantByUserId(userId);
-            if (!tenant) {
-                throw new UnauthorizedError("Tenant profile not found");
-            }
-
-            const { rows, count } = await this.paymentRepository.getPaginatedByTenant(tenant.id, page, limit);
-            return { data: rows.map((payment) => this.paymentMapper.toResponse(payment)), total: count };
-        }
-
-        if (role === "proprietaire") {
-            const landlord = await this.landlordRepository.getlandLordByUserId(userId);
-            if (!landlord) {
-                throw new UnauthorizedError("Landlord profile not found");
-            }
-
-            const { rows, count } = await this.paymentRepository.getPaginatedByLandlord(landlord.id, page, limit);
-            return { data: rows.map((payment) => this.paymentMapper.toResponse(payment)), total: count };
-        }
-
-        throw new UnauthorizedError("Role not authorized for payment listing");
+        const { rows, count } = await this.paymentRepository.getPaymentPaginated(page, limit, userId, role);
+        return { data: rows.map((payment) => this.paymentMapper.toResponse(payment)), total: count };
     }
 
     private toNumber(value: unknown): number {
@@ -375,8 +351,6 @@ export class PaymentService {
 
     private assertProviderCurrencyCompatibility(provider: PaymentProviderEnum, currency: CurrencyCode): void {
         const supportedCurrenciesByProvider: Record<PaymentProviderEnum, CurrencyCode[]> = {
-            [PaymentProviderEnum.FLOOZ]: ["XOF"],
-            [PaymentProviderEnum.TMONEY]: ["XOF"],
             [PaymentProviderEnum.FEDAPAY]: ["XOF"],
             [PaymentProviderEnum.STRIPE]: ["XOF", "EUR", "USD"],
         };

@@ -18,8 +18,6 @@ const CreatePaymentSchema = z.object({
         PaymentMethodEnum.ONLINE,
     ]),
     payment_provider: z.enum([
-        PaymentProviderEnum.FLOOZ,
-        PaymentProviderEnum.TMONEY,
         PaymentProviderEnum.STRIPE,
         PaymentProviderEnum.FEDAPAY,
     ]).default(PaymentProviderEnum.FEDAPAY),

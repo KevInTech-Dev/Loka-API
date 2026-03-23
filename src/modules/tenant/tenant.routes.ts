@@ -8,15 +8,14 @@ import { authorize } from "../middleware/authorization.middleware";
 
 
 const router: Router = Router();
-// router.use(authMiddleware);
+router.use(authMiddleware);
 const tenantController = new TenantController();
 
-router.get('', tenantController.getAllTenants);
-// authorize(['admin', 'proprietaire']),
-// validate(paginatedTenantSchema, 'query'), );
+router.get('', authorize(['admin', 'proprietaire']),
+validate(paginatedTenantSchema, 'query'),tenantController.getAllTenants);
 
 router.post('',
-    // authorize(['admin', 'proprietaire']),
+    authorize(['admin', 'proprietaire']),
     fieldsUpload({
         fields: [
             { name: 'photo', maxCount: 1 },

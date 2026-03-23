@@ -1,4 +1,5 @@
 import { BaseRepositoryImpl } from "@/common/base.repository";
+import { BadRequestError } from "@/common/errors";
 import { FactureAbonnement } from "@/database/models/FactureAbonnment";
 import { FactureEau } from "@/database/models/FactureEau";
 import { FactureElectricite } from "@/database/models/FactureElectricite";
@@ -7,8 +8,10 @@ import { FactureMaintenance } from "@/database/models/FacturesMaintenance";
 import { LandLord } from "@/database/models/landLord";
 import { Payment } from "@/database/models/payment";
 import { Tenant } from "@/database/models/Tenants";
+import { User } from "@/database/models/Users";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
-import { CreationAttributes } from "sequelize";
+import { RoleEnum } from "@/enums/RoleEnum";
+import { CreationAttributes, WhereOptions } from "sequelize";
 
 type FactureDetails =
     | FactureLoyer
@@ -40,10 +43,19 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
             ]
         });
     }
-
-    async getPaymentPaginated(page: number, limit: number) {
+    
+    async getPaymentPaginated(page: number, limit: number, userId: string, role: string) {
         const offset = (page - 1) * limit;
+        
         const { rows, count } = await this.model.findAndCountAll({
+            where:{
+                ...(role === RoleEnum.PROPRIETAIRE && { landlord_id:{
+                    includes: [{ model: User, as: 'user', where: { id: userId } }]
+                } }),
+                ...(role === RoleEnum.LOCATAIRE && { tenant_id: {
+                    includes: [{ model: User, as: 'user', where: { id: userId } }]
+                }}),
+            },
             limit,
             offset,
             include: [
@@ -52,34 +64,9 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
             ],
             order: [['createdAt', 'DESC']],
         });
-
+        
         return { rows, count };
-    }
 
-    async getPaginatedByTenant(tenantId: string, page: number, limit: number) {
-        const offset = (page - 1) * limit;
-        const { rows, count } = await this.model.findAndCountAll({
-            where: { tenant_id: tenantId },
-            limit,
-            offset,
-            include: [{ model: LandLord, as: 'paymentLandlord' }],
-            order: [['createdAt', 'DESC']],
-        });
-
-        return { rows, count };
-    }
-
-    async getPaginatedByLandlord(landlordId: string, page: number, limit: number) {
-        const offset = (page - 1) * limit;
-        const { rows, count } = await this.model.findAndCountAll({
-            where: { landlord_id: landlordId },
-            limit,
-            offset,
-            include: [{ model: Tenant, as: 'paymentTenant' }],
-            order: [['createdAt', 'DESC']],
-        });
-
-        return { rows, count };
     }
 
     async countByYearMonth(year: number, month: string): Promise<number> {
