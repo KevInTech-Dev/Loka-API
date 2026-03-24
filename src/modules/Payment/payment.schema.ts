@@ -12,7 +12,7 @@ const CreatePaymentSchema = z.object({
         InvoiceType.ABONNEMENT,
         InvoiceType.ABONNEMENT_TRIAL,
     ]),
-    facture_id: z.string().uuid("Invalid facture ID format"),
+    facture_id: z.uuid("Invalid facture ID format"),
     payment_method: z.enum([
         PaymentMethodEnum.CASH,
         PaymentMethodEnum.ONLINE,
@@ -32,7 +32,7 @@ const CreatePaymentSchema = z.object({
 });
 
 const paymentIdSchema = z.object({
-    id: z.string().uuid("Invalid payment ID format"),
+    id: z.uuid("Invalid payment ID format"),
 });
 
 const paymentPaginationSchema = z.object({

@@ -70,6 +70,7 @@ class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implem
         Payment.belongsTo(models.factureMaintenance, {as: 'factureMaintenance', foreignKey: 'facture_mtn_id'});
         Payment.belongsTo(models.factureElectricite, {as: 'factureElectricite', foreignKey: 'facture_elec_id'});
         Payment.belongsTo(models.FactureEau, {as: 'FactureEau', foreignKey: 'facture_water_id'});
+        Payment.hasMany(models.Transaction, {as: 'paymentTransaction', foreignKey: 'payment_id'});
     }
 }
 
