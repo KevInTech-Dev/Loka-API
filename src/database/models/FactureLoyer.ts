@@ -1,7 +1,7 @@
-import {DataTypes, Model, Sequelize} from "sequelize";
-import {FactureAttributes, FactureCreationAttributes} from "@database/models/Facture";
-import {InvoiceType} from "@/enums/InvoiceTypeEnume";
-import {StatusFactures} from "@/enums/StatusFacturesEnum";
+import { DataTypes, Model, Sequelize } from "sequelize";
+import { FactureAttributes, FactureCreationAttributes } from "@database/models/Facture";
+import { InvoiceType } from "@/enums/InvoiceTypeEnume";
+import { StatusFactures } from "@/enums/StatusFacturesEnum";
 
 export interface FactureLoyerAttributes extends FactureAttributes {
     unitLocation: string;
@@ -98,4 +98,4 @@ const initModelFactureLoyer = (sequelize: Sequelize) => {
     );
 };
 
-export {FactureLoyer, initModelFactureLoyer};
+export { FactureLoyer, initModelFactureLoyer };

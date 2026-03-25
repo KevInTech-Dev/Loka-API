@@ -1,7 +1,7 @@
-import {BaseModel} from '@/common/models/base.model';
-import {DataTypes, Model, Optional, Sequelize} from 'sequelize';
-import {ContractStatusEnum} from '@/enums/ContractStatusEnum';
-import {ContractTypeEnum} from '@/enums/ContractTypeEnum';
+import { BaseModel } from '@/common/models/base.model';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { ContractStatusEnum } from '@/enums/ContractStatusEnum';
+import { ContractTypeEnum } from '@/enums/ContractTypeEnum';
 
 export interface ContractAttributes extends BaseModel {
   contract_number: string;
@@ -31,17 +31,17 @@ export interface ContractAttributes extends BaseModel {
   contract_status: ContractStatusEnum;
   is_signed_by_landlord: boolean;
   is_signed_by_tenant: boolean;
+  nextRentDueDate: Date
 }
 
 export interface ContractCreationAttributes extends Optional<
   ContractAttributes,
-  'id' | 'createdAt' | 'updatedAt'
-> {}
+  'id' | 'createdAt' | 'updatedAt' | 'nextRentDueDate'
+> { }
 
 class Contract
   extends Model<ContractAttributes, ContractCreationAttributes>
-  implements ContractAttributes
-{
+  implements ContractAttributes {
   declare id: string;
   declare contract_number: string;
   declare landlord_id: string;
@@ -70,6 +70,7 @@ class Contract
   declare contract_status: ContractStatusEnum;
   declare is_signed_by_landlord: boolean;
   declare is_signed_by_tenant: boolean;
+  declare nextRentDueDate: Date;
   declare readonly createdAt?: Date;
   declare readonly updatedAt?: Date;
   static associate(models: any) {
@@ -99,6 +100,10 @@ const initModelContract = (sequelize: Sequelize) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
+      },
+      nextRentDueDate: {
+        type: DataTypes.DATE,
+        allowNull: true
       },
       contract_number: {
         type: DataTypes.STRING,
@@ -232,7 +237,7 @@ const initModelContract = (sequelize: Sequelize) => {
         allowNull: false,
       },
     },
-    { sequelize, modelName: 'Contract', tableName: 'contracts', timestamps: true, underscored: true, paranoid: true},
+    { sequelize, modelName: 'Contract', tableName: 'contracts', timestamps: true, underscored: true, paranoid: true },
   );
 };
 

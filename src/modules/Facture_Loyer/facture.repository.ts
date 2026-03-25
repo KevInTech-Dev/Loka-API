@@ -32,6 +32,33 @@ export class FactureLoyerRepository extends BaseRepositoryImpl<FactureLoyer> {
         });
     }
 
+    //Vérifier si il existe déjà une facture pour le locataire
+    isFactureExistingForTenant = async (idTenant: string, idUnitLocation: string): Promise<Boolean> => {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        const todayEnd = new Date(todayStart);
+        todayEnd.setHours(23, 59, 59, 999)
+        if (await this.model.findOne({
+            where: {
+                idTenant: idTenant,
+                unitLocation: idUnitLocation,
+                dateEmission: {
+                    [this.Op.gte]: todayStart,
+                    [this.Op.lte]: todayEnd
+                }
+            }
+        })) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Recuperer le dernier numero de facture
+    getLastInvNumber = async (): Promise<number> => {
+        return this.model.count()
+    }
+
     async isThereInvoice(idTenant: keyof FactureLoyerAttributes, value: string) {
         const aujourdhui = new Date();
         return this.model.findOne({

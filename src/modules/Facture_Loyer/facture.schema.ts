@@ -1,22 +1,18 @@
 import { InvoiceType } from '@/enums/InvoiceTypeEnume'
-import { StatusAbonnementEnum } from '@/enums/StatusAbonnement'
 import { StatusFactures } from '@/enums/StatusFacturesEnum'
 import { z } from 'zod'
 
 const createFactureLoyerSchema = z.object({
     numeroFacture: z.string(),
-    dateEmission: z.date(),
+    dateEmission: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).transform((v) => { return new Date(v) }),
     invoiceType: z.enum(InvoiceType),
-    dateEcheance: z.date(),
+    dateEcheance: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).transform((v) => { return new Date(v) }),
     status: z.enum(StatusFactures),
     notes: z.string(),
     isTva: z.boolean(),
-    id: z.string(),
     unitLocation: z.string(),
     idTenant: z.string(),
     totalAPayer: z.number(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
 })
 
 const factureLoyerIdSchema = z.object({
