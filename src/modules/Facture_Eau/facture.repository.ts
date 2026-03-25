@@ -40,4 +40,8 @@ export class FactureEauRepository extends BaseRepositoryImpl<FactureEau> {
             }
         })
     }
+
+    getLastInvNumber = async (): Promise<number> => {
+        return this.model.count()
+    }
 }

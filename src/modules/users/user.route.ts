@@ -46,7 +46,9 @@ router.patch(
 
 // delete user by id
 router.delete(
-    "/:id", authMiddleware, authorize(["admin"]),
+    "/:id",
+    //authMiddleware,
+    //authorize(["admin"]),
     validate(userIdShema, "params"),
     userController.deleteUser,
 );

@@ -14,7 +14,10 @@ router.get('', authorize(['admin', 'proprietaire']), validate(defaultPaginationQ
 
 router.get('/:id', authorize(['admin', 'proprietaire']), validate(MeterReadingIdSchema, 'params'), meterReandingController.getMeterReading);
 
-router.post('', authorize(['admin', 'proprietaire']), validate(CreationMeterReadingSchema, 'body'), meterReandingController.createMeterReading);
+router.post('',
+    authorize(['admin', 'proprietaire']),
+    validate(CreationMeterReadingSchema, 'body'),
+    meterReandingController.createMeterReading);
 
 router.patch('/:id', authorize(['admin', 'proprietaire']), validate({
     params: MeterReadingIdSchema,

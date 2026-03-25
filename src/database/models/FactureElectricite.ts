@@ -60,7 +60,7 @@ const initModelFactureElectricite = (sequelize: Sequelize) => {
                 allowNull: false
             },
             invoiceType: {
-                type: DataTypes.UUID,
+                type: DataTypes.ENUM(...Object.values(InvoiceType)),
                 allowNull: false
             },
             isTva: {

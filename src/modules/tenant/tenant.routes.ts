@@ -5,6 +5,7 @@ import { createTenantSchema, paginatedTenantSchema, tenantIdSchema } from "./ten
 import { fieldsUpload } from "@modules/middleware/upload.middleware";
 import authMiddleware from "@modules/middleware/authMiddleware";
 import { authorize } from "../middleware/authorization.middleware";
+import { RoleEnum } from "@/enums/RoleEnum";
 
 
 const router: Router = Router();
@@ -45,7 +46,7 @@ router.patch("/photo/:id",
 );
 
 router.get('/:id',
-    authorize(['admin', 'proprietaire', 'locataire']),
+    authorize([RoleEnum.ADMIN, RoleEnum.PROPRIETAIRE]),
     validate(tenantIdSchema, 'params'), tenantController.getTenant);
 
 router.patch('/:id',

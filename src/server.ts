@@ -1,8 +1,8 @@
 import http from 'http';
 import app from './app';
 import env from './config/env';
-import {syncDatabase, testConnection} from '@database/sequelize';
-import {RunAllCron} from './cron';
+import { syncDatabase, testConnection } from '@database/sequelize';
+import { RunAllCron } from './cron';
 
 
 let server: http.Server;

@@ -1,4 +1,3 @@
-import { ContractStatusEnum } from "@/enums/ContractStatusEnum";
 import { ContractTypeEnum } from "@/enums/ContractTypeEnum"
 import z from "zod"
 
@@ -59,5 +58,5 @@ export {
     contractPaginationSchema,
     manualRenewalSchema,
     manualSignatureSchema,
-    
+
 }

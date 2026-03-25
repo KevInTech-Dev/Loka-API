@@ -1,5 +1,4 @@
 import { MeterTypeEnum } from "@/enums/MeterTypeEnum";
-import { UUID } from "node:crypto";
 import z from "zod";
 
 const CreationMeterReadingSchema = z.object({
@@ -25,7 +24,7 @@ const MeterReadingIdSchema = z.object({
 
 type MeterReadingIdParams = z.infer<typeof MeterReadingIdSchema>
 type CreationMeterReadingInput = z.infer<typeof CreationMeterReadingSchema> & {
-    reading_date? : Date,
+    reading_date?: Date,
     previous_meter_value?: number,
     rate_per_unit?: number,
     amount_due?: number,
@@ -33,7 +32,7 @@ type CreationMeterReadingInput = z.infer<typeof CreationMeterReadingSchema> & {
     recorded_by_user_id?: string,
 }
 type UpdateMeterReadingInput = z.infer<typeof UpdateMeterReadingSchema> & {
-     reading_date? : Date,
+    reading_date?: Date,
     previous_meter_value?: number,
     rate_per_unit?: number,
     amount_due?: number,

@@ -40,4 +40,8 @@ export class FactureElectriciteRepository extends BaseRepositoryImpl<FactureElec
             }
         })
     }
+
+    getLastInvNumber = async (): Promise<number> => {
+        return this.model.count()
+    }
 }
