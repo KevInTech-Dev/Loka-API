@@ -23,6 +23,7 @@ import { factureMaintenancePath, factureMaintenanceSchema, factureMaintenanceTag
 import { factureEauPath, factureEauSchema, factureEauTags } from "./FactureEau.swagger";
 import { maintenancePath, maintenanceSchema, maintenanceTags } from "./maintenance.swagger";
 import { technicalManagerPath, technicalManagerSchema, technicalManagerTags } from "./technicalManager.swagger";
+import { paymentPath, paymentSchema, paymentTags } from "./payment.swagger";
 
 
 export const tags: OpenAPIV3.TagObject[] = [
@@ -47,6 +48,7 @@ export const tags: OpenAPIV3.TagObject[] = [
     abonnementsTags,
     utilisateurAbonnementTags,
     technicalManagerTags
+    ,paymentTags
 ];
 
 export const paths: OpenAPIV3.PathsObject = {
@@ -108,7 +110,8 @@ export const paths: OpenAPIV3.PathsObject = {
     ...factureMaintenancePath,
     ...factureEauPath,
     ...maintenancePath,
-    ...technicalManagerPath
+    ...technicalManagerPath,
+    ...paymentPath
 
 };
 
@@ -137,7 +140,8 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...factureMaintenanceSchema,
     ...factureEauSchema,
     ...maintenanceSchema,
-    ...technicalManagerSchema
+    ...technicalManagerSchema,
+    ...paymentSchema
 
 };
 

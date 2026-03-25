@@ -25,6 +25,7 @@ import { initModelFactureMiantenance } from "./models/FacturesMaintenance";
 import { initTechnicalManager } from "./models/technicalManger";
 import { initMaintenance } from "./models/maintenance";
 import {initPaymentModel} from "@database/models/payment";
+import { initModelTransaction } from "./models/Transaction";
 
 
 const sequelize = new Sequelize({
@@ -93,6 +94,7 @@ const initModels = async () => {
   initTechnicalManager(sequelize);
   initMaintenance(sequelize);
   initPaymentModel(sequelize);
+  initModelTransaction(sequelize);
 
   // If you have more models, initialize them here and set up associations if needed before syncing the database.
   Object.values(sequelize.models).forEach((model: any) => {

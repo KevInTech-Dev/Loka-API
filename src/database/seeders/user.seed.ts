@@ -36,7 +36,7 @@ const SEED_USERS: UserCreationAttributes[] = [
         username: 'tenant',
         email: 'tenant@gmail.com',
         phoneNumber: '+22890000003',
-        password: 'Tenant123!',
+        password: 'Tenant123@',
         firstname: 'godwin',
         lastname: 'dev',
         role: RoleEnum.LOCATAIRE,

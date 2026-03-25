@@ -291,7 +291,7 @@ export class ContractService {
     if(data.is_signed_by_tenant){
       updateData.is_signed_by_tenant = data.is_signed_by_tenant
     }
-    if(data.is_signed_by_landlord == true && data.is_signed_by_tenant == true){
+    if(updateData.is_signed_by_landlord == true && updateData.is_signed_by_tenant == true){
       updateData.contract_status = ContractStatusEnum.ACTIVE
     }
     const updateContract = await this.contractRepository.updateContract(id, updateData);

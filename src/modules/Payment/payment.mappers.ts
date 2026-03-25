@@ -1,8 +1,7 @@
 import {BaseMapper} from "@/common/mapper/base.mapper";
 import {Payment} from "@/database/models/payment";
-import {PaymentResponse} from "@modules/Payment/payment.types";
 import {CreatePaymentInput} from "./payment.schema";
-
+import {PaymentResponse} from "@modules/Payment/payment.types";
 
 export class PaymentMapper implements BaseMapper<Payment, PaymentResponse> {
     toResponse(payment: Payment): PaymentResponse {
@@ -11,8 +10,13 @@ export class PaymentMapper implements BaseMapper<Payment, PaymentResponse> {
             payment_reference: payment?.payment_reference,
             landlord_id: payment?.landlord_id,
             tenant_id: payment?.tenant_id,
-            facture_id: payment?.facture_id,
+            facture_loy_id: payment?.facture_loy_id,
+            facture_ab_id: payment?.facture_ab_id,
+            facture_water_id: payment?.facture_water_id,
+            facture_elec_id: payment?.facture_elec_id,
+            facture_mtn_id: payment?.facture_mtn_id,
             amount_paid: payment?.amount_paid,
+            currency: payment?.currency,
             payment_date: payment?.payment_date || new Date(),
             factureType: payment?.factureType,
             payment_method: payment?.payment_method,
@@ -31,24 +35,13 @@ export class PaymentMapper implements BaseMapper<Payment, PaymentResponse> {
 
     toEntity(data: CreatePaymentInput): Partial<Payment> {
         return {
-            payment_reference: data.payment_reference,
-            landlord_id: data.landlord_id,
-            tenant_id: data.tenant_id,
-            facture_id: data.facture_id,
-            amount_paid: data.amount_paid,
-            payment_date: data.payment_date,
             factureType: data.facture_type,
             payment_method: data.payment_method,
             payment_provider: data.payment_provider,
-            payment_status: data.payment_status,
-            platform_commission: data.platform_commission,
-            landlord_amount: data.landlord_amount,
+            currency: data.currency,
             payer_phone: data.payer_phone,
-            payer_email: data.payer_email,
-            receitpt_number: data.receitpt_number,
+            payer_email: data.payer_email || "",
             payment_notes: data.payment_notes,
-            refund_reason: data.refund_reason,
-            refund_at: data.refund_at,
         };
     }
 }
