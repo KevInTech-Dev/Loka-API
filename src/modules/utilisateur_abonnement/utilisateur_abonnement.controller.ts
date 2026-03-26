@@ -14,7 +14,7 @@ export class Utilisateur_AbonnementController {
 
     create = async (req: Request, res: Response) => {
 
-        const result = await this.service.create(req.body, req.user.id, req.user.role);
+        const result = await this.service.create(req.body);
         return sendCreated(
             res,
             result,

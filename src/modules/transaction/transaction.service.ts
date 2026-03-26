@@ -1,4 +1,4 @@
-import { Transaction } from "@/database/models/Transaction";
+import { Transactions } from "@/database/models/Transaction";
 import { TransactionMapper } from "./transaction.mappers";
 import { TransactionRepository } from "./transaction.repository";
 import { CreateTransactionInput } from "./transaction.schema";
@@ -26,7 +26,7 @@ export class TransactionService {
             throw new NotFoundError("Payment")
         }
 
-        const alreadyInitialized = await Transaction.findOne({
+        const alreadyInitialized = await Transactions.findOne({
             where: {
                 payment_id: payment.id,
                 transaction_status: {
@@ -68,7 +68,7 @@ export class TransactionService {
         const day = String(now.getDate()).padStart(2, "0");
         const datePart = `${year}${month}${day}`;
 
-        const countToday = await Transaction.count({
+        const countToday = await Transactions.count({
             where: {
                 transaction_reference: {
                     [Op.like]: `TXN-${datePart}-%`,

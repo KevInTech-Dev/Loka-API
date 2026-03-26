@@ -82,7 +82,11 @@ export class MeterReadingRepository extends BaseRepositoryImpl<MeterReading> {
     meter_type: string,
     meter_value: number
   ): Promise<Boolean> {
-    const object = this.model.findOne({
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0)
+    const todayEnd = new Date(todayStart);
+    todayEnd.setHours(23, 59, 59, 599)
+    const object = await this.model.findOne({
       where: {
         landlord_id: landlord_id,
         property_id: property_id,
@@ -91,7 +95,8 @@ export class MeterReadingRepository extends BaseRepositoryImpl<MeterReading> {
         meter_type: meter_type,
         meter_value: meter_value,
         createdAt: {
-          [this.Op.eq]: new Date()
+          [this.Op.gte]: todayStart,
+          [this.Op.lte]: todayEnd
         }
       }
     })

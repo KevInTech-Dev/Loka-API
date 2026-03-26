@@ -20,12 +20,11 @@ export interface TransactionAttributes extends BaseModel {
 export interface TransactionCreationAttributes extends Optional<
     TransactionAttributes,
     "id" | "createdAt" | "updatedAt" | "metadata" | "landlord_id" | "callback_url"
-> {}
+> { }
 
-class Transaction
+class Transactions
     extends Model<TransactionAttributes, TransactionCreationAttributes>
-    implements TransactionAttributes
-{
+    implements TransactionAttributes {
     declare id: string;
     declare payment_id: string;
     declare landlord_id?: string | null;
@@ -42,11 +41,11 @@ class Transaction
     declare readonly updatedAt?: Date;
 
     static associate(models: any) {
-        Transaction.belongsTo(models.Payment, {
+        Transactions.belongsTo(models.Payment, {
             foreignKey: 'payment_id',
             as: 'transactionPayment'
         });
-        Transaction.belongsTo(models.LandLord, {
+        Transactions.belongsTo(models.LandLord, {
             foreignKey: 'landlord_id',
             as: 'transactionLandlord'
         });
@@ -54,7 +53,7 @@ class Transaction
 }
 
 const initModelTransaction = (sequelize: Sequelize) => {
-    Transaction.init(
+    Transactions.init(
         {
             id: {
                 type: DataTypes.UUID,
@@ -131,4 +130,4 @@ const initModelTransaction = (sequelize: Sequelize) => {
     );
 };
 
-export { Transaction, initModelTransaction };
+export { Transactions, initModelTransaction };

@@ -73,10 +73,11 @@ export class MeterReadingService {
     }
 
     //Verifier si il n'existe pas déjà de relevé de compteur avec les données envoyés
-    const existingMeterReading = this.meterReadingRepository.checkMeterReading(data.landlord_id, data.property_id, data.unit_id, data.tenant_id, data.meter_type, data.meter_value);
+    const existingMeterReading = await this.meterReadingRepository.checkMeterReading(data.landlord_id, data.property_id, data.unit_id, data.tenant_id, data.meter_type, data.meter_value);
     if (existingMeterReading) {
-      throw new Error("Cannot make a meter reading with the same value");
+      throw new Error("Cannot register meter reading with the same value, check datas");
     }
+
 
     const reading_date = new Date();
 
@@ -142,6 +143,7 @@ export class MeterReadingService {
       if (!user) {
         throw new NotFoundError("User was")
       }
+
       //Creation du paiament
       await this.paymentService.createPayment(user.id, user.role, {
         facture_type: InvoiceType.FACTURE_ELEC,

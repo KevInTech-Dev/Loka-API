@@ -5,23 +5,22 @@ import { FactureEau } from "@/database/models/FactureEau";
 import { FactureElectricite } from "@/database/models/FactureElectricite";
 import { FactureLoyer } from "@/database/models/FactureLoyer";
 import { FactureMaintenance } from "@/database/models/FacturesMaintenance";
-import { Transaction } from "@/database/models/Transaction";
 import { ContractStatusEnum } from "@/enums/ContractStatusEnum";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
 import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
 import { PaymentStatusEnum } from "@/enums/PaymentStatusEnum";
-import { TransactionStatusEnum } from "@/enums/TransactionStatusEnum";
 import { TransactionTypeEnum } from "@/enums/TransactionTypeEnum";
 import { landLordRepository } from "@modules/landLord/landlord.repository";
 import { TenantRepository } from "@modules/tenant/tenant.repository";
-import { Op } from "sequelize";
-import env from '@/config/env';
-import { CreateFedapaySchema, CreatePaymentInput, FedapayResponseSchema } from "./payment.schema";
+import { Op, Transaction } from "sequelize";
+
+import { CreatePaymentInput, } from "./payment.schema";
 import { PaymentMapper } from "./payment.mappers";
 import { PaymentRepository } from "./payment.repository";
 import { PaymentResponse } from "./payment.types";
 import { Payment } from "@/database/models/payment";
-import axios from "axios";
+import { TransactionRepository } from "../transaction/transaction.repository";
+import { Transactions } from "@/database/models/Transaction";
 
 type CurrencyCode = "XOF" | "EUR" | "USD";
 const DEFAULT_CURRENCY: CurrencyCode = "XOF";
@@ -31,21 +30,23 @@ export class PaymentService {
     private paymentMapper: PaymentMapper;
     private landlordRepository: landLordRepository;
     private tenantRepository: TenantRepository;
+    private transactionRepository: TransactionRepository;
 
     constructor() {
         this.paymentRepository = new PaymentRepository();
         this.paymentMapper = new PaymentMapper();
         this.landlordRepository = new landLordRepository();
         this.tenantRepository = new TenantRepository();
+        this.transactionRepository = new TransactionRepository()
     }
 
-    async createPayment(userId: string, role: string, paymentData: CreatePaymentInput): Promise<PaymentResponse> {
+    async createPayment(userId: string, role: string, paymentData: CreatePaymentInput, transaction?: Transaction): Promise<PaymentResponse> {
         const tenant = await this.tenantRepository.getTenantByUserId(userId);
         const landlord = await this.landlordRepository.getlandLordByUserId(userId);
 
         const facture = await this.paymentRepository.getFactureByTypeAndId(
             paymentData.facture_type,
-            paymentData.facture_id,
+            paymentData.facture_id, transaction
         );
 
         if (!facture) {
@@ -90,7 +91,7 @@ export class PaymentService {
             payment_notes: paymentData.payment_notes || "",
             refund_reason: null,
             refund_at: null,
-        });
+        }, transaction);
 
         // const transactionReference = await this.generateTransactionReference();
         // await Transaction.create({
@@ -321,7 +322,7 @@ export class PaymentService {
         const day = String(now.getDate()).padStart(2, "0");
         const datePart = `${year}${month}${day}`;
 
-        const countToday = await Transaction.count({
+        const countToday = await Transactions.count({
             where: {
                 transaction_reference: {
                     [Op.like]: `TXN-${datePart}-%`,

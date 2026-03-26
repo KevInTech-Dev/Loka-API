@@ -179,6 +179,7 @@ const utilisateurAbonnementPath: OpenAPIV3.PathsObject = {
         post: {
             tags: ["Utilisateur Abonnement"],
             summary: "Créer une nouvelle relation",
+            security: [{ bearerAuth: [] }],
             description: "Crée une nouvelle relation entre un utilisateur et un abonnement",
             requestBody: {
                 required: true,
