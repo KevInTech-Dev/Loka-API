@@ -18,6 +18,7 @@ export interface EnvConfig {
   ACCESS_TOKEN_EXPRIRY_TIME: number;
   FEDAPAY_SECRET_KEY: string;
   TRANSACTION_URL: string,
+  FEDAPAY_ENVIRONNEMENT: string
 
 
   API_PREFIX?: string;
@@ -97,6 +98,10 @@ export const env: EnvConfig = {
 
   //Transaction url
   TRANSACTION_URL: getEnvVar("TRANSACTION_URL"),
+
+  //Fedapay environnement
+  FEDAPAY_ENVIRONNEMENT: getEnvVar("FEDAPAY_ENVIRONNEMENT")
+
 
 };
 

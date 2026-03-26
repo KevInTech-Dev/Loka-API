@@ -6,9 +6,9 @@ export type TransactionResponse = BaseTypes & {
     payment_id: string;
     landlord_id?: string | null;
     transaction_type: TransactionTypeEnum;
-    transaction_status: TransactionStatusEnum;
+    transaction_status: string;
     transaction_reference: string
-    transaction_date: Date;
+    //transaction_date: Date;
     amount: number;
     currency: string;
     description: string;
