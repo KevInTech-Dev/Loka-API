@@ -16,6 +16,7 @@ export interface EnvConfig {
   JWT_SECRET: string;
   REFRESH_TOKEN: string;
   ACCESS_TOKEN_EXPRIRY_TIME: number;
+  PLATFORM_COMMISSION_RATE: number;
 
 
   API_PREFIX?: string;
@@ -89,6 +90,9 @@ export const env: EnvConfig = {
 
   //Access token expiry time
   ACCESS_TOKEN_EXPRIRY_TIME: getEnvVarNumber("ACCESS_TOKEN_EXPRIRY_TIME"),
+
+  //Platform commission rate
+  PLATFORM_COMMISSION_RATE: getEnvVarNumber("PLATFORM_COMMISSION_RATE", 20),
 
 };
 

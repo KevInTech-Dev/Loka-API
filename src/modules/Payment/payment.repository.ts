@@ -49,10 +49,10 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
         const { rows, count } = await this.model.findAndCountAll({
             where:{
                 ...(role === RoleEnum.PROPRIETAIRE && { landlord_id:{
-                    includes: [{ model: User, as: 'user', where: { id: userId } }]
+                    include: [{ model: User, as: 'userLandlord', where: { id: userId } }]
                 } }),
                 ...(role === RoleEnum.LOCATAIRE && { tenant_id: {
-                    includes: [{ model: User, as: 'user', where: { id: userId } }]
+                    include: [{ model: User, as: 'userTenant', where: { id: userId } }]
                 }}),
             },
             limit,

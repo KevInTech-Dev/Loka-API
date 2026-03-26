@@ -4,7 +4,7 @@ import { TransactionTypeEnum } from "@/enums/TransactionTypeEnum";
 
 export type TransactionResponse = BaseTypes & {
     payment_id: string;
-    landlord_id?: string | null;
+    sender_id?: string | null;
     transaction_type: TransactionTypeEnum;
     transaction_status: TransactionStatusEnum;
     transaction_reference: string

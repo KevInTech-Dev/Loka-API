@@ -14,34 +14,33 @@ export class TransactionRepository extends BaseRepositoryImpl<Transaction> {
         return this.model.create(transactionData);
     }
 
-    async findById(id: string): Promise<Transaction> {
-        return this.model.findByPk(id, {
+    async findByIdWithAccess(id: string, opts: { role: string , senderId?: string }): Promise<Transaction> {
+        
+        return this.model.findOne({
+            where: {
+                ...opts.role === RoleEnum.ADMIN ? { id } : { id, sender_id: opts.senderId }
+            }, 
             include: [{
                 model: Payment,
                 as: 'transactionPayment'
             }
-            ]
-        });
+            ],
+    });
     }
-    async getTransactionPaginated(page: number, limit: number, role: string, userId: string ) {
+    async getTransactionPaginated(page: number, limit: number, opts: { role: string, senderId?: string }) {
         const offset = (page - 1) * limit;
         const { rows, count } = await this.model.findAndCountAll({
             where:  {
-                ...(role === RoleEnum.PROPRIETAIRE && { landlord_id: {
-                    includes: [{ model: Payment, as: 'transactionPayment', where: { id: userId } }]
-                } }),
-                ...(role === RoleEnum.LOCATAIRE && { tenant_id: {
-                    includes: [{ model: Payment, as: 'transactionPayment', where: { id: userId } }]
-                }}),
+                ...opts.role === RoleEnum.ADMIN ? {} : { sender_id: opts.senderId }
             },
             limit,
             offset,
             include: [{
                 model: Payment,
                 as: 'transactionPayment'
-            }]
+            }],
+            order: [['createdAt', 'DESC']]
         });
         return { rows, count };
     }
-
 }

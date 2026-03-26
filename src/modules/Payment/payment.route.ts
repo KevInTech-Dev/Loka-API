@@ -10,13 +10,6 @@ const paymentController = new PaymentController();
 
 router.use(authMiddleware);
 
-router.post(
-	"",
-	authorize(["locataire", "proprietaire", "admin"]),
-	validate(CreatePaymentSchema, "body"),
-	paymentController.createPayment,
-);
-
 router.get(
 	"",
 	authorize(["locataire", "proprietaire", "admin"]),

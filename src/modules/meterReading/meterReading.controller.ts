@@ -1,7 +1,6 @@
 import { CreationMeterReadingInput, UpdateMeterReadingInput } from "@modules/meterReading/meterReading.schemas";
 import { MeterReadingService } from "@modules/meterReading/meterReading.service";
 import { Request, Response } from "express";
-import { read } from "node:fs";
 
 export class MeterReadingController {
     private meterService: MeterReadingService;

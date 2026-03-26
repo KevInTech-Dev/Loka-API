@@ -8,7 +8,7 @@ export class TransactionMapper implements BaseMapper<Transaction, TransactionRes
         return {
             id: transaction?.id,
             payment_id: transaction?.payment_id,
-            landlord_id: transaction?.landlord_id,
+            sender_id: transaction?.sender_id,
             transaction_type: transaction?.transaction_type,
             transaction_status: transaction?.transaction_status,
             transaction_reference: transaction?.transaction_reference,
@@ -24,7 +24,7 @@ export class TransactionMapper implements BaseMapper<Transaction, TransactionRes
     toEntity(data: CreateTransactionInput): Partial<Transaction> {
         return {
             payment_id: data.payment_id,
-            landlord_id: data.landlord_id,
+            sender_id: data.sender_id,
             transaction_type: data.transaction_type,
             transaction_status: data.transaction_status,
             transaction_date: data.transaction_date,

@@ -5,21 +5,19 @@ import { FactureEau } from "@/database/models/FactureEau";
 import { FactureElectricite } from "@/database/models/FactureElectricite";
 import { FactureLoyer } from "@/database/models/FactureLoyer";
 import { FactureMaintenance } from "@/database/models/FacturesMaintenance";
-import { Transaction } from "@/database/models/Transaction";
 import { ContractStatusEnum } from "@/enums/ContractStatusEnum";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
 import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
 import { PaymentStatusEnum } from "@/enums/PaymentStatusEnum";
-import { TransactionStatusEnum } from "@/enums/TransactionStatusEnum";
-import { TransactionTypeEnum } from "@/enums/TransactionTypeEnum";
 import { landLordRepository } from "@modules/landLord/landlord.repository";
 import { TenantRepository } from "@modules/tenant/tenant.repository";
-import { Op } from "sequelize";
 import { CreatePaymentInput } from "./payment.schema";
 import { PaymentMapper } from "./payment.mappers";
 import { PaymentRepository } from "./payment.repository";
 import { PaymentResponse } from "./payment.types";
 import { Payment } from "@/database/models/payment";
+import env from "@/config/env";
+import { RoleEnum } from "@/enums/RoleEnum";
 
 type CurrencyCode = "XOF" | "EUR" | "USD";
 const DEFAULT_CURRENCY: CurrencyCode = "XOF";
@@ -58,7 +56,7 @@ export class PaymentService {
             role,
         );
 
-        const platformCommissionRate = 0.02;
+        const platformCommissionRate = env.PLATFORM_COMMISSION_RATE / 100; 
         const platformCommission = amountPaid * platformCommissionRate;
         const landlordAmount = amountPaid - platformCommission;
 
@@ -89,25 +87,6 @@ export class PaymentService {
             refund_reason: null,
             refund_at: null,
         });
-
-        const transactionReference = await this.generateTransactionReference();
-        await Transaction.create({
-            payment_id: payment.id,
-            landlord_id: landlordId || null,
-            transaction_type: this.mapInvoiceTypeToTransactionType(paymentData.facture_type),
-            transaction_status: TransactionStatusEnum.PENDING,
-            transaction_reference: transactionReference,
-            transaction_date: new Date(),
-            amount: amountPaid,
-            currency: selectedCurrency,
-            description: `Paiement ${paymentData.facture_type}`,
-            callback_url: null,
-            metadata: {
-                payment_reference: paymentReference,
-                provider: selectedProvider,
-            },
-        });
-
         return this.paymentMapper.toResponse(payment);
     }
 
@@ -262,11 +241,11 @@ export class PaymentService {
     }
 
     private async assertPaymentOwnership(payment: Payment, userId: string, role: string): Promise<void> {
-        if (role === "admin") {
+        if (role === RoleEnum.ADMIN) {
             return;
         }
 
-        if (role === "locataire") {
+        if (role === RoleEnum.LOCATAIRE) {
             const tenant = await this.tenantRepository.getTenantByUserId(userId);
             if (!tenant || payment.tenant_id !== tenant.id) {
                 throw new UnauthorizedError("Not authorized to view this payment");
@@ -274,7 +253,7 @@ export class PaymentService {
             return;
         }
 
-        if (role === "proprietaire") {
+        if (role === RoleEnum.PROPRIETAIRE) {
             const landlord = await this.landlordRepository.getlandLordByUserId(userId);
             if (!landlord || payment.landlord_id !== landlord.id) {
                 throw new UnauthorizedError("Not authorized to view this payment");
@@ -312,7 +291,7 @@ export class PaymentService {
         return `PAY-${year}-${month}${paddedNumber}`;
     }
 
-    private async generateTransactionReference(): Promise<string> {
+    /*private async generateTransactionReference(): Promise<string> {
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -329,9 +308,9 @@ export class PaymentService {
 
         const nextNumber = String(countToday + 1).padStart(3, "0");
         return `TXN-${datePart}-${nextNumber}`;
-    }
+    }*/
 
-    private mapInvoiceTypeToTransactionType(invoiceType: InvoiceType): TransactionTypeEnum {
+    /*private mapInvoiceTypeToTransactionType(invoiceType: InvoiceType): TransactionTypeEnum {
         switch (invoiceType) {
             case InvoiceType.FACTURE_LOYER:
                 return TransactionTypeEnum.LOYER;
@@ -347,7 +326,7 @@ export class PaymentService {
             default:
                 return TransactionTypeEnum.AUTRE;
         }
-    }
+    }*/
 
     private assertProviderCurrencyCompatibility(provider: PaymentProviderEnum, currency: CurrencyCode): void {
         const supportedCurrenciesByProvider: Record<PaymentProviderEnum, CurrencyCode[]> = {

@@ -5,7 +5,7 @@ import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface TransactionAttributes extends BaseModel {
     payment_id: string;
-    landlord_id?: string | null;
+    sender_id?: string;
     transaction_type: TransactionTypeEnum;
     transaction_status: TransactionStatusEnum;
     transaction_reference: string;
@@ -19,7 +19,7 @@ export interface TransactionAttributes extends BaseModel {
 
 export interface TransactionCreationAttributes extends Optional<
     TransactionAttributes,
-    "id" | "createdAt" | "updatedAt" | "metadata" | "landlord_id" | "callback_url"
+    "id" | "createdAt" | "updatedAt" | "metadata" | "sender_id" | "callback_url"
 > {}
 
 class Transaction
@@ -28,6 +28,7 @@ class Transaction
 {
     declare id: string;
     declare payment_id: string;
+    declare sender_id?: string;
     declare landlord_id?: string | null;
     declare transaction_type: TransactionTypeEnum;
     declare transaction_status: TransactionStatusEnum;
@@ -70,11 +71,11 @@ const initModelTransaction = (sequelize: Sequelize) => {
                 },
                 onDelete: 'CASCADE'
             },
-            landlord_id: {
+            sender_id: {
                 type: DataTypes.UUID,
                 allowNull: true,
                 references: {
-                    model: 'landlords',
+                    model: 'users',
                     key: 'id'
                 },
                 onDelete: 'SET NULL'

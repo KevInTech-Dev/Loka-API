@@ -8,12 +8,6 @@ export class PaymentController {
 		this.paymentService = new PaymentService();
 	}
 
-	createPayment = async (req: Request, res: Response) => {
-		return res.send({
-			data: await this.paymentService.createPayment(req.user.id, req.user.role, req.body),
-		});
-	};
-
 	getPayments = async (req: Request, res: Response) => {
 		const page = parseInt(req.query.page as string) || 1;
 		const limit = parseInt(req.query.limit as string) || 10;
