@@ -16,6 +16,8 @@ export interface EnvConfig {
   JWT_SECRET: string;
   REFRESH_TOKEN: string;
   ACCESS_TOKEN_EXPRIRY_TIME: number;
+  FEDAPAY_SECRET_KEY: string;
+  TRANSACTION_URL: string,
 
 
   API_PREFIX?: string;
@@ -89,6 +91,12 @@ export const env: EnvConfig = {
 
   //Access token expiry time
   ACCESS_TOKEN_EXPRIRY_TIME: getEnvVarNumber("ACCESS_TOKEN_EXPRIRY_TIME"),
+
+  //Fedapay secret key
+  FEDAPAY_SECRET_KEY: getEnvVar("FEDAPAY_SECRET_KEY"),
+
+  //Transaction url
+  TRANSACTION_URL: getEnvVar("TRANSACTION_URL"),
 
 };
 

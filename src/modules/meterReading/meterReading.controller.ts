@@ -6,32 +6,32 @@ import { read } from "node:fs";
 export class MeterReadingController {
     private meterService: MeterReadingService;
 
-    constructor(){
+    constructor() {
         this.meterService = new MeterReadingService();
     }
 
-    createMeterReading = async(req: Request, res: Response) => {
+    createMeterReading = async (req: Request, res: Response) => {
         const data: CreationMeterReadingInput = req.body;
         return res.send({
-            data: await this.meterService.createMeterReading({...data, recorded_by_user_id:req?.user?.id }),
+            data: await this.meterService.createMeterReading({ ...data, recorded_by_user_id: req?.user?.id }),
         });
     }
 
-    getMeterReading = async(req: Request, res: Response) => {
+    getMeterReading = async (req: Request, res: Response) => {
         const id = req.params.id as string;
         return res.send({
             data: await this.meterService.getMeterReadingyId(id),
         });
     };
 
-    getPaginatedMeterReading = async(req: Request, res: Response) =>{
+    getPaginatedMeterReading = async (req: Request, res: Response) => {
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
 
         return res.send({
-           page: req.query.page,
-           limit: req.query.limit,
-           data: await this.meterService.getPaginatedMeter(page, limit)
+            page: req.query.page,
+            limit: req.query.limit,
+            data: await this.meterService.getPaginatedMeter(page, limit)
         });
     };
 

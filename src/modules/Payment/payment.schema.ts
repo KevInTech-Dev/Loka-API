@@ -1,26 +1,56 @@
-import {InvoiceType} from "@/enums/InvoiceTypeEnume";
+import { CurrencyEnum } from "@/enums/Currency";
+import { InvoiceType } from "@/enums/InvoiceTypeEnume";
 import { PaymentMethodEnum } from "@/enums/PaymentMethodEnum";
 import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
-import { PaymentStatusEnum } from "@/enums/PaymentStatusEnum";
+import { Currency } from "fedapay";
 import z from "zod";
 
-const PaymentSchema = z.object({
-    landlord_id: z.uuid("Invalid landlord ID format"),
-    tenant_id: z.uuid("Invalid tenant ID format"),
+const createFedapaySchema = z.object({
+    description: z.string(),
+    amount: z.number(),
+    currency: z.string(),
+    //callback_url: z.string(),
+    //custom_metadata: z.object(),
+    //customer: z.object()
+})
+
+const fedapayResponseSchema = z.object({
+    id: z.number(),
+    reference: z.string(),
+    amount: z.number(),
+    description: z.string(),
+    callbackurl: z.string(),
+    status: z.string(),
+    createdAt: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).transform((v) => { return new Date(v) }),
+    updatedAt: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).transform((v) => { return new Date(v) }),
+})
+
+const CreatePaymentSchema = z.object({
+    facture_type: z.enum([
+        InvoiceType.FACTURE_LOYER,
+        InvoiceType.FACTURE_EAU,
+        InvoiceType.FACTURE_ELEC,
+        InvoiceType.FACTURE_MAINTENANCE,
+        InvoiceType.ABONNEMENT,
+        InvoiceType.ABONNEMENT_TRIAL,
+    ]),
     facture_id: z.uuid("Invalid facture ID format"),
-    payment_date: z.coerce.date("Invalid payment date format"),
-    amount_paid: z.number(),
-    facture_type: z.enum(InvoiceType),
-    payment_method: z.enum(PaymentMethodEnum),
-    payment_provider: z.enum(PaymentProviderEnum),
-    payment_status: z.enum(PaymentStatusEnum),
-    platform_commission: z.number(),
-    landlord_amount: z.number(),
-    payer_phone: z.string(),
-    payer_email: z.email("Invalid email format"),
-    receitpt_number: z.string(),
+    payment_method: z.enum([
+        PaymentMethodEnum.CASH,
+        PaymentMethodEnum.ONLINE,
+    ]),
+    payment_provider: z.enum([
+        PaymentProviderEnum.STRIPE,
+        PaymentProviderEnum.FEDAPAY,
+    ]).default(PaymentProviderEnum.FEDAPAY),
+    currency: z.enum([
+        "XOF",
+        "EUR",
+        "USD",
+    ]).default("XOF"),
+    payer_phone: z.string().min(1, "Phone is required"),
+    payer_email: z.string().email("Invalid email format").optional(),
     payment_notes: z.string().optional(),
-    refund_reason: z.string().optional(),
 });
 
 const paymentIdSchema = z.object({
@@ -32,18 +62,21 @@ const paymentPaginationSchema = z.object({
     limit: z.coerce.number().min(1).default(10),
 });
 
-type CreatePaymentInput = z.infer<typeof PaymentSchema> & {
-    payment_reference: string;
-    refund_at: Date;
-}
-type PaymentIdParams = z.infer<typeof paymentIdSchema>
-type PaymentPaginationParams = z.infer<typeof paymentPaginationSchema>
+type CreatePaymentInput = z.infer<typeof CreatePaymentSchema>;
+type PaymentIdParams = z.infer<typeof paymentIdSchema>;
+type PaymentPaginationParams = z.infer<typeof paymentPaginationSchema>;
+type CreateFedapaySchema = z.infer<typeof createFedapaySchema>;
+type FedapayResponseSchema = z.infer<typeof fedapayResponseSchema>
 
 export {
-    PaymentSchema,
+    CreatePaymentSchema,
     paymentIdSchema,
     paymentPaginationSchema,
+    createFedapaySchema,
+    fedapayResponseSchema,
     CreatePaymentInput,
     PaymentIdParams,
     PaymentPaginationParams,
-}
+    CreateFedapaySchema,
+    FedapayResponseSchema
+};

@@ -9,15 +9,14 @@ import { RoleEnum } from "@/enums/RoleEnum";
 
 
 const router: Router = Router();
-// router.use(authMiddleware);
+//router.use(authMiddleware);
 const tenantController = new TenantController();
 
-router.get('', tenantController.getAllTenants);
-// authorize(['admin', 'proprietaire']),
-// validate(paginatedTenantSchema, 'query'), );
+router.get('', authorize(['admin', 'proprietaire']),
+    validate(paginatedTenantSchema, 'query'), tenantController.getAllTenants);
 
 router.post('',
-    // authorize(['admin', 'proprietaire']),
+    authorize(['admin', 'proprietaire']),
     fieldsUpload({
         fields: [
             { name: 'photo', maxCount: 1 },
@@ -46,7 +45,7 @@ router.patch("/photo/:id",
 );
 
 router.get('/:id',
-    authorize([RoleEnum.ADMIN, RoleEnum.PROPRIETAIRE]),
+    //authorize([RoleEnum.ADMIN, RoleEnum.PROPRIETAIRE]),
     validate(tenantIdSchema, 'params'), tenantController.getTenant);
 
 router.patch('/:id',

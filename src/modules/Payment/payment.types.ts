@@ -6,10 +6,15 @@ import {InvoiceType} from "@/enums/InvoiceTypeEnume";
 
 export type PaymentResponse = BaseTypes & {
     payment_reference: string;
-    landlord_id: string;
-    tenant_id: string;
-    facture_id: string;
+    landlord_id?: string | null;
+    tenant_id?: string | null;
+    facture_loy_id?: string | null;
+    facture_ab_id?: string | null;
+    facture_water_id?: string | null;
+    facture_elec_id?: string | null;
+    facture_mtn_id?: string | null;
     amount_paid: number;
+    currency: string;
     payment_date: Date;
     factureType: InvoiceType;
     payment_method: PaymentMethodEnum;
@@ -22,5 +27,6 @@ export type PaymentResponse = BaseTypes & {
     receitpt_number: string;
     payment_notes?: string;
     refund_reason?: string;
-    refund_at: Date;
-}
+    refund_at?: Date | null;
+    facture_details?: unknown;
+};

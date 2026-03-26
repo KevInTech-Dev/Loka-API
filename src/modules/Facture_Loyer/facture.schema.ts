@@ -11,7 +11,7 @@ const createFactureLoyerSchema = z.object({
     notes: z.string(),
     isTva: z.boolean(),
     unitLocation: z.string(),
-    idTenant: z.string(),
+    idTenant: z.uuid(),
     totalAPayer: z.number(),
 })
 

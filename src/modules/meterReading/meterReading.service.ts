@@ -17,6 +17,10 @@ import { generateIvoiceNumber } from "@/common/generateInvoiceNumber";
 import { FactureEauRepository } from "../Facture_Eau/facture.repository";
 import { FactureElectriciteRepository } from "../Facture_Electricite/facture.repository";
 import { MeterReading } from "@/database/models/meter_reading";
+import { UserRepository } from "../users/user.repository";
+import { PaymentService } from "../Payment/payment.service";
+import { PaymentMethodEnum } from "@/enums/PaymentMethodEnum";
+import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
 
 export class MeterReadingService {
   private meterReadingRepository: MeterReadingRepository
@@ -30,9 +34,13 @@ export class MeterReadingService {
   private factureElectriciteRepository: FactureElectriciteRepository;
   private factureEauService: FactureEauService;
   private factureElectriciteService: FactureElectriciteService;
+  private utilisateurRepository: UserRepository;
+  private paymentService: PaymentService;
 
 
   constructor() {
+    this.paymentService = new PaymentService();
+    this.utilisateurRepository = new UserRepository();
     this.meterReadingRepository = new MeterReadingRepository();
     this.landlordRepository = new landLordRepository();
     this.tenantRepository = new TenantRepository();
@@ -111,7 +119,7 @@ export class MeterReadingService {
 
     if (meterReading.meter_type === MeterTypeEnum.ELECTRICITY) {
       const invoiceNumber = await this.factureElectriciteRepository.getLastInvNumber();
-      await this.factureElectriciteService.createFactureElectricite({
+      const facture = await this.factureElectriciteService.createFactureElectricite({
         dateEcheance: dateEcheance,
         dateEmission: new Date(),
         idReleveCompteur: meterReading.id,
@@ -124,9 +132,30 @@ export class MeterReadingService {
         totalAPayer: meterReading.amount_due,
         unitLocation: meterReading.unit_id
       });
+      //Rechercher le locataire qui doit completer le paiement
+      const tenant = await this.tenantRepository.getTenantById(facture.idTenant);
+      if (!tenant) {
+        throw new NotFoundError("Tenant was");
+      }
+      //Ensuite récuperer l'utilisateur associé au locataire
+      const user = await this.utilisateurRepository.findById(tenant.userId);
+      if (!user) {
+        throw new NotFoundError("User was")
+      }
+      //Creation du paiament
+      await this.paymentService.createPayment(user.id, user.role, {
+        facture_type: InvoiceType.FACTURE_ELEC,
+        facture_id: facture.id,
+        payment_method: PaymentMethodEnum.ONLINE,
+        payment_provider: PaymentProviderEnum.FEDAPAY,
+        currency: "XOF",
+        payer_phone: user.phoneNumber,
+        payer_email: user.email,
+        payment_notes: `PAIEMENT GENERER AUTOMATIQUEMENT POUR LA FACTURE D'ELECTRICITE ${facture.id}-${new Date()}`,
+      })
     } else if (meterReading.meter_type === MeterTypeEnum.WATER) {
       const invoiceNumber = await this.factureEauRepository.getLastInvNumber();
-      await this.factureEauService.createFactureEau({
+      const facture = await this.factureEauService.createFactureEau({
         dateEcheance: dateEcheance,
         dateEmission: new Date(),
         idReleveCompteur: meterReading.id,
@@ -139,7 +168,26 @@ export class MeterReadingService {
         totalAPayer: meterReading.amount_due,
         unitLocation: meterReading.unit_id
       });
-
+      //Rechercher le locataire qui doit completer le paiement
+      const tenant = await this.tenantRepository.getTenantById(facture.idTenant);
+      if (!tenant) {
+        throw new NotFoundError("Tenant was");
+      }
+      //Ensuite récuperer l'utilisateur associé au locataire
+      const user = await this.utilisateurRepository.findById(tenant.userId);
+      if (!user) {
+        throw new NotFoundError("User was")
+      }
+      await this.paymentService.createPayment(user.id, user.role, {
+        facture_type: InvoiceType.FACTURE_EAU,
+        facture_id: facture.id,
+        payment_method: PaymentMethodEnum.ONLINE,
+        payment_provider: PaymentProviderEnum.FEDAPAY,
+        currency: "XOF",
+        payer_phone: user.phoneNumber,
+        payer_email: user.email,
+        payment_notes: `PAIEMENT GENERER AUTOMATIQUEMENT POUR LA FACTURE D'EAU ${facture.id}-${new Date()}`,
+      })
     }
     return this.meterMapper.toResponse(meterReading);
   }

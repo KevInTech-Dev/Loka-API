@@ -13,6 +13,9 @@ import { generateIvoiceNumber } from "@/common/generateInvoiceNumber";
 import { StatusFactures } from "@/enums/StatusFacturesEnum";
 import { Transaction } from "sequelize";
 import { RoleEnum } from "@/enums/RoleEnum";
+import { PaymentService } from "../Payment/payment.service";
+import { PaymentMethodEnum } from "@/enums/PaymentMethodEnum";
+import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
 
 export class Utilisateur_AbonnementService {
     private repository: Utilisateur_AbonnementRepository;
@@ -20,6 +23,7 @@ export class Utilisateur_AbonnementService {
     private utilisateurRepository: UserRepository;
     private factureAbonnementService: FactureAbonnementService;
     private factureAbonnementRepository: FactureAbonnementRepository;
+    private paymentService: PaymentService;
 
     constructor() {
         this.repository = new Utilisateur_AbonnementRepository();
@@ -27,12 +31,13 @@ export class Utilisateur_AbonnementService {
         this.utilisateurRepository = new UserRepository();
         this.factureAbonnementService = new FactureAbonnementService();
         this.factureAbonnementRepository = new FactureAbonnementRepository();
+        this.paymentService = new PaymentService()
     }
 
     /**
      * Crée une nouvelle relation utilisateur-abonnement
     */
-    async create(data: UtilisateurAbonnementAttributes): Promise<Utilisateur_Abonnement> {
+    async create(data: UtilisateurAbonnementAttributes, userId?: string, role?: string): Promise<Utilisateur_Abonnement> {
         let transaction: Transaction;
         let response;
         //Verifier le type d'abonnement
@@ -73,7 +78,7 @@ export class Utilisateur_AbonnementService {
                             const invNumber = await this.factureAbonnementRepository.getLastInvNumber();
                             const dateEcheance = new Date();
                             dateEcheance.setDate(dateEcheance.getDate() + 15);
-                            await this.factureAbonnementService.createFactureAbonnement({
+                            const facture = await this.factureAbonnementService.createFactureAbonnement({
                                 invoiceType: InvoiceType.ABONNEMENT,
                                 isTva: false,
                                 landlordId: (existingUserSubs as any)?.userLandlord.id,
@@ -84,6 +89,20 @@ export class Utilisateur_AbonnementService {
                                 utilisateurAbonnement: response.id,
                                 dateEcheance: dateEcheance,
                             }, transaction);
+                            const user = await this.utilisateurRepository.findById(userId);
+                            if (!user) {
+                                throw new NotFoundError("User was");
+                            }
+                            await this.paymentService.createPayment(userId, role, {
+                                facture_type: InvoiceType.ABONNEMENT,
+                                facture_id: facture.id,
+                                payment_method: PaymentMethodEnum.ONLINE,
+                                payment_provider: PaymentProviderEnum.FEDAPAY,
+                                currency: "XOF",
+                                payer_phone: user.phoneNumber,
+                                payer_email: user.email,
+                                payment_notes: `PAIEMENT GENERER AUTOMATIQUEMENT POUR LA FACTURE ${facture.id}-${new Date()}`,
+                            })
 
                             await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.INACTIVE, endDate: null, startDate: null }, transaction)
                         } else {
@@ -95,7 +114,7 @@ export class Utilisateur_AbonnementService {
                         const invoiceNumber = await this.factureAbonnementRepository.getLastInvNumber();
                         const dateEcheance = new Date();
                         dateEcheance.setDate(dateEcheance.getDate() + 15);
-                        await this.factureAbonnementService.createFactureAbonnement({
+                        const facture = await this.factureAbonnementService.createFactureAbonnement({
                             invoiceType: InvoiceType.ABONNEMENT_TRIAL,
                             isTva: false,
                             landlordId: (existingUserSubs as any)?.userLandlord.id,
@@ -106,6 +125,20 @@ export class Utilisateur_AbonnementService {
                             utilisateurAbonnement: response.id,
                             dateEcheance: dateEcheance,
                         }, transaction);
+                        const user = await this.utilisateurRepository.findById(userId);
+                        if (!user) {
+                            throw new NotFoundError("User was");
+                        }
+                        await this.paymentService.createPayment(userId, role, {
+                            facture_type: InvoiceType.ABONNEMENT_TRIAL,
+                            facture_id: facture.id,
+                            payment_method: PaymentMethodEnum.ONLINE,
+                            payment_provider: PaymentProviderEnum.FEDAPAY,
+                            currency: "XOF",
+                            payer_phone: user.phoneNumber,
+                            payer_email: user.email,
+                            payment_notes: `PAIEMENT GENERER AUTOMATIQUEMENT POUR LA FACTURE AU STATUT GRATUIT ${facture.id}-${new Date()}`,
+                        })
                     }
 
                     const dateDebut = new Date();
@@ -134,7 +167,7 @@ export class Utilisateur_AbonnementService {
                         const invNumber = await this.factureAbonnementRepository.getLastInvNumber();
                         const dateEcheance = new Date();
                         dateEcheance.setDate(dateEcheance.getDate() + 15);
-                        this.factureAbonnementService.createFactureAbonnement({
+                        const facture = await this.factureAbonnementService.createFactureAbonnement({
                             invoiceType: InvoiceType.ABONNEMENT,
                             isTva: false,
                             landlordId: (existingUserSubs as any)?.userLandlord.id,
@@ -145,6 +178,21 @@ export class Utilisateur_AbonnementService {
                             utilisateurAbonnement: response.id,
                             dateEcheance: dateEcheance,
                         }, transaction);
+
+                        const user = await this.utilisateurRepository.findById(userId);
+                        if (!user) {
+                            throw new NotFoundError("User was");
+                        }
+                        await this.paymentService.createPayment(userId, role, {
+                            facture_type: InvoiceType.ABONNEMENT,
+                            facture_id: facture.id,
+                            payment_method: PaymentMethodEnum.ONLINE,
+                            payment_provider: PaymentProviderEnum.FEDAPAY,
+                            currency: "XOF",
+                            payer_phone: user.phoneNumber,
+                            payer_email: user.email,
+                            payment_notes: `PAIEMENT GENERER AUTOMATIQUEMENT POUR LA FACTURE ${facture.id}-${new Date()}`,
+                        })
 
                         await this.repository.updateUtilisateurAbonnement(response.id, { ...response, status: StatusAbonnementEnum.INACTIVE, endDate: null, startDate: null }, transaction)
                     } else {
