@@ -13,13 +13,12 @@ export interface TransactionAttributes extends BaseModel {
     amount: number;
     currency: string;
     description: string;
-    callback_url?: string | null;
     metadata?: unknown;
 }
 
 export interface TransactionCreationAttributes extends Optional<
     TransactionAttributes,
-    "id" | "createdAt" | "updatedAt" | "metadata" | "sender_id" | "callback_url"
+    "id" | "createdAt" | "updatedAt" | "metadata" | "sender_id" 
 > {}
 
 class Transaction
@@ -37,7 +36,6 @@ class Transaction
     declare amount: number;
     declare currency: string;
     declare description: string;
-    declare callback_url?: string | null;
     declare metadata?: unknown;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
@@ -111,10 +109,6 @@ const initModelTransaction = (sequelize: Sequelize) => {
             description: {
                 type: DataTypes.TEXT,
                 allowNull: false
-            },
-            callback_url: {
-                type: DataTypes.STRING,
-                allowNull: true
             },
             metadata: {
                 type: DataTypes.JSON,

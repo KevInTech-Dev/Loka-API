@@ -12,6 +12,5 @@ export type TransactionResponse = BaseTypes & {
     amount: number;
     currency: string;
     description: string;
-    callback_url?: string | null;
     metadata?: unknown;
 }

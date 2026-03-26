@@ -113,14 +113,7 @@ export class TransactionService {
         if (role === RoleEnum.ADMIN) {
             return undefined; 
         }
-        if (role === RoleEnum.PROPRIETAIRE) {
-            const landlord = await this.landlordRepository.getlandLordByUserId(userId);
-            return landlord ? landlord.id : undefined;
-        }
-        if (role === RoleEnum.LOCATAIRE) {
-            const tenant = await this.tenantRepository.getTenantByUserId(userId);
-            return tenant ? tenant.id : undefined;
-        }
+        return userId;
     }
 
     private mapInvoiceTypeToTransactionType(factureType: InvoiceType): TransactionTypeEnum {

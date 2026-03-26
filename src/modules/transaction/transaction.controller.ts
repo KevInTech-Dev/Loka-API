@@ -9,7 +9,7 @@ export class TransactionController {
         this.transactionService = new TransactionService();
     }
 
-    async createTransaction(req: Request, res: Response) {
+    createTransaction = async(req: Request, res: Response) => {
         const userId = req.user.id;
         const role = req.user.role;
         const data: CreateTransactionInput = req.body;
@@ -18,7 +18,7 @@ export class TransactionController {
         });
     }
 
-    async getPaginatedTransactions(req: Request, res: Response) {
+    getPaginatedTransactions = async(req: Request, res: Response) => {
         const userId = req.user.id;
         const role = req.user.role;
         const page = parseInt(req.query.page as string) || 1;
@@ -32,7 +32,7 @@ export class TransactionController {
         });
     }
 
-    async getTransactionById(req: Request, res: Response) {
+    getTransactionById = async(req: Request, res: Response) => {
         const userId = req.user.id;
         const role = req.user.role;
         const id = req.params.id as string;

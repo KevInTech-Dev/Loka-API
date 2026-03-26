@@ -16,7 +16,6 @@ export class TransactionMapper implements BaseMapper<Transaction, TransactionRes
             amount: transaction?.amount,
             currency: transaction?.currency,
             description: transaction?.description,
-            callback_url: transaction?.callback_url,
             metadata: transaction?.metadata
         };
     }
@@ -32,7 +31,6 @@ export class TransactionMapper implements BaseMapper<Transaction, TransactionRes
             amount: data.amount,
             currency: data.currency,
             description: data.description,
-            callback_url: data.callback_url,
             metadata: data.metadata
         };
     }

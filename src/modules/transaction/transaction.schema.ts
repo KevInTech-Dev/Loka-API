@@ -18,6 +18,13 @@ const transactionPaginationSchema = z.object({
 type CreateTransactionInput = z.infer<typeof CreateTransactionSchema> & {
     transaction_reference: string
     sender_id?: string;
+    transaction_type: TransactionTypeEnum;
+    transaction_status: TransactionStatusEnum;
+    transaction_date: Date;
+    amount: number;
+    currency: string;
+    description: string;
+    metadata?: unknown;
 }
 type TransactionIdParams = z.infer<typeof transactionIdSchema>;
 type TransactionPaginationParams = z.infer<typeof transactionPaginationSchema>;
