@@ -9,13 +9,16 @@ import { ContractStatusEnum } from "@/enums/ContractStatusEnum";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
 import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
 import { PaymentStatusEnum } from "@/enums/PaymentStatusEnum";
+import { TransactionTypeEnum } from "@/enums/TransactionTypeEnum";
 import { landLordRepository } from "@modules/landLord/landlord.repository";
 import { TenantRepository } from "@modules/tenant/tenant.repository";
 import { CreatePaymentInput } from "./payment.schema";
+import { Op, Transaction } from "sequelize";
 import { PaymentMapper } from "./payment.mappers";
 import { PaymentRepository } from "./payment.repository";
 import { PaymentResponse } from "./payment.types";
 import { Payment } from "@/database/models/payment";
+import { TransactionRepository } from "../transaction/transaction.repository";
 import env from "@/config/env";
 import { RoleEnum } from "@/enums/RoleEnum";
 
@@ -27,21 +30,23 @@ export class PaymentService {
     private paymentMapper: PaymentMapper;
     private landlordRepository: landLordRepository;
     private tenantRepository: TenantRepository;
+    private transactionRepository: TransactionRepository;
 
     constructor() {
         this.paymentRepository = new PaymentRepository();
         this.paymentMapper = new PaymentMapper();
         this.landlordRepository = new landLordRepository();
         this.tenantRepository = new TenantRepository();
+        this.transactionRepository = new TransactionRepository()
     }
 
-    async createPayment(userId: string, role: string, paymentData: CreatePaymentInput): Promise<PaymentResponse> {
+    async createPayment(userId: string, role: string, paymentData: CreatePaymentInput, transaction?: Transaction): Promise<PaymentResponse> {
         const tenant = await this.tenantRepository.getTenantByUserId(userId);
         const landlord = await this.landlordRepository.getlandLordByUserId(userId);
 
         const facture = await this.paymentRepository.getFactureByTypeAndId(
             paymentData.facture_type,
-            paymentData.facture_id,
+            paymentData.facture_id, transaction
         );
 
         if (!facture) {
@@ -56,7 +61,7 @@ export class PaymentService {
             role,
         );
 
-        const platformCommissionRate = env.PLATFORM_COMMISSION_RATE / 100; 
+        const platformCommissionRate = env.PLATFORM_COMMISSION_RATE / 100;
         const platformCommission = amountPaid * platformCommissionRate;
         const landlordAmount = amountPaid - platformCommission;
 
@@ -86,7 +91,26 @@ export class PaymentService {
             payment_notes: paymentData.payment_notes || "",
             refund_reason: null,
             refund_at: null,
-        });
+        }, transaction);
+
+        // const transactionReference = await this.generateTransactionReference();
+        // await Transaction.create({
+        //     payment_id: payment.id,
+        //     landlord_id: landlordId || null,
+        //     transaction_type: this.mapInvoiceTypeToTransactionType(paymentData.facture_type),
+        //     transaction_status: TransactionStatusEnum.PENDING,
+        //     transaction_reference: transactionReference,
+        //     transaction_date: new Date(),
+        //     amount: amountPaid,
+        //     currency: selectedCurrency,
+        //     description: `Paiement ${paymentData.facture_type}`,
+        //     callback_url: null,
+        //     metadata: {
+        //         payment_reference: paymentReference,
+        //         provider: selectedProvider,
+        //     },
+        // });
+
         return this.paymentMapper.toResponse(payment);
     }
 
@@ -298,7 +322,7 @@ export class PaymentService {
         const day = String(now.getDate()).padStart(2, "0");
         const datePart = `${year}${month}${day}`;
 
-        const countToday = await Transaction.count({
+        const countToday = await Transactions.count({
             where: {
                 transaction_reference: {
                     [Op.like]: `TXN-${datePart}-%`,

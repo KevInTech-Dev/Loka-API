@@ -16,6 +16,9 @@ export interface EnvConfig {
   JWT_SECRET: string;
   REFRESH_TOKEN: string;
   ACCESS_TOKEN_EXPRIRY_TIME: number;
+  FEDAPAY_SECRET_KEY: string;
+  TRANSACTION_URL: string,
+  FEDAPAY_ENVIRONNEMENT: string
   PLATFORM_COMMISSION_RATE: number;
 
 
@@ -93,6 +96,16 @@ export const env: EnvConfig = {
 
   //Platform commission rate
   PLATFORM_COMMISSION_RATE: getEnvVarNumber("PLATFORM_COMMISSION_RATE", 20),
+
+  //Fedapay secret key
+  FEDAPAY_SECRET_KEY: getEnvVar("FEDAPAY_SECRET_KEY"),
+
+  //Transaction url
+  TRANSACTION_URL: getEnvVar("TRANSACTION_URL"),
+
+  //Fedapay environnement
+  FEDAPAY_ENVIRONNEMENT: getEnvVar("FEDAPAY_ENVIRONNEMENT")
+
 
 };
 

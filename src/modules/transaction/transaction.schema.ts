@@ -4,6 +4,11 @@ import z from "zod";
 
 const CreateTransactionSchema = z.object({
     payment_id: z.uuid("Invalid payment ID format"),
+    landlord_id: z.uuid("Invalid landlord ID format").optional(),
+    transaction_type: z.enum(TransactionTypeEnum),
+    amount: z.number().positive(),
+    currency: z.string().length(3),
+    description: z.string(),
 });
 
 const transactionIdSchema = z.object({

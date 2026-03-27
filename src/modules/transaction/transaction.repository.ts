@@ -1,25 +1,25 @@
 import { BaseRepositoryImpl } from "@/common/base.repository";
 import { Payment } from "@/database/models/payment";
-import { Transaction } from "@/database/models/Transaction";
+import { Transactions } from "@/database/models/Transaction";
 import { RoleEnum } from "@/enums/RoleEnum";
-import { CreationAttributes } from "sequelize";
+import {CreationAttributes} from "sequelize";
 
 
-export class TransactionRepository extends BaseRepositoryImpl<Transaction> {
+export class TransactionRepository extends BaseRepositoryImpl<Transactions> {
     constructor() {
-        super(Transaction);
+        super(Transactions);
     }
 
-    async create(transactionData: CreationAttributes<Transaction>): Promise<Transaction> {
+    async create(transactionData: CreationAttributes<Transactions>): Promise<Transactions> {
         return this.model.create(transactionData);
     }
 
-    async findByIdWithAccess(id: string, opts: { role: string , senderId?: string }): Promise<Transaction> {
-        
+    async findByIdWithAccess(id: string, opts: { role: string , senderId?: string }): Promise<Transactions> {
+
         return this.model.findOne({
             where: {
                 ...opts.role === RoleEnum.ADMIN ? { id } : { id, sender_id: opts.senderId }
-            }, 
+            },
             include: [{
                 model: Payment,
                 as: 'transactionPayment'
@@ -27,10 +27,10 @@ export class TransactionRepository extends BaseRepositoryImpl<Transaction> {
             ],
     });
     }
-    async getTransactionPaginated(page: number, limit: number, opts: { role: string, senderId?: string }) {
+    async getTransactionPaginated(page: number, limit: number, opts: { role: string, senderId?: string}) {
         const offset = (page - 1) * limit;
         const { rows, count } = await this.model.findAndCountAll({
-            where:  {
+            where: {
                 ...opts.role === RoleEnum.ADMIN ? {} : { sender_id: opts.senderId }
             },
             limit,

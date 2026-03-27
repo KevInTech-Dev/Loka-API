@@ -1,25 +1,29 @@
-import { BaseModel } from "../../common/models/base.model";
-import { TransactionStatusEnum } from "../../enums/TransactionStatusEnum";
-import { TransactionTypeEnum } from "../../enums/TransactionTypeEnum";
+import { BaseModel } from "@common/models/base.model";
+// import { TransactionStatusEnum } from "../../enums/TransactionStatusEnum";
+import { TransactionTypeEnum } from "@/enums/TransactionTypeEnum";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface TransactionAttributes extends BaseModel {
     payment_id: string;
+    landlord_id?: string | null;
+    idFedapay: string;
+    referenceFedapay: string;
     sender_id?: string;
     transaction_type: TransactionTypeEnum;
-    transaction_status: TransactionStatusEnum;
+    transaction_status: string;
     transaction_reference: string;
-    transaction_date: Date;
+    //transaction_date: Date;
     amount: number;
     currency: string;
     description: string;
+    callback_url?: string | null;
     metadata?: unknown;
 }
 
 export interface TransactionCreationAttributes extends Optional<
     TransactionAttributes,
-    "id" | "createdAt" | "updatedAt" | "metadata" | "sender_id" 
-> {}
+    "id" | "createdAt" | "updatedAt" | "metadata" | "sender_id"
+> { }
 
 class Transaction
     extends Model<TransactionAttributes, TransactionCreationAttributes>
@@ -30,22 +34,25 @@ class Transaction
     declare sender_id?: string;
     declare landlord_id?: string | null;
     declare transaction_type: TransactionTypeEnum;
-    declare transaction_status: TransactionStatusEnum;
+    declare transaction_status: string;
     declare transaction_reference: string;
-    declare transaction_date: Date;
+    declare idFedapay: string;
+    declare referenceFedapay: string;
+    //declare transaction_date: Date;
     declare amount: number;
     declare currency: string;
     declare description: string;
+    declare callback_url?: string | null;
     declare metadata?: unknown;
     declare readonly createdAt?: Date;
     declare readonly updatedAt?: Date;
 
     static associate(models: any) {
-        Transaction.belongsTo(models.Payment, {
+        Transactions.belongsTo(models.Payment, {
             foreignKey: 'payment_id',
             as: 'transactionPayment'
         });
-        Transaction.belongsTo(models.LandLord, {
+        Transactions.belongsTo(models.LandLord, {
             foreignKey: 'landlord_id',
             as: 'transactionLandlord'
         });
@@ -69,6 +76,15 @@ const initModelTransaction = (sequelize: Sequelize) => {
                 },
                 onDelete: 'CASCADE'
             },
+            idFedapay: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            referenceFedapay: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+
             sender_id: {
                 type: DataTypes.UUID,
                 allowNull: true,
@@ -83,19 +99,13 @@ const initModelTransaction = (sequelize: Sequelize) => {
                 allowNull: false
             },
             transaction_status: {
-                type: DataTypes.ENUM(...Object.values(TransactionStatusEnum)),
-                defaultValue: TransactionStatusEnum.PENDING,
+                type: DataTypes.STRING,
                 allowNull: false
             },
             transaction_reference: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true
-            },
-            transaction_date: {
-                type: DataTypes.DATE,
-                allowNull: false,
-                defaultValue: DataTypes.NOW
             },
             amount: {
                 type: DataTypes.DECIMAL(10, 2),
@@ -109,6 +119,10 @@ const initModelTransaction = (sequelize: Sequelize) => {
             description: {
                 type: DataTypes.TEXT,
                 allowNull: false
+            },
+            callback_url: {
+                type: DataTypes.STRING,
+                allowNull: true
             },
             metadata: {
                 type: DataTypes.JSON,
@@ -126,4 +140,4 @@ const initModelTransaction = (sequelize: Sequelize) => {
     );
 };
 
-export { Transaction, initModelTransaction };
+export { Transactions, initModelTransaction };

@@ -8,7 +8,7 @@ import { UnitLocation } from '@/database/models/UnitLocation';
 import { ContractStatusEnum } from '@/enums/ContractStatusEnum';
 
 export class ContractRepository {
-    
+
   private contract: ModelStatic<Contract>;
 
   constructor() {
@@ -49,7 +49,7 @@ export class ContractRepository {
     return this.contract.create(data);
   }
 
-  async getContractById(id: string):Promise<Contract |null> {
+  async getContractById(id: string): Promise<Contract | null> {
     return await this.contract.findByPk(id, {
       include: [
         {
@@ -77,8 +77,8 @@ export class ContractRepository {
     if (!contract) throw new NotFoundError('Contract');
 
     await contract.update(data, {
-      where:{
-        id : data.id
+      where: {
+        id: data.id
       }
     });
     return contract;
@@ -104,6 +104,7 @@ export class ContractRepository {
       }
     });
   }
+
   // // Récupérer les contrats qui expirent hier
   //   async getContractsExpiringOn(date) {
   //       const yyyy = date.getFullYear();

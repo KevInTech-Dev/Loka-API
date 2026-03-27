@@ -46,11 +46,14 @@ export class ContractService {
     }
 
     const contractNumber = await this.generateContractNumber();
-
+    //Génerer la prochaine date pour avoir une facture de loyer à dans 30 jours = 1 mois
+    const nextRentDueDate = data.contract_start_date;
+    nextRentDueDate.setDate(nextRentDueDate.getDate() + 30);
     const contract = await this.contractRepository.createContract({
       contract_number: contractNumber,
       landlord_id: data.landlord_id,
       property_id: data.property_id,
+      nextRentDueDate: nextRentDueDate,
       unit_id: data.unit_id,
       tenant_id: data.tenant_id,
       contract_type: data.contract_type,
@@ -95,23 +98,23 @@ export class ContractService {
     return (await this.contractRepository.getAllContract()).map((contract) => {
       return {
         ...contract.toJSON(),
-           is_signed_by_landlord: !!contract.landlord_signature_url || contract.is_signed_by_landlord,
-          is_signed_by_tenant: !!contract.tenant_signature_url || contract.is_signed_by_tenant,
-        };
+        is_signed_by_landlord: !!contract.landlord_signature_url || contract.is_signed_by_landlord,
+        is_signed_by_tenant: !!contract.tenant_signature_url || contract.is_signed_by_tenant,
+      };
     });
   }
 
-  async getPaginatedContract( page: number, limit: number): Promise<contractResponse[]> {
+  async getPaginatedContract(page: number, limit: number): Promise<contractResponse[]> {
     return (
       await this.contractRepository.getContractPaginated(page, limit)).map((contract) => {
-      return {
-        ...contract.toJSON(),
+        return {
+          ...contract.toJSON(),
           is_signed_by_landlord: !!contract.landlord_signature_url || contract.is_signed_by_landlord,
           is_signed_by_tenant: !!contract.tenant_signature_url || contract.is_signed_by_tenant,
         };
-    });
+      });
   }
-  async uploadContractDocUrl( id: string, files: { tenant?: Express.Multer.File; landlord?: Express.Multer.File } ) {
+  async uploadContractDocUrl(id: string, files: { tenant?: Express.Multer.File; landlord?: Express.Multer.File }) {
     const contract = await this.getContractById(id);
     if (!contract) {
       throw new NotFoundError('Contract');
@@ -119,7 +122,7 @@ export class ContractService {
 
     const uploadData: any = {};
     if (files.landlord) {
-      if ( contract.landlord_signature_url && fileExists(contract.landlord_signature_url)) {
+      if (contract.landlord_signature_url && fileExists(contract.landlord_signature_url)) {
         deleteFile(contract.landlord_signature_url);
       }
       uploadData.landlord_signature_url = files.landlord.path;
@@ -137,7 +140,7 @@ export class ContractService {
     }
     return await this.contractRepository.updateContract(id, uploadData);
   }
-  async updateContract( id: string, data: Partial<createContractInput> ): Promise<contractResponse | null> {
+  async updateContract(id: string, data: Partial<createContractInput>): Promise<contractResponse | null> {
     const existingContract = await this.contractRepository.getContractById(id);
     if (!existingContract) {
       throw new NotFoundError('Contract');
@@ -204,14 +207,14 @@ export class ContractService {
   };
   async renewContract(id: string) {
     const existingContract = await this.contractRepository.getContractById(id);
-  try {      
+    try {
       if (!existingContract) {
         throw new Error('Contract');
       }
       if (!existingContract.auto_renewal) {
         throw new Error('Auto renewal is disabled and contract status is not active');
       }
-      if(existingContract.contract_status != ContractStatusEnum.ACTIVE) {
+      if (existingContract.contract_status != ContractStatusEnum.ACTIVE) {
         throw new Error('The contract status is not active');
       }
     } catch (error) {
@@ -250,18 +253,18 @@ export class ContractService {
     if (existingContract.auto_renewal) {
       throw new Error('Auto-renewal is activated, manual renewal not allowed');
     }
-    
-    if(existingContract.contract_status !== ContractStatusEnum.ACTIVE){
+
+    if (existingContract.contract_status !== ContractStatusEnum.ACTIVE) {
       throw new Error('The contract status is not active');
     }
     const today = new Date();
     const contractEndDate = new Date(existingContract.contract_end_date);
 
-    if(contractEndDate > today) {
+    if (contractEndDate > today) {
       throw new Error("Contract has not expired yet");
     }
     const contractNumber = await this.generateContractNumber();
-    await this.contractRepository.updateContract(id, {contract_status: ContractStatusEnum.EXPIRED})
+    await this.contractRepository.updateContract(id, { contract_status: ContractStatusEnum.EXPIRED })
     const manualRenawalContract = await this.contractRepository.createContract({
       ...existingContract.toJSON(),
       contract_number: contractNumber,
@@ -276,22 +279,22 @@ export class ContractService {
     });
 
     return manualRenawalContract;
-    
+
   }
 
   async signconract(id: string, data: Partial<manualSignatureInput>) {
     const existingContract = await this.contractRepository.getContractById(id);
-    if(!existingContract){
+    if (!existingContract) {
       throw new NotFoundError("Contract");
     }
     const updateData: any = {};
-    if(data.is_signed_by_landlord){
+    if (data.is_signed_by_landlord) {
       updateData.is_signed_by_landlord = data.is_signed_by_landlord
     }
-    if(data.is_signed_by_tenant){
+    if (data.is_signed_by_tenant) {
       updateData.is_signed_by_tenant = data.is_signed_by_tenant
     }
-    if(updateData.is_signed_by_landlord == true && updateData.is_signed_by_tenant == true){
+    if (updateData.is_signed_by_landlord == true && updateData.is_signed_by_tenant == true) {
       updateData.contract_status = ContractStatusEnum.ACTIVE
     }
     const updateContract = await this.contractRepository.updateContract(id, updateData);
@@ -305,13 +308,13 @@ export class ContractService {
 
   async terminateContract(id: string) {
     const existingContract = await this.contractRepository.getContractById(id);
-    if(!existingContract){
+    if (!existingContract) {
       throw new NotFoundError("Contract");
     }
-    const updateContract = await this.contractRepository.updateContract(id, {...existingContract, contract_status: ContractStatusEnum.TERMINATED});
+    const updateContract = await this.contractRepository.updateContract(id, { ...existingContract, contract_status: ContractStatusEnum.TERMINATED });
 
     return {
       ...updateContract.toJSON(),
     }
-  } 
+  }
 }

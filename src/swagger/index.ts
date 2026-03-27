@@ -48,8 +48,8 @@ export const tags: OpenAPIV3.TagObject[] = [
     propertyTypeTags,
     abonnementsTags,
     utilisateurAbonnementTags,
-    technicalManagerTags
-    ,paymentTags,
+    technicalManagerTags,
+    paymentTags,
     transactionTags
 ];
 

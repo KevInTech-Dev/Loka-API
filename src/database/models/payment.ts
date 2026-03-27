@@ -1,9 +1,9 @@
-import {BaseModel} from "@/common/models/base.model";
-import {PaymentMethodEnum} from "@/enums/PaymentMethodEnum";
-import {PaymentProviderEnum} from "@/enums/PaymentProviderEnum";
-import {PaymentStatusEnum} from "@/enums/PaymentStatusEnum";
-import {InvoiceType} from "@/enums/InvoiceTypeEnume";
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
+import { BaseModel } from "@/common/models/base.model";
+import { PaymentMethodEnum } from "@/enums/PaymentMethodEnum";
+import { PaymentProviderEnum } from "@/enums/PaymentProviderEnum";
+import { PaymentStatusEnum } from "@/enums/PaymentStatusEnum";
+import { InvoiceType } from "@/enums/InvoiceTypeEnume";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface PaymentAttributes extends BaseModel {
     payment_reference: string;
@@ -63,14 +63,14 @@ class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implem
     declare readonly updatedAt?: Date;
 
     static associate(models: any) {
-        Payment.belongsTo(models.LandLord, {as: 'paymentLandlord', foreignKey: 'landlord_id'});
-        Payment.belongsTo(models.Tenant, {as: 'paymentTenant', foreignKey: 'tenant_id'});
-        Payment.belongsTo(models.factureLoyer, {as: 'factureLoyer', foreignKey: 'facture_loy_id'});
-        Payment.belongsTo(models.FactureAbonnement, {as: 'FactureAbonnement', foreignKey: 'facture_ab_id'});
-        Payment.belongsTo(models.factureMaintenance, {as: 'factureMaintenance', foreignKey: 'facture_mtn_id'});
-        Payment.belongsTo(models.factureElectricite, {as: 'factureElectricite', foreignKey: 'facture_elec_id'});
-        Payment.belongsTo(models.FactureEau, {as: 'FactureEau', foreignKey: 'facture_water_id'});
-        Payment.hasMany(models.Transaction, {as: 'paymentTransaction', foreignKey: 'payment_id'});
+        Payment.belongsTo(models.LandLord, { as: 'paymentLandlord', foreignKey: 'landlord_id' });
+        Payment.belongsTo(models.Tenant, { as: 'paymentTenant', foreignKey: 'tenant_id' });
+        Payment.belongsTo(models.factureLoyer, { as: 'factureLoyer', foreignKey: 'facture_loy_id' });
+        Payment.belongsTo(models.FactureAbonnement, { as: 'FactureAbonnement', foreignKey: 'facture_ab_id' });
+        Payment.belongsTo(models.factureMaintenance, { as: 'factureMaintenance', foreignKey: 'facture_mtn_id' });
+        Payment.belongsTo(models.factureElectricite, { as: 'factureElectricite', foreignKey: 'facture_elec_id' });
+        Payment.belongsTo(models.FactureEau, { as: 'FactureEau', foreignKey: 'facture_water_id' });
+        Payment.hasMany(models.Transaction, { as: 'paymentTransaction', foreignKey: 'payment_id' });
     }
 }
 
@@ -97,41 +97,41 @@ const initPaymentModel = (sequelize: Sequelize) => {
             type: DataTypes.UUID,
             allowNull: true,
             references: {
-                    model: "Facturesloyer",
-                    key: "id"
-                },
+                model: "Facturesloyer",
+                key: "id"
+            },
         },
         facture_ab_id: {
             type: DataTypes.UUID,
             allowNull: true,
             references: {
-                    model: "facturesAbonnement",
-                    key: "id"
-                },
+                model: "facturesAbonnement",
+                key: "id"
+            },
         },
         facture_water_id: {
             type: DataTypes.UUID,
             allowNull: true,
             references: {
-                    model: "facturesEau",
-                    key: "id"
-                },
+                model: "facturesEau",
+                key: "id"
+            },
         },
         facture_elec_id: {
             type: DataTypes.UUID,
             allowNull: true,
             references: {
-                    model: "FactureElectricite",
-                    key: "id"
-                },
+                model: "FactureElectricite",
+                key: "id"
+            },
         },
         facture_mtn_id: {
             type: DataTypes.UUID,
             allowNull: true,
             references: {
-                    model: "FactureMaintenance",
-                    key: "id"
-                },
+                model: "FactureMaintenance",
+                key: "id"
+            },
         },
         payment_date: {
             type: DataTypes.DATE,
@@ -143,9 +143,9 @@ const initPaymentModel = (sequelize: Sequelize) => {
             allowNull: false
         },
         currency: {
-            type: DataTypes.STRING(3),
+            type: DataTypes.STRING(),
             allowNull: false,
-            defaultValue: 'XOF'
+            // defaultValue: 'XOF'
         },
         factureType: {
             type: DataTypes.ENUM(...Object.values(InvoiceType)),
@@ -206,4 +206,4 @@ const initPaymentModel = (sequelize: Sequelize) => {
     });
 };
 
-export {Payment, initPaymentModel};
+export { Payment, initPaymentModel };

@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
+
+import { sendSuccess } from "@/common/api.response";
 import { PaymentService } from "./payment.service";
 
 export class PaymentController {
-	private readonly paymentService: PaymentService;
+	private paymentService: PaymentService;
 
 	constructor() {
 		this.paymentService = new PaymentService();

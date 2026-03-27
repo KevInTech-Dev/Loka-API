@@ -3,7 +3,8 @@ import authMiddleware from "@modules/middleware/authMiddleware";
 import { authorize } from "@modules/middleware/authorization.middleware";
 import validate from "@modules/middleware/validate.middleware";
 import { PaymentController } from "./payment.controller";
-import { CreatePaymentSchema, paymentIdSchema, paymentPaginationSchema } from "./payment.schema";
+import { createFedapaySchema, CreatePaymentSchema, paymentIdSchema, paymentPaginationSchema } from "./payment.schema";
+import { RoleEnum } from "@/enums/RoleEnum";
 
 const router: Router = Router();
 const paymentController = new PaymentController();

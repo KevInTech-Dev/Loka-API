@@ -20,7 +20,7 @@ export class AuthController {
 
 
     login = async (req: Request, res: Response) => {
-        console.log(req.body);
+        //console.log(req.body);
         sendSuccess(
             res,
             await this.authService.login(req.body as LoginInput),

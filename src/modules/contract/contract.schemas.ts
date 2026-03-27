@@ -15,7 +15,7 @@ const createContractSchema = z.object({
     unit_id: z.uuid("Invalid landlord id format"),
     tenant_id: z.uuid("Invalid landlord id format"),
     contract_type: z.enum(ContractTypeEnum),
-    contract_start_date: z.coerce.date(),
+    contract_start_date: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/).transform((v) => { return new Date(v) }),
     contract_end_date: z.coerce.date(),
     monthly_rent: z.number(),
     security_deposit: z.number(),

@@ -10,6 +10,62 @@ const paymentTags: OpenAPIV3.TagObject = {
 };
 
 const paymentSchema: OpenAPIV3.ComponentsObject["schemas"] = {
+	createPaymentFedapay: {
+		type: "object",
+		properties: {
+			description: {
+				type: "string",
+				description: "Description of the transaction"
+			},
+			amount: {
+				type: "number",
+				description: "Number to send within the request"
+			},
+			currency: {
+				type: "string",
+				description: "Currency"
+			}
+		},
+		required: ["description", "amount", "currency"]
+	},
+	fedaPayResponse: {
+		type: "object",
+		properties: {
+			id: {
+				type: "string",
+				description: "Id of the transaction"
+			},
+			reference: {
+				type: "string",
+				description: "reference of the transaction"
+			},
+			amount: {
+				type: "string",
+				description: "Amount of the transaction"
+			},
+			description: {
+				type: "string",
+				description: "Description of the transaction"
+			},
+			callbackurl: {
+				type: "string",
+				description: "CallBackUrl of the transaction"
+			},
+			status: {
+				type: "string",
+				description: "Status of the transaction"
+			},
+			createdAt: {
+				type: "string",
+				description: "Created date of the transaction"
+			},
+			updatedAt: {
+				type: "string",
+				description: "Updated date of the transaction"
+			},
+		},
+		required: ["id", "reference", "amount", "description", "callbackurl", "status", "createdAt", "updatedAt"]
+	},
 	createPaymentRequest: {
 		type: "object",
 		properties: {
@@ -110,17 +166,59 @@ const paymentSchema: OpenAPIV3.ComponentsObject["schemas"] = {
 
 const paymentPath: OpenAPIV3.PathsObject = {
 	"/payments": {
+		// post: {
+		// 	tags: ["Payment"],
+		// 	summary: "Create a payment",
+		// 	security: [{ bearerAuth: [] }],
+		// 	description: "Create a new payment for a specific facture",
+		// 	requestBody: {
+		// 		required: true,
+		// 		content: {
+		// 			"application/json": {
+		// 				schema: {
+		// 					$ref: "#/components/schemas/createPaymentRequest"
+		// 				}
+		// 			}
+		// 		}
+		// 	},
+		// 	responses: {
+		// 		"200": {
+		// 			description: "Payment created successfully",
+		// 			content: {
+		// 				"application/json": {
+		// 					schema: {
+		// 						type: "object",
+		// 						properties: {
+		// 							data: {
+		// 								$ref: "#/components/schemas/payment"
+		// 							}
+		// 						}
+		// 					}
+		// 				}
+		// 			}
+		// 		},
+		// 		"400": {
+		// 			description: "Invalid input or provider/currency incompatibility"
+		// 		},
+		// 		"401": {
+		// 			description: "Unauthorized"
+		// 		},
+		// 		"404": {
+		// 			description: "Facture not found"
+		// 		}
+		// 	}
+		// },
 		post: {
 			tags: ["Payment"],
 			summary: "Create a payment",
 			security: [{ bearerAuth: [] }],
-			description: "Create a new payment for a specific facture",
+			description: "Create a new payment",
 			requestBody: {
 				required: true,
 				content: {
 					"application/json": {
 						schema: {
-							$ref: "#/components/schemas/createPaymentRequest"
+							$ref: "#/components/schemas/createPaymentFedapay"
 						}
 					}
 				}
@@ -134,7 +232,7 @@ const paymentPath: OpenAPIV3.PathsObject = {
 								type: "object",
 								properties: {
 									data: {
-										$ref: "#/components/schemas/payment"
+										$ref: "#/components/schemas/fedaPayResponse"
 									}
 								}
 							}

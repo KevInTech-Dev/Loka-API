@@ -10,7 +10,7 @@ import { Tenant } from "@/database/models/Tenants";
 import { User } from "@/database/models/Users";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
 import { RoleEnum } from "@/enums/RoleEnum";
-import { CreationAttributes } from "sequelize";
+import { CreationAttributes, Transaction } from "sequelize";
 
 type FactureDetails =
     | FactureLoyer
@@ -24,9 +24,9 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
     constructor() {
         super(Payment);
     }
-    
-    async create(paymentData: CreationAttributes<Payment>): Promise<Payment> {
-        return this.model.create(paymentData);
+
+    async create(paymentData: CreationAttributes<Payment>, transaction?: Transaction): Promise<Payment> {
+        return this.model.create(paymentData, { transaction });
     }
 
     async findById(id: string): Promise<Payment | null> {
@@ -42,18 +42,22 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
             ]
         });
     }
-    
+
     async getPaymentPaginated(page: number, limit: number, userId: string, role: string) {
         const offset = (page - 1) * limit;
-        
+
         const { rows, count } = await this.model.findAndCountAll({
-            where:{
-                ...(role === RoleEnum.PROPRIETAIRE && { landlord_id:{
-                    include: [{ model: User, as: 'userLandlord', where: { id: userId } }]
-                } }),
-                ...(role === RoleEnum.LOCATAIRE && { tenant_id: {
-                    include: [{ model: User, as: 'userTenant', where: { id: userId } }]
-                }}),
+            where: {
+                ...(role === RoleEnum.PROPRIETAIRE && {
+                    landlord_id: {
+                        includes: [{ model: User, as: 'userLandlord', where: { id: userId } }]
+                    }
+                }),
+                ...(role === RoleEnum.LOCATAIRE && {
+                    tenant_id: {
+                        includes: [{ model: User, as: 'userTenant', where: { id: userId } }]
+                    }
+                }),
             },
             limit,
             offset,
@@ -63,7 +67,7 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
             ],
             order: [['createdAt', 'DESC']],
         });
-        
+
         return { rows, count };
 
     }
@@ -78,19 +82,20 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
         });
     }
 
-    async getFactureByTypeAndId(invoiceType: InvoiceType, factureId: string): Promise<FactureDetails | null> {
+    async getFactureByTypeAndId(invoiceType: InvoiceType, factureId: string, transaction?: Transaction): Promise<FactureDetails | null> {
+        const options = transaction ? { transaction } : {};
         switch (invoiceType) {
             case InvoiceType.FACTURE_LOYER:
-                return FactureLoyer.findByPk(factureId);
+                return FactureLoyer.findByPk(factureId, options);
             case InvoiceType.FACTURE_EAU:
-                return FactureEau.findByPk(factureId);
+                return FactureEau.findByPk(factureId, options);
             case InvoiceType.FACTURE_ELEC:
-                return FactureElectricite.findByPk(factureId);
+                return FactureElectricite.findByPk(factureId, options);
             case InvoiceType.FACTURE_MAINTENANCE:
-                return FactureMaintenance.findByPk(factureId);
+                return FactureMaintenance.findByPk(factureId, options);
             case InvoiceType.ABONNEMENT:
             case InvoiceType.ABONNEMENT_TRIAL:
-                return FactureAbonnement.findByPk(factureId);
+                return FactureAbonnement.findByPk(factureId, options);
             default:
                 return null;
         }

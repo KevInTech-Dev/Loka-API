@@ -1,16 +1,18 @@
-import { Transaction } from "@/database/models/Transaction";
+import { Transaction, Transactions} from "@/database/models/Transaction";
 import { TransactionMapper } from "./transaction.mappers";
 import { TransactionRepository } from "./transaction.repository";
 import { CreateTransactionInput } from "./transaction.schema";
 import { TransactionResponse } from "./transaction.type";
 import { Op } from "sequelize";
+import env from '@/config/env';
 import { PaymentRepository } from "../Payment/payment.repository";
-import { ForbiddenError, NotFoundError, UnauthorizedError } from "@/common/errors";
+import {BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } from "@/common/errors";
 import { TransactionStatusEnum } from "@/enums/TransactionStatusEnum";
+import { landLordRepository } from "../landLord/landlord.repository";
+import { UserRepository } from "../users/user.repository";
 import { RoleEnum } from "@/enums/RoleEnum";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
 import { TransactionTypeEnum } from "@/enums/TransactionTypeEnum";
-import { landLordRepository } from "../landLord/landlord.repository";
 import { TenantRepository } from "../tenant/tenant.repository";
 import { Payment } from "@/database/models/payment";
 
@@ -21,46 +23,88 @@ export class TransactionService {
     private paymentRepository: PaymentRepository;
     private landlordRepository :  landLordRepository;
     private tenantRepository : TenantRepository;
+    private utilisateurRepository: UserRepository;
 
     constructor() {
         this.transactionRepository = new TransactionRepository();
         this.transactionMapper = new TransactionMapper();
         this.paymentRepository = new PaymentRepository();
         this.landlordRepository = new landLordRepository();
+        this.utilisateurRepository = new UserRepository()
+        this.landlordRepository = new landLordRepository();
         this.tenantRepository = new TenantRepository();
     }
 
-    async createTransaction(userId: string, role: string, transactionData: CreateTransactionInput) : Promise<TransactionResponse> {
+   /* async createTransaction(transactionData: CreateTransactionInput): Promise<TransactionResponse> {
         const payment = await this.paymentRepository.findById(transactionData.payment_id)
-        if(!payment){
+        if (!payment) {
             throw new NotFoundError("Payment")
         }
-        await this.assertPaymentOwnership(payment, userId, role)
 
+        const alreadyInitialized = await Transactions.findOne({
+    async createTransaction(transactionData: CreateTransactionInput): Promise<TransactionResponse> {
+            where: {
+                payment_id: payment.id,
+                transaction_status: {
+                    [Op.in]: [TransactionStatusEnum.PENDING, TransactionStatusEnum.COMPLETED],
+                },
+            },
+        });
+        if (alreadyInitialized) {
+            throw new BadRequestError("Transaction already initialized for this payment");
+        }
         const transactionReference = await this.generateTransactionReference();
-        const transaction = await this.transactionRepository.create(this.transactionMapper.toEntity({
-            ...transactionData,
-            transaction_type: this.mapInvoiceTypeToTransactionType(payment.factureType),
-            transaction_status: TransactionStatusEnum.PENDING,
-            transaction_reference: transactionReference,
-            transaction_date: new Date(),
-            description: `Transaction for payment ${payment.payment_reference}`,
-            amount: payment.amount_paid,
-            currency: payment.currency,
-            metadata: {
-                payment_reference: payment.payment_reference,
-                factureType: payment.factureType,
-                payer_email: payment.payer_email,
-                payer_phone: payment.payer_phone,
+
+        //recuperer l'utilisateur qui effectue le paiement
+        const landlordTransaction = await this.landlordRepository.findById(transactionData.landlord_id);
+        if (!landlordTransaction) {
+            throw new NotFoundError("Landlord was")
+        }
+        const userTransaction = await this.utilisateurRepository.findById(landlordTransaction.userId);
+        if (!userTransaction) {
+            throw new NotFoundError("User was")
+        }
+
+
+        const { FedaPay, Transaction } = require('fedapay');
+        FedaPay.setApiKey(env.FEDAPAY_SECRET_KEY);
+        FedaPay.setEnvironment(env.FEDAPAY_ENVIRONNEMENT);
+        const transactionF = await Transaction.create({
+            description: 'PAIEMENT DE FACTURE',
+            amount: transactionData.amount,
+            currency: { iso: 'XOF' },
+            callback_url: 'https://example.com/callback',
+            mode: 'mtn_open',
+            customer: {
+                id: userTransaction.id,
+                email: userTransaction.email,
+                firstname: userTransaction.firstname,
+                lastname: userTransaction.lastname,
+                phone_number: userTransaction.phoneNumber
             }
-        }));
+        });
+
+        const transaction = await this.transactionRepository.create(
+            {
+                ...transactionData,
+                idFedapay: transactionF.id,
+                referenceFedapay: transactionF.reference,
+                transaction_status: transactionF.status,
+                transaction_reference: transactionReference,
+                callback_url: transactionF.callback_url
+            }
+
+
+        );
         return this.transactionMapper.toResponse(transaction);
-    }
+    }*/
+
+
 
     async getTransactions(userId: string, role: string, page: number, limit: number): Promise<{ data: TransactionResponse[] , total: number}> {
         const senderId = await this.resolveSenderId(userId, role);
         const { rows, count } = await this.transactionRepository.getTransactionPaginated(page, limit, { role, senderId });
-        return { 
+        return {
             data: rows.map((t) => this.transactionMapper.toResponse(t)), total: count };
     }
 
@@ -80,7 +124,7 @@ export class TransactionService {
         const day = String(now.getDate()).padStart(2, "0");
         const datePart = `${year}${month}${day}`;
 
-        const countToday = await Transaction.count({
+        const countToday = await Transactions.count({
             where: {
                 transaction_reference: {
                     [Op.like]: `TXN-${datePart}-%`,
@@ -111,7 +155,7 @@ export class TransactionService {
     }
     private async resolveSenderId(userId: string, role: string): Promise<string | undefined> {
         if (role === RoleEnum.ADMIN) {
-            return undefined; 
+            return undefined;
         }
         return userId;
     }
