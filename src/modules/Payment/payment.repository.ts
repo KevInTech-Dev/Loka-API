@@ -102,7 +102,7 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
         }
     }
 
-    async refundPayment(id: string, refundReason: string): Promise<Payment | null> {
+    async refundPayment(id: string, refundReason?: string): Promise<Payment | null> {
         const payment = await this.model.findByPk(id);
         if (!payment) {
             return null;

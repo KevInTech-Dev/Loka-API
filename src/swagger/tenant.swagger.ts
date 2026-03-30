@@ -290,7 +290,7 @@ const tenantPath: OpenAPIV3.PathsObject = {
                         }
                     }
                 },
-                "400": {
+                "404": {
                     description: "tenant not found"
                 }
             }
