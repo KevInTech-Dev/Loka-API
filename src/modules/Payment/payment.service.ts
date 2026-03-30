@@ -119,6 +119,10 @@ export class PaymentService {
         return { data: rows.map((payment) => this.paymentMapper.toResponse(payment)), total: count };
     }
 
+    async refundPayment(id: string, ) {
+
+    }
+
     private toNumber(value: unknown): number {
         return Number(value || 0);
     }
@@ -291,43 +295,7 @@ export class PaymentService {
         return `PAY-${year}-${month}${paddedNumber}`;
     }
 
-    /*private async generateTransactionReference(): Promise<string> {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const day = String(now.getDate()).padStart(2, "0");
-        const datePart = `${year}${month}${day}`;
-
-        const countToday = await Transaction.count({
-            where: {
-                transaction_reference: {
-                    [Op.like]: `TXN-${datePart}-%`,
-                },
-            },
-        });
-
-        const nextNumber = String(countToday + 1).padStart(3, "0");
-        return `TXN-${datePart}-${nextNumber}`;
-    }*/
-
-    /*private mapInvoiceTypeToTransactionType(invoiceType: InvoiceType): TransactionTypeEnum {
-        switch (invoiceType) {
-            case InvoiceType.FACTURE_LOYER:
-                return TransactionTypeEnum.LOYER;
-            case InvoiceType.FACTURE_EAU:
-                return TransactionTypeEnum.EAU;
-            case InvoiceType.FACTURE_ELEC:
-                return TransactionTypeEnum.ELECTRICITE;
-            case InvoiceType.FACTURE_MAINTENANCE:
-                return TransactionTypeEnum.MAINTENANCE;
-            case InvoiceType.ABONNEMENT:
-            case InvoiceType.ABONNEMENT_TRIAL:
-                return TransactionTypeEnum.ABONNEMENT;
-            default:
-                return TransactionTypeEnum.AUTRE;
-        }
-    }*/
-
+   
     private assertProviderCurrencyCompatibility(provider: PaymentProviderEnum, currency: CurrencyCode): void {
         const supportedCurrenciesByProvider: Record<PaymentProviderEnum, CurrencyCode[]> = {
             [PaymentProviderEnum.FEDAPAY]: ["XOF"],
