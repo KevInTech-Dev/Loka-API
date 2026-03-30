@@ -59,19 +59,19 @@ const initModels = async () => {
             model.associate(sequelize.models);
         }
     });
-    
+
     console.log(" All models initialized successfully");
 };
 
 // Exécuter l'initialisation
-initModels().catch(error => 
+initModels().catch(error =>
     console.error(" Unable to initialize models:", error)
 );
 
-export { 
-    sequelize, 
-    testConnection, 
-    syncDatabase, 
-    closeConnection, 
-    initModels 
+export {
+    sequelize,
+    testConnection,
+    syncDatabase,
+    closeConnection,
+    initModels
 };

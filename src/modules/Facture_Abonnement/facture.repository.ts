@@ -50,4 +50,12 @@ export class FactureAbonnementRepository extends BaseRepositoryImpl<FactureAbonn
         return this.model.count()
     }
 
+    checkIfInvoiceNumberExist = async (invoiceNumber: string): Promise<FactureAbonnement> => {
+        return this.model.findOne({
+            where: {
+                numeroFacture: invoiceNumber,
+            }
+        })
+    }
+
 }

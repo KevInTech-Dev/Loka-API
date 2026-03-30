@@ -19,11 +19,13 @@ router.get("", userController.getAllUsers);
 
 
 // create user
-router.post("", authMiddleware, authorize(["admin"]), singleUpload({
-    fieldName: "photo",
-    fileType: 'image',
-    subFolder: "profiles",
-}), validate(createUserSchema, "body"), userController.createUser);
+router.post("",
+    authMiddleware,
+    authorize(["admin"]), singleUpload({
+        fieldName: "photo",
+        fileType: 'image',
+        subFolder: "profiles",
+    }), validate(createUserSchema, "body"), userController.createUser);
 
 router.post("/photo/:id", validate(userIdShema, 'params'), singleUpload({
     fieldName: "photo",

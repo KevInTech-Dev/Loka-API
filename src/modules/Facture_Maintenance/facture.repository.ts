@@ -45,4 +45,12 @@ export class FactureMaintenanceRepository extends BaseRepositoryImpl<FactureMain
             }
         })
     }
+
+    checkIfInvoiceNumberExist = async (invoiceNumber: string): Promise<FactureMaintenance> => {
+        return this.model.findOne({
+            where: {
+                numeroFacture: invoiceNumber,
+            }
+        })
+    }
 }

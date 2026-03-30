@@ -2,9 +2,10 @@ import { TransactionStatusEnum } from "@/enums/TransactionStatusEnum"
 import { TransactionTypeEnum } from "@/enums/TransactionTypeEnum"
 import { OpenAPIV3 } from "openapi-types"
 import { tags } from ".";
+import { InvoiceType } from "@/enums/InvoiceTypeEnume";
 
 
-const transactionTags : OpenAPIV3.TagObject = {
+const transactionTags: OpenAPIV3.TagObject = {
     name: "Transaction",
     description: "Operations related to transactions management"
 }
@@ -13,15 +14,19 @@ const TransactionSchema: OpenAPIV3.ComponentsObject["schemas"] = {
     initializeTransactionRequest: {
         type: "object",
         properties: {
-            payment_id: {
+            numero_facture: {
                 type: "string",
-                format: "uuid",
-                description: "Unique identifier of the payment associated with the transaction"
+                description: "Invoice Number"
             },
+            type_facture: {
+                type: "string",
+                enum: [...Object.values(InvoiceType)],
+                default: "ABONNEMENT | ABONNEMENT_TRIAL | FACTURE_EAU | FACTURE_ELEC | FACTURE_MAINTENANCE | FACTURE_LOY"
+            }
         },
-        required: ["payment_id"]
-     },
-     transactionResponse: {
+        required: ["numero_facture", "type_facture"]
+    },
+    transactionResponse: {
         type: "object",
         properties: {
             id: {
@@ -46,7 +51,6 @@ const TransactionSchema: OpenAPIV3.ComponentsObject["schemas"] = {
             },
             transaction_status: {
                 type: "string",
-                enum: [...Object.values(TransactionStatusEnum)],
                 description: "Status of the transaction"
             },
             transaction_reference: {
@@ -86,9 +90,9 @@ const TransactionSchema: OpenAPIV3.ComponentsObject["schemas"] = {
                 description: "Date and time when the transaction was last updated"
             }
         }
-     },
+    },
 
-     PaginatedTransactionResponse: {
+    PaginatedTransactionResponse: {
         type: "object",
         properties: {
             page: {
@@ -106,7 +110,7 @@ const TransactionSchema: OpenAPIV3.ComponentsObject["schemas"] = {
                 }
             }
         }
-     }
+    }
 };
 
 const transactionPath: OpenAPIV3.PathsObject = {
@@ -142,7 +146,7 @@ const transactionPath: OpenAPIV3.PathsObject = {
                         }
                     }
                 },
-                    "400": {
+                "400": {
                     description: "Bad Request - Invalid input data or payment not found"
                 }
             }
@@ -226,7 +230,7 @@ const transactionPath: OpenAPIV3.PathsObject = {
     }
 };
 
-export  {
+export {
     transactionPath,
     transactionTags,
     TransactionSchema

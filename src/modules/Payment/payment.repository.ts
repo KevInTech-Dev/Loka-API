@@ -1,11 +1,12 @@
 import { BaseRepositoryImpl } from "@/common/base.repository";
+import { NotFoundError } from "@/common/errors";
 import { FactureAbonnement } from "@/database/models/FactureAbonnment";
 import { FactureEau } from "@/database/models/FactureEau";
 import { FactureElectricite } from "@/database/models/FactureElectricite";
 import { FactureLoyer } from "@/database/models/FactureLoyer";
 import { FactureMaintenance } from "@/database/models/FacturesMaintenance";
 import { LandLord } from "@/database/models/landLord";
-import { Payment } from "@/database/models/payment";
+import { Payment, PaymentCreationAttributes } from "@/database/models/payment";
 import { Tenant } from "@/database/models/Tenants";
 import { User } from "@/database/models/Users";
 import { InvoiceType } from "@/enums/InvoiceTypeEnume";
@@ -109,5 +110,49 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
         payment.refund_reason = refundReason;
         payment.refund_at = new Date();
         return await payment.save();
+    }
+
+    async getPaymentWithInvoiceId(invoiceNumber: string, typeFacture: InvoiceType) {
+        if (typeFacture = InvoiceType.ABONNEMENT) {
+            return this.model.findOne({
+                where: {
+                    facture_ab_id: invoiceNumber,
+                }
+            })
+        } else if (typeFacture = InvoiceType.FACTURE_EAU) {
+            return this.model.findOne({
+                where: {
+                    facture_water_id: invoiceNumber,
+                }
+            })
+        } else if (typeFacture = InvoiceType.FACTURE_ELEC) {
+            return this.model.findOne({
+                where: {
+                    facture_elec_id: invoiceNumber,
+                }
+            })
+        } else if (typeFacture = InvoiceType.FACTURE_LOYER) {
+            return this.model.findOne({
+                where: {
+                    facture_loy_id: invoiceNumber,
+                }
+            })
+        } else if (typeFacture = InvoiceType.FACTURE_MAINTENANCE) {
+            return this.model.findOne({
+                where: {
+                    facture_mtn_id: invoiceNumber,
+                }
+            })
+        }
+
+    }
+
+    async updatePayment(id: string, data: PaymentCreationAttributes) {
+        const paymentObject = await this.findById(id);
+        if (!paymentObject) {
+            throw new NotFoundError("PAYMENT NOT FOUND");
+        }
+        await paymentObject.update(data);
+        return paymentObject
     }
 }

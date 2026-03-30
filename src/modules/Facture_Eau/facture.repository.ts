@@ -44,4 +44,11 @@ export class FactureEauRepository extends BaseRepositoryImpl<FactureEau> {
     getLastInvNumber = async (): Promise<number> => {
         return this.model.count()
     }
+    checkIfInvoiceNumberExist = async (invoiceNumber: string): Promise<FactureEau> => {
+        return this.model.findOne({
+            where: {
+                numeroFacture: invoiceNumber,
+            }
+        })
+    }
 }

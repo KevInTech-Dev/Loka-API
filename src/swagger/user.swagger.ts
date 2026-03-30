@@ -97,8 +97,12 @@ const userSchema: OpenAPIV3.ComponentsObject['schemas'] = {
                 type: "string",
                 description: "Optional last name"
             },
+            phoneNumber: {
+                type: "string",
+                description: "Phone number"
+            }
         },
-        required: ["photo", "email", "password", "username"]
+        required: ["photo", "email", "password", "username", "phoneNumber"]
     },
     paginatedUsers: {
         type: "object",

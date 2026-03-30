@@ -24,6 +24,9 @@ export class Utilisateur_AbonnementController {
     };
 
 
+    
+
+
     //Pagination a faire plus tard, ne plus uiliser getAll 
 
     getAbonnementPaginated = asyncHandler(async (req: Request, res: Response) => {

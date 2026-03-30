@@ -5,14 +5,15 @@ import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface TransactionAttributes extends BaseModel {
     payment_id: string;
-    landlord_id?: string | null;
     idFedapay: string;
     referenceFedapay: string;
     sender_id?: string;
     transaction_type: TransactionTypeEnum;
     transaction_status: string;
     transaction_reference: string;
-    //transaction_date: Date;
+    operation: string;
+    payment_token: string;
+    payment_url: string;
     amount: number;
     currency: string;
     description: string;
@@ -22,23 +23,23 @@ export interface TransactionAttributes extends BaseModel {
 
 export interface TransactionCreationAttributes extends Optional<
     TransactionAttributes,
-    "id" | "createdAt" | "updatedAt" | "metadata" | "sender_id"
+    "id" | "createdAt" | "updatedAt" | "metadata"
 > { }
 
-class Transaction
+class Transactions
     extends Model<TransactionAttributes, TransactionCreationAttributes>
-    implements TransactionAttributes
-{
+    implements TransactionAttributes {
     declare id: string;
     declare payment_id: string;
     declare sender_id?: string;
-    declare landlord_id?: string | null;
+    declare operation: string;
+    declare payment_token: string;
+    declare payment_url: string;
     declare transaction_type: TransactionTypeEnum;
     declare transaction_status: string;
     declare transaction_reference: string;
     declare idFedapay: string;
     declare referenceFedapay: string;
-    //declare transaction_date: Date;
     declare amount: number;
     declare currency: string;
     declare description: string;
@@ -60,12 +61,24 @@ class Transaction
 }
 
 const initModelTransaction = (sequelize: Sequelize) => {
-    Transaction.init(
+    Transactions.init(
         {
             id: {
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
                 primaryKey: true
+            },
+            operation: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            payment_token: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            payment_url: {
+                type: DataTypes.STRING,
+                allowNull: false
             },
             payment_id: {
                 type: DataTypes.UUID,

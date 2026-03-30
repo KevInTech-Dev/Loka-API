@@ -68,4 +68,12 @@ export class FactureLoyerRepository extends BaseRepositoryImpl<FactureLoyer> {
             }
         })
     }
+
+    checkIfInvoiceNumberExist = async (invoiceNumber: string): Promise<FactureLoyer> => {
+        return this.model.findOne({
+            where: {
+                numeroFacture: invoiceNumber,
+            }
+        })
+    }
 }

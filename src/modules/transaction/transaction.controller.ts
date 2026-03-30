@@ -9,16 +9,23 @@ export class TransactionController {
         this.transactionService = new TransactionService();
     }
 
-    createTransaction = async(req: Request, res: Response) => {
+    createTransaction = async (req: Request, res: Response) => {
         const userId = req.user.id;
         const role = req.user.role;
         const data: CreateTransactionInput = req.body;
         return res.send({
-            data: await this.transactionService.createTransaction(userId, role, {...data, sender_id: userId}),
+            data: await this.transactionService.createTransaction(role, userId, { ...data }),
         });
     }
 
-    getPaginatedTransactions = async(req: Request, res: Response) => {
+    getCallBackUrl = async (req: Request, res: Response) => {
+        const idTransaction = parseInt(req.query.id as string);
+        console.log("--------------------------------------------------------> : ", idTransaction);
+        const data = await this.transactionService.getCallBackUrl(idTransaction);
+        return res.status(200).json(req.query)
+    }
+
+    getPaginatedTransactions = async (req: Request, res: Response) => {
         const userId = req.user.id;
         const role = req.user.role;
         const page = parseInt(req.query.page as string) || 1;
@@ -32,7 +39,7 @@ export class TransactionController {
         });
     }
 
-    getTransactionById = async(req: Request, res: Response) => {
+    getTransactionById = async (req: Request, res: Response) => {
         const userId = req.user.id;
         const role = req.user.role;
         const id = req.params.id as string;
