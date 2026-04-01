@@ -82,7 +82,7 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
             }
         });
     }
-
+ 
     async getFactureByTypeAndId(invoiceType: InvoiceType, factureId: string, transaction?: Transaction): Promise<FactureDetails | null> {
         const options = transaction ? { transaction } : {};
         switch (invoiceType) {
@@ -113,31 +113,31 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
     }
 
     async getPaymentWithInvoiceId(invoiceNumber: string, typeFacture: InvoiceType) {
-        if (typeFacture = InvoiceType.ABONNEMENT) {
+        if (typeFacture === InvoiceType.ABONNEMENT) {
             return this.model.findOne({
                 where: {
                     facture_ab_id: invoiceNumber,
                 }
             })
-        } else if (typeFacture = InvoiceType.FACTURE_EAU) {
+        } else if (typeFacture === InvoiceType.FACTURE_EAU) {
             return this.model.findOne({
                 where: {
                     facture_water_id: invoiceNumber,
                 }
             })
-        } else if (typeFacture = InvoiceType.FACTURE_ELEC) {
+        } else if (typeFacture === InvoiceType.FACTURE_ELEC) {
             return this.model.findOne({
                 where: {
                     facture_elec_id: invoiceNumber,
                 }
             })
-        } else if (typeFacture = InvoiceType.FACTURE_LOYER) {
+        } else if (typeFacture === InvoiceType.FACTURE_LOYER) {
             return this.model.findOne({
                 where: {
                     facture_loy_id: invoiceNumber,
                 }
             })
-        } else if (typeFacture = InvoiceType.FACTURE_MAINTENANCE) {
+        } else if (typeFacture === InvoiceType.FACTURE_MAINTENANCE) {
             return this.model.findOne({
                 where: {
                     facture_mtn_id: invoiceNumber,
@@ -147,7 +147,7 @@ export class PaymentRepository extends BaseRepositoryImpl<Payment> {
 
     }
 
-    async updatePayment(id: string, data: PaymentCreationAttributes) {
+    async updatePayment(id: string, data: Partial<PaymentCreationAttributes>): Promise<Payment> {
         const paymentObject = await this.findById(id);
         if (!paymentObject) {
             throw new NotFoundError("PAYMENT NOT FOUND");

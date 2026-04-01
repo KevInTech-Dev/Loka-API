@@ -2,6 +2,7 @@ import { RefundStatusEnum } from "@/enums/refundStatusEnum";
 import z from "zod";
 
 const RefundSchema = z.object({
+    transactionReference: z.string(),
     refundReason: z.string().optional(),
 });
 
@@ -14,23 +15,12 @@ const refundIdSchema = z.object({
 });
 
 const refundPaymentPagination = z.object({
-    page: z.number(),
-    limit: z.number()
-})
-type RefundSchemaType = z.infer<typeof RefundSchema> & {
-    transactionReference: string;
-    paymentId: string;
-    refundAmount: number;
-    refundStatus: RefundStatusEnum;
-    allowRefund: boolean;
-};
-type allowRefundSchemaType = z.infer<typeof allowRefundSchema> & {
-    transactionReference: string;
-    paymentId: string;
-    refundAmount: number;
-    refundStatus: RefundStatusEnum;
-    refundReason?: string;
-};
+    page: z.coerce.number().min(1).default(1),
+    limit: z.coerce.number().min(1).default(10)
+});
+
+type RefundSchemaType = z.infer<typeof RefundSchema>;
+type allowRefundSchemaType = z.infer<typeof allowRefundSchema>;
 type refundIdSchemaType = z.infer<typeof refundIdSchema>;
 type refundPaginationParams = z.infer<typeof refundPaymentPagination>;
 

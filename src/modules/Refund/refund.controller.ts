@@ -12,7 +12,7 @@ export class RefundController {
     initializeRefundPayment = async (req: Request, res: Response) => {
         const userId = req.user.id;
         const data : RefundSchemaType = req.body;
-        const refundPayment = await this.refundService.createRdefundPayment(userId, data);
+        const refundPayment = await this.refundService.createRefundPayment(userId, data);
         return res.send({ data: refundPayment });
     }
 

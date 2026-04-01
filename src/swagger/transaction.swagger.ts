@@ -21,7 +21,6 @@ const TransactionSchema: OpenAPIV3.ComponentsObject["schemas"] = {
             type_facture: {
                 type: "string",
                 enum: [...Object.values(InvoiceType)],
-                default: "ABONNEMENT | ABONNEMENT_TRIAL | FACTURE_EAU | FACTURE_ELEC | FACTURE_MAINTENANCE | FACTURE_LOY"
             }
         },
         required: ["numero_facture", "type_facture"]

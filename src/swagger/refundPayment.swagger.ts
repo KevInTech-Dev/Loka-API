@@ -14,9 +14,13 @@ const RefundSchema : OpenAPIV3.ComponentsObject['schemas'] =  {
                 type: 'string',
                 description: "Refund Payment's reason",
                 nullable: true
+            },
+            transactionReference: {
+                type: 'string',
+                description: "Reference of the transaction to be refunded"
             }
         },
-        required: ["refundReason"]
+        required: ["transactionReference"]
     },
     RefundPaymentResponse: {
         type: 'object',
@@ -57,6 +61,7 @@ const refundPaymentPath : OpenAPIV3.PathsObject = {
         post: {
             tags: ["RefundPayment"],
             summary: "Initialize a new refund payement",
+            security: [{ bearerAuth: [] }],
             description: "A new refund payment initialisation",
             requestBody: {
                 required: true,
@@ -95,6 +100,7 @@ const refundPaymentPath : OpenAPIV3.PathsObject = {
         get: {
             tags:  ["RefundPayment"],
             summary: "Get all refund payment with pagination",
+            security: [{ bearerAuth: [] }],
             description: "Get all refund payment with pagination",
             parameters: [
                 {
@@ -149,6 +155,7 @@ const refundPaymentPath : OpenAPIV3.PathsObject = {
             tags: ["RefundPayment"],
             summary: "Get a refund payment by id",
             description: "Get a refund payment by it's id",
+            security: [{ bearerAuth: [] }],
             parameters:  [
                 {
                     name: "id",
@@ -177,8 +184,58 @@ const refundPaymentPath : OpenAPIV3.PathsObject = {
         },
         patch: {
             tags: ["RefundPayment"],
-            summary: "Approve refund payment",
-            description: "Approve refund payment",
+            summary: "Approve refund payment By landlord",
+            description: "Approve refund payment By landlord",
+            security: [{ bearerAuth: [] }],
+            parameters:  [
+                {
+                    name: "id",
+                    in: "path",
+                    schema: {
+                        type: "string"
+                    },
+                    description: "The unique identifier of the refund payment"
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json" : {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                allowRefund: {
+                                    type: "boolean",
+                                    description: "Whether the refund is allowed or not"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                "200" : {
+                    description: "Refund payment updated",
+                    content: {
+                        "application/json" : {
+                            schema: {
+                                $ref: "#/components/schemas/RefundPaymentResponse"
+                            }
+                        }
+                    }
+                },
+                "400" : {
+                    description: "Invalid request data"
+                }
+            }
+        }
+    },
+    "/refundPayment/{id}/admin" : {
+        patch: {
+            tags: ["RefundPayment"],
+            summary: "Approve refund payment by admin",
+            security: [{ bearerAuth: [] }],
+            description: "Approve refund payment by admin",
             parameters:  [
                 {
                     name: "id",
@@ -223,7 +280,7 @@ const refundPaymentPath : OpenAPIV3.PathsObject = {
         }
     }
 }
-
+ 
 export {
     RefundTags,
     RefundSchema,

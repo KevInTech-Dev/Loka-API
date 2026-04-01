@@ -14,6 +14,14 @@ export class RefundPaymentRepository {
         return this.RefundPayment.create(data);
     }
 
+    async findByTransactionReference(transactionReference: string) {
+        return this.RefundPayment.findOne({
+            where: {
+                transactionReference,
+            },
+        });
+    }
+
     async getRefundPaymentById(id: string) {
         return this.RefundPayment.findByPk(id);
     }

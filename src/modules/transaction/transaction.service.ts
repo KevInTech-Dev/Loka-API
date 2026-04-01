@@ -357,7 +357,11 @@ export class TransactionService {
                 if (!checkRentInvoice) {
                     throw new NotFoundError("Rent invoice");
                 }
+
                 const loyInvoicePaymentId = await this.paymentRepository.getPaymentWithInvoiceId(checkRentInvoice.id, InvoiceType.FACTURE_LOYER);
+                if (!loyInvoicePaymentId) {
+                    throw new NotFoundError("Payment associated to rent invoice was not found");
+                }
                 const transactionReferenceLoy = await this.generateTransactionReference();
 
                 //recuperer l'utilisateur qui effectue le paiement
@@ -388,7 +392,7 @@ export class TransactionService {
                         }
                     });
                     console.log("---------------------------->",
-                        loyInvoicePaymentId.id, transactionFLoy.id, userTransactionElec.id
+                        loyInvoicePaymentId.id, transactionFLoy.id, userTransactionLoy.id
 
                     )
                     const transactionLoyer = await this.transactionRepository.create(
@@ -396,7 +400,7 @@ export class TransactionService {
                             payment_id: loyInvoicePaymentId.id,
                             idFedapay: transactionFLoy.id,
                             referenceFedapay: transactionFLoy.reference,
-                            sender_id: userTransactionElec.id,
+                            sender_id: userTransactionLoy.id,
                             transaction_type: TransactionTypeEnum.LOYER,
                             transaction_status: transactionFLoy.status,
                             transaction_reference: transactionReferenceLoy,
