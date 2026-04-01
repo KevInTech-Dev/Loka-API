@@ -4,7 +4,6 @@ import { TransactionRepository } from "./transaction.repository";
 import { CreateTransactionInput } from "./transaction.schema";
 import { TransactionResponse } from "./transaction.type";
 import { Op } from "sequelize";
-import env from '@/config/env';
 import { PaymentRepository } from "../Payment/payment.repository";
 import { ForbiddenError, NotFoundError } from "@/common/errors";
 import { landLordRepository } from "../landLord/landlord.repository";
@@ -160,7 +159,6 @@ export class TransactionService {
                             payment_token: transactionF.payment_token,
                             payment_url: transactionF.payment_url
                         }
-
                     );
                     if (transaction) { return transaction; }
                 } catch (e) {

@@ -25,6 +25,7 @@ import { maintenancePath, maintenanceSchema, maintenanceTags } from "./maintenan
 import { technicalManagerPath, technicalManagerSchema, technicalManagerTags } from "./technicalManager.swagger";
 import { paymentPath, paymentSchema, paymentTags } from "./payment.swagger";
 import { transactionPath, TransactionSchema, transactionTags } from "./transaction.swagger";
+import { refundPaymentPath, RefundSchema, RefundTags } from "./refundPayment.swagger";
 
 
 export const tags: OpenAPIV3.TagObject[] = [
@@ -50,7 +51,8 @@ export const tags: OpenAPIV3.TagObject[] = [
     utilisateurAbonnementTags,
     technicalManagerTags,
     paymentTags,
-    transactionTags
+    transactionTags,
+    RefundTags,
 ];
 
 export const paths: OpenAPIV3.PathsObject = {
@@ -114,8 +116,8 @@ export const paths: OpenAPIV3.PathsObject = {
     ...maintenancePath,
     ...technicalManagerPath,
     ...paymentPath,
-    ...transactionPath
-
+    ...transactionPath,
+    ...refundPaymentPath
 };
 
 export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
@@ -145,7 +147,8 @@ export const schemas: OpenAPIV3.ComponentsObject['schemas'] = {
     ...maintenanceSchema,
     ...technicalManagerSchema,
     ...paymentSchema,
-    ...TransactionSchema
+    ...TransactionSchema,
+    ...RefundSchema,
 
 };
 

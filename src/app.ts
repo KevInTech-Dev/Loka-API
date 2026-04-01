@@ -28,6 +28,7 @@ import technicalManagerRoute from "./modules/technicalManger/technicalManager.ro
 import maintenanceRoute from "./modules/maintenance/maintenance.route";
 import paymentRoute from "@modules/Payment/payment.route";
 import transactionRoute from "@modules/transaction/transaction.route";
+import refundRoute from "@modules/Refund/refund.routes";
 
 const app: Express = express();
 const API_PREFIX = env.API_PREFIX;
@@ -90,6 +91,7 @@ app.use(`${API_PREFIX}/technicalManager`, technicalManagerRoute);
 app.use(`${API_PREFIX}/maintenance-request`, maintenanceRoute);
 app.use(`${API_PREFIX}/payments`, paymentRoute);
 app.use(`${API_PREFIX}/transactions`, transactionRoute);
+app.use(`${API_PREFIX}/refundPayment`, refundRoute);
 
 
 // 404 handler

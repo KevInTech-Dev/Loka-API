@@ -1,9 +1,9 @@
 import { BaseRepositoryImpl } from "@/common/base.repository";
 import { NotFoundError } from "@/common/errors";
 import { Payment } from "@/database/models/payment";
-import { TransactionCreationAttributes, Transactions } from "@/database/models/Transaction";
+import { Transactions } from "@/database/models/Transaction";
 import { RoleEnum } from "@/enums/RoleEnum";
-import { CreationAttributes, where } from "sequelize";
+import { CreationAttributes, Transaction, where } from "sequelize";
 
 
 export class TransactionRepository extends BaseRepositoryImpl<Transactions> {
@@ -22,8 +22,13 @@ export class TransactionRepository extends BaseRepositoryImpl<Transactions> {
             }
         })
     }
-
-
+     async getTransactionReference(transactionReference: string) : Promise<Transactions | null> {
+        return this.model.findOne({
+            where: {
+                idFedapay: transactionReference
+            }
+        });    
+    }
 
     async findByIdWithAccess(id: string, opts: { role: string, senderId?: string }): Promise<Transactions> {
 
@@ -54,16 +59,4 @@ export class TransactionRepository extends BaseRepositoryImpl<Transactions> {
         });
         return { rows, count };
     }
-
-    // async updateTransactions(id: string, data: TransactionCreationAttributes) {
-    //     const transactionObject = await this.findById(id);
-    //     if (!transactionObject) {
-    //         throw new NotFoundError("TRANSACTION NOT FOUND");
-    //     }
-    //     return await transactionObject.update(data, {
-    //         where: {
-    //             id: transactionObject.id
-    //         }
-    //     });
-    // }
 }
